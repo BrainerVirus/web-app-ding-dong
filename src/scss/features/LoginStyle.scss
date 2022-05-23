@@ -1,0 +1,171 @@
+$colors: #540b66;
+
+#container-login {
+  background-image: url("../../../src/img/logos/login-bg3.svg");
+  background-size: cover;
+  color: white;
+}
+
+#bg-logo {
+  content: url("../../../src/img/logos/Ding-Dong-Logo-Light.svg");
+  height: 100%;
+  width: 100%;
+}
+
+#title-logo {
+  color: white;
+}
+
+@media screen and (max-width: 375px) {
+  #bg-logo {
+    content: url("../../../src/img/logos/Ding-Dong-Logo-Dark.svg");
+    height: 280px;
+  }
+  #col-left {
+    order: 2;
+  }
+  #right-col {
+    order: 1;
+    padding-top: 20px;
+  }
+  #submit-btn {
+    margin-left: 118px;
+  }
+  #title-logo {
+    color: white;
+  }
+  #header-login {
+    color: white;
+  }
+  #container-login {
+    background-color: #540b66;
+    color: white;
+  }
+  #title-logo {
+    color: white;
+  }
+}
+
+@media screen and (min-width: 376px) and (max-width: 428px) {
+  #bg-logo {
+    content: url("../../../src/img/logos/Ding-Dong-Logo-Dark.svg");
+    height: 400px;
+  }
+  #col-left {
+    order: 2;
+  }
+  #right-col {
+    order: 1;
+    padding-top: 20px;
+  }
+  #submit-btn {
+    margin-left: 130px;
+    padding: 5px 30px 5px 30px;
+  }
+  #title-logo {
+    color: white;
+  }
+  #header-login {
+    color: white;
+  }
+  #container-login {
+    background-color: #540b66;
+    color: white;
+  }
+  #title-logo {
+    color: white;
+  }
+}
+
+@media screen and (min-width: 376px) and (max-width: 390px) {
+  #bg-logo {
+    content: url("../../../src/img/logos/Ding-Dong-Logo-Dark.svg");
+    height: 400px;
+  }
+  #col-left {
+    order: 2;
+  }
+  #right-col {
+    order: 1;
+    padding-top: 20px;
+  }
+  #submit-btn {
+    margin-left: 110px;
+    padding: 5px 30px 5px 30px;
+  }
+  #title-logo {
+    color: white;
+  }
+  #header-login {
+    color: white;
+  }
+  #container-login {
+    background-color: #540b66;
+    color: white;
+  }
+  #title-logo {
+    color: white;
+  }
+}
+
+@media screen and (min-width: 391px) and (max-width: 414px) {
+  #bg-logo {
+    content: url("../../../src/img/logos/Ding-Dong-Logo-Dark.svg");
+    height: 400px;
+  }
+  #col-left {
+    order: 2;
+  }
+  #right-col {
+    order: 1;
+    padding-top: 20px;
+  }
+  #submit-btn {
+    margin-left: 120px;
+    padding: 5px 30px 5px 30px;
+  }
+  #title-logo {
+    color: white;
+  }
+  #header-login {
+    color: white;
+  }
+  #container-login {
+    background-color: #540b66;
+    color: white;
+  }
+  #title-logo {
+    color: white;
+  }
+}
+
+@media screen and (min-width: 391px) and (max-width: 414px) {
+  #bg-logo {
+    content: url("../../../src/img/logos/Ding-Dong-Logo-Dark.svg");
+    height: 400px;
+  }
+  #col-left {
+    order: 2;
+  }
+  #right-col {
+    order: 1;
+    padding-top: 20px;
+  }
+  #submit-btn {
+    margin-left: 120px;
+    padding: 5px 30px 5px 30px;
+  }
+  #title-logo {
+    color: white;
+  }
+  #header-login {
+    color: white;
+  }
+  #container-login {
+    background-color: #540b66;
+    color: white;
+  }
+  #title-logo {
+    color: white;
+  }
+}
