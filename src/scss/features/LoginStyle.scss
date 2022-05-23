@@ -3,6 +3,8 @@ $colors: #540b66;
 #container-login {
   background-image: url("../../../src/img/logos/login-bg3.svg");
   background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
   color: white;
 }
 
@@ -16,7 +18,7 @@ $colors: #540b66;
   color: white;
 }
 
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 376px) {
   #bg-logo {
     content: url("../../../src/img/logos/Ding-Dong-Logo-Dark.svg");
     height: 280px;
