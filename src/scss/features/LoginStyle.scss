@@ -1,4 +1,6 @@
-$colors: #540b66;
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap");
+$baseColor: #540b66;
+$secondaryColor: #c48e3c;
 
 #container-login {
   background-image: url("../../../src/img/logos/login-bg3.svg");
@@ -6,16 +8,73 @@ $colors: #540b66;
   background-repeat: no-repeat;
   background-position: center center;
   color: white;
+  font-family: "Barlow", sans-serif;
 }
 
 #bg-logo {
   content: url("../../../src/img/logos/Ding-Dong-Logo-Light.svg");
-  height: 100%;
-  width: 100%;
+  width: 90%;
 }
 
 #title-logo {
   color: white;
+}
+
+#forgot-pass-link {
+  text-decoration: none;
+  color: white;
+  text-align: center;
+}
+
+#forgot-pass-link:hover {
+  color: $secondaryColor;
+}
+
+#forgot-pass-hr {
+  width: 100px;
+  border: 1px solid white;
+}
+
+#play-store-logo {
+  width: 200px;
+  height: 100px;
+}
+
+#rememberMe {
+  cursor: pointer;
+}
+
+#col-left {
+  height: 100vh;
+}
+
+#right-col {
+  height: 100vh;
+}
+
+#submit-btn:hover {
+  color: #540b66;
+}
+//Pc screen resize to avoid background to superimpose
+@media screen and (max-width: 768px) {
+  #bg-logo {
+    content: none;
+    width: 50%;
+  }
+  #col-left {
+    order: 2;
+    display: none;
+    visibility: hidden;
+
+    background-color: $baseColor;
+  }
+  #right-col {
+    order: 1;
+    background-color: $baseColor;
+  }
+  #title-logo {
+    color: white;
+  }
 }
 
 @media screen and (max-width: 376px) {
@@ -30,9 +89,6 @@ $colors: #540b66;
     order: 1;
     padding-top: 20px;
   }
-  #submit-btn {
-    margin-left: 118px;
-  }
   #title-logo {
     color: white;
   }
@@ -40,7 +96,7 @@ $colors: #540b66;
     color: white;
   }
   #container-login {
-    background-color: #540b66;
+    background-color: $baseColor;
     color: white;
   }
   #title-logo {
@@ -71,7 +127,7 @@ $colors: #540b66;
     color: white;
   }
   #container-login {
-    background-color: #540b66;
+    background-color: $baseColor;
     color: white;
   }
   #title-logo {
@@ -102,7 +158,7 @@ $colors: #540b66;
     color: white;
   }
   #container-login {
-    background-color: #540b66;
+    background-color: $baseColor;
     color: white;
   }
   #title-logo {
@@ -133,7 +189,7 @@ $colors: #540b66;
     color: white;
   }
   #container-login {
-    background-color: #540b66;
+    background-color: $baseColor;
     color: white;
   }
   #title-logo {
@@ -164,7 +220,7 @@ $colors: #540b66;
     color: white;
   }
   #container-login {
-    background-color: #540b66;
+    background-color: $baseColor;
     color: white;
   }
   #title-logo {

@@ -1,4 +1,5 @@
 import "./App.scss";
+import Footer from "./features/Footer/Footer";
 
 import Login from "./features/Login/Login";
 function App() {

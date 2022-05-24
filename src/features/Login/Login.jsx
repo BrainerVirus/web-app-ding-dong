@@ -1,8 +1,9 @@
 import "../../scss/features/LoginStyle.scss";
+import LightLogo from "../../img/logos/Ding-Dong-Logo-Light.svg";
+import PlayStoreLogo from "../../img/logos/get-it-on-google-play-logo.svg";
+
 import React from "react";
 import { useState, useEffect } from "react";
-import LightLogo from "../../img/logos/Ding-Dong-Logo-Light.svg";
-import LoginBg from "../../img/logos/login-bg.svg";
 
 function validateMail(email) {
   let emailRegex =
@@ -24,6 +25,7 @@ function validatePassword(password) {
 }
 
 function Login() {
+  const [login, setLogin] = useState({ userName: "", password: "" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   function handleBlurEmail() {
@@ -70,16 +72,19 @@ function Login() {
   }
   return (
     <div className="container-fluid vh-100" id="container-login">
-      <div className="row vh-100">
-        <div className="col-md-6" id="col-left">
+      <div className="row vh-100" id="column-container">
+        <div className="col-md-6 col-sm-12 d-flex flex-column" id="col-left">
           <div className="img-wrapper text-center">
             <figure>
-              <img id="bg-logo" className="img-fluid" alt="logo-light" />
+              <img id="bg-logo" className="img-fluid" />
             </figure>
           </div>
         </div>
-        <div className="col-md-6" id="right-col">
-          <div className="header-wrapper mb-3 text-center" id="header-login">
+        <div className="col-md-6 col-sm-12 d-flex flex-column" id="right-col">
+          <div
+            className="header-wrapper mb-3 pt-5 text-center"
+            id="header-login"
+          >
             <h1>
               <i>¡Bienvenidas!</i>
             </h1>
@@ -137,14 +142,23 @@ function Login() {
                   </label>
                 </div>
               </div>
-              <button
-                id="submit-btn"
-                type="submit"
-                className="btn btn-primary col-sm-4 offset-sm-4"
-                style={{ backgroundColor: "#C48E3C" }}
+              <div
+                className="d-flex flex-column align-items-center"
+                id="btn-wrapper"
               >
-                Iniciar sesión
-              </button>
+                <button
+                  id="submit-btn"
+                  type="submit"
+                  className="btn btn-primary pt-2 px-5 mb-1"
+                  style={{ backgroundColor: "#C48E3C" }}
+                >
+                  Iniciar sesión
+                </button>
+                <a href="#" id="forgot-pass-link">
+                  <p>¿Olvidaste tú contraseña?</p>
+                </a>
+                <hr id="forgot-pass-hr"></hr>
+              </div>
             </form>
           </div>
         </div>

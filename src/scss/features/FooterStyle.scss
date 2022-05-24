@@ -1,0 +1,43 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap");
+$baseColor: #540b66;
+$secondaryColor: #c48e3c;
+
+footer {
+  bottom: 0;
+}
+
+#footer-right-column {
+  width: 50%;
+  ul {
+    a {
+      text-decoration: none;
+      color: $baseColor;
+    }
+  }
+}
+
+#footer-right-column {
+  ul {
+    a:hover {
+      color: $secondaryColor;
+    }
+  }
+}
+
+#footer-left-column {
+  width: 39%;
+  ul {
+    a {
+      text-decoration: none;
+      color: $baseColor;
+    }
+  }
+}
+
+#footer-left-column {
+  ul {
+    a:hover {
+      color: $secondaryColor;
+    }
+  }
+}
