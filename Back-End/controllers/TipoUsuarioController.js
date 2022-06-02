@@ -1,4 +1,4 @@
-import TipoUsuarioModel from "../models/TipoUsuarioModel";
+import TipoUsuarioModel from "../models/TipoUsuarioModel.js";
 
 //crear un tipo de usuario
 
