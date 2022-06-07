@@ -12,6 +12,9 @@ const CuentaModel = db.define("cuenta", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  isLogged: {
+    type: DataTypes.INTEGER,
+  },
 });
 
 export default CuentaModel;

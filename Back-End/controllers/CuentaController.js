@@ -67,14 +67,24 @@ export const deleteCuenta = async (req, res) => {
 
 //metodos adicionales
 
+//login
 export const login = async (req, res) => {
   try {
     const cuenta = await CuentaModel.findAll({
       where: {
-        usuario: req.body.usuario,
+        user: req.body.email,
         password: req.body.password,
       },
     });
+    await CuentaModel.update(
+      { isLogged: 1 },
+      {
+        where: {
+          user: req.body.email,
+          password: req.body.password,
+        },
+      }
+    );
     res.json(cuenta[0]);
   } catch (error) {
     res.json({ message: error.message });

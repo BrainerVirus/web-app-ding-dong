@@ -4,6 +4,7 @@ import {
   deleteCuenta,
   getAllCuentas,
   getCuenta,
+  login,
   updateCuenta,
 } from "../controllers/CuentaController.js";
 
@@ -14,5 +15,6 @@ routerCuentas.get("/:id", getCuenta);
 routerCuentas.post("/", createCuenta);
 routerCuentas.put("/:id", updateCuenta);
 routerCuentas.delete("/:id", deleteCuenta);
+routerCuentas.post("/login", login);
 
 export default routerCuentas;

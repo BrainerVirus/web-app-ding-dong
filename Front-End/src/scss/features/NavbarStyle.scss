@@ -1,0 +1,50 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap");
+$baseColor: #540b66;
+$baseColorSecondary: #ccb6d1;
+$black: black;
+$textColor: #fff;
+$secondaryColor: #c48e3c;
+$box-shadow: 0 0.5rem 1rem rgba($black, 0.15);
+$box-shadow-sm: 0 0.125rem 0.25rem rgba($black, 0.075);
+$box-shadow-lg: 0 1rem 3rem rgba($black, 0.175);
+$box-shadow-inset: inset 0 1px 2px rgba($black, 0.075);
+
+#navbarNav {
+  justify-content: flex-end;
+}
+
+.navbar {
+  background-color: #540b66 !important;
+}
+
+nav {
+  padding: 0px 10px 8px 10px !important;
+  box-shadow: $box-shadow;
+  div {
+    div {
+      ul {
+        li {
+          a {
+            color: white !important;
+            border-bottom: 1px solid transparent;
+          }
+          a:hover {
+            transition: 0.8s;
+            color: $baseColorSecondary !important;
+            border-bottom: 1px solid $baseColorSecondary;
+          }
+        }
+      }
+    }
+  }
+}
+
+.navbar-toggler {
+  background-color: $textColor !important;
+  color: #7a1094 !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(84, 11, 102, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+  border-color: rgba(84, 11, 102, 1);
+}

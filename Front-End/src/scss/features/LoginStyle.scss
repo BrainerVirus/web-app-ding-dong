@@ -55,6 +55,12 @@ $secondaryColor: #c48e3c;
 #submit-btn:hover {
   color: #540b66;
 }
+
+#invalidEmail {
+  color: red;
+  text-align: center;
+}
+
 //Pc screen resize to avoid background to superimpose
 @media screen and (max-width: 768px) {
   #bg-logo {

@@ -3,7 +3,11 @@ import LightLogo from "../../img/logos/Ding-Dong-Logo-Light.svg";
 import PlayStoreLogo from "../../img/logos/get-it-on-google-play-logo.svg";
 
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const URI = "http://localhost:8080/cuentas/login";
 
 function validateMail(email) {
   let emailRegex =
@@ -15,61 +19,37 @@ function validateMail(email) {
   }
 }
 
-function validatePassword(password) {
-  let passwordRegex = /((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{6,20})/;
-  if (passwordRegex.test(password)) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
 function Login() {
-  const [login, setLogin] = useState({ userName: "", password: "" });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  function handleBlurEmail() {
-    let validEmail = document.getElementById("email").value;
+  const navigate = useNavigate();
 
-    if (validateMail(validEmail) === true) {
-      document.getElementById("email").className =
-        "form-control border-success";
-      setEmail(validEmail);
-    } else {
-      document.getElementById("email").className = "form-control border-danger";
-      setEmail("");
-    }
-  }
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+  const handlePassChange = (e) => {
+    setPassword(e.target.value);
+  };
 
-  function handleBlurPass() {
-    let validPassword = document.getElementById("inputPassword").value;
-
-    if (validatePassword(validPassword)) {
-      document.getElementById("inputPassword").className =
-        "form-control border-success";
-      setPassword(validPassword);
-    } else {
-      document.getElementById("inputPassword").className =
-        "form-control border-danger";
-      setPassword("");
-    }
-  }
-
-  function handleSubmit(e) {
+  const store = async (e) => {
     e.preventDefault();
-    console.log("entra al submit");
-    if (email === "") {
-      document.getElementById("email").className = "form-control border-danger";
+    if (validateMail(email) === true) {
+      const res = await axios.post(URI, {
+        email: email,
+        password: password,
+      });
+      console.log(
+        `El usuario es: ${res.data.user}, y la password es: ${res.data.password}`
+      );
+      if (email === res.data.user && password === res.data.password) {
+        console.log("Login correcto");
+        navigate("/usuario/administrador");
+      }
     }
-    if (password === "") {
-      document.getElementById("inputPassword").className =
-        "form-control border-danger";
-    }
-    if (email !== "" && password !== "") {
-      console.log("entra al if");
-      document.getElementById("form-login").submit();
-    }
-  }
+    document.getElementById("invalidEmail").innerHTML =
+      "Email invalido, por favor escriba un email valido";
+    //navigate("/");
+  };
   return (
     <div className="container-fluid vh-100" id="container-login">
       <div className="row vh-100" id="column-container">
@@ -94,7 +74,7 @@ function Login() {
             </h2>
           </div>
           <div id="form-wrapper">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={store}>
               <div className="mb-3 d-flex flex-column">
                 <label
                   htmlFor="staticEmail"
@@ -107,8 +87,9 @@ function Login() {
                     type="text"
                     className="form-control"
                     id="email"
+                    value={email}
+                    onChange={handleEmailChange}
                     placeholder="email@example.com"
-                    onBlur={handleBlurEmail}
                   />
                 </div>
               </div>
@@ -124,9 +105,11 @@ function Login() {
                     type="password"
                     className="form-control"
                     id="inputPassword"
-                    onBlur={handleBlurPass}
+                    onChange={handlePassChange}
+                    value={password}
                   />
                 </div>
+                <div id="invalidEmail"></div>
               </div>
               <div className="mb-3 form-check">
                 <div className="d-flex flex-row">
