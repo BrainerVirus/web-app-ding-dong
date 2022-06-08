@@ -23,20 +23,65 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link" aria-current="page" href="#">
+              <a
+                className="nav-link nav-item-base-status"
+                aria-current="page"
+                href="#"
+              >
                 <i className="fa-solid me-2 fa-house-chimney"></i>
                 Home
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <a className="nav-link nav-item-base-status" href="#">
                 <i className="fa-solid fa-user me-2"></i> Mi Cuenta
               </a>
             </li>
-            <li className="nav-item">
-              <a class="nav-link" href="#">
+            <li className="nav-item dropdown">
+              <a
+                className="nav-link dropdown-toggle nav-item-base-status"
+                data-bs-toggle="dropdown"
+                href="#"
+                role="button"
+                aria-expanded="false"
+              >
                 <i className="fa-solid fa-gears me-2"></i>Ajustes
               </a>
+              <ul className="dropdown-menu dropdown-menu-end">
+                <li>
+                  <a className="dropdown-item" href="#">
+                    <i className="fa-solid fa-moon me-2" />
+                    Dark mode
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    <i class="fa-solid fa-universal-access me-2" />
+                    Accesibilidad
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    <i class="fa-solid fa-circle-info me-2" />
+                    Ayuda
+                  </a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    <i class="fa-solid fa-arrow-right-from-bracket me-2" />
+                    Cerrar Sesión
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
