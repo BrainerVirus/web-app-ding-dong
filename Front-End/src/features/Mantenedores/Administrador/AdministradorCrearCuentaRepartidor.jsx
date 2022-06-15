@@ -4,7 +4,7 @@ import "../../../scss/features/Administrador/AgregarRepartidorAdminStyle.scss";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const URI = "http://localhost:8080/cuentas/;";
+const URI = "http://localhost:8080/cuentas/";
 
 const RegionesYcomunas = [
   {
@@ -441,6 +441,7 @@ function AdministradorCrearCuentaRepartidor() {
   const [region, setRegion] = useState("");
   const [comuna, setComuna] = useState("");
   const [celular, setCelular] = useState("");
+  const [tipoUsuario, setTipoUsuario] = useState("3");
   //navitaion
   const navigate = useNavigate();
   //store
@@ -568,8 +569,37 @@ function AdministradorCrearCuentaRepartidor() {
   useEffect(() => {
     comparePasswords(password, rePassword);
   }, [password, rePassword]);
+
+  const store = async (e) => {
+    console.log(email);
+    console.log(password);
+    console.log(img);
+    e.preventDefault();
+    /*await axios.post(
+      URI,
+      {
+        user: email,
+        password: password,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      }
+    );*/
+    const formData = new FormData();
+    formData.append("profileImg", img);
+    formData.append("user", email);
+    formData.append("password", password);
+    await axios.post(URI, formData);
+    //history.push('/cuentas/')
+    //navigate("/");
+  };
+  //img
+
   return (
-    <form action="/" method="get">
+    <form onSubmit={store}>
       <div className="container-fluid container-actualizar-datos-admin">
         <h1 className="grid-span-3">Crear cuenta de repartidor</h1>
         <div
@@ -584,6 +614,8 @@ function AdministradorCrearCuentaRepartidor() {
               ref={fileInputRef}
               onChange={handleInputChange}
               accept="image/*"
+              name="profileImg"
+              id="profileImg"
             />
             {preview ? (
               <div className="img-preview-wrapper flex-container no-margin-bottom">
@@ -724,6 +756,7 @@ function AdministradorCrearCuentaRepartidor() {
           </button>
         </div>
       </div>
+      <button type="submit">submit</button>
     </form>
   );
 }

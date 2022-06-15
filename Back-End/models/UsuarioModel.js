@@ -41,7 +41,7 @@ const UsuarioModel = db.define("usuarios", {
 
 //asociaciones
 UsuarioModel.hasOne(CuentaModel, {
-  foreignKey: "created_by",
+  foreignKey: "usuario_id",
 });
 
 UsuarioModel.hasOne(TipoUsuarioModel, {
