@@ -4,5 +4,8 @@ import { Sequelize } from "sequelize";
 const db = new Sequelize("dindong_app", "root", "", {
   host: "localhost",
   dialect: "mysql",
+  define: {
+    paranoid: true,
+  },
 });
 export default db;

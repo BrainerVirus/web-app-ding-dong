@@ -1,4 +1,4 @@
-import UsuarioModel from "../models/UsuarioModel";
+import UsuarioModel from "../models/UsuarioModel.js";
 
 //crear un usurio
 export const createUsuario = async (req, res) => {

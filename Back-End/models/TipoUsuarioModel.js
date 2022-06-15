@@ -1,13 +1,15 @@
 import db from "../database/db.js";
 import { DataTypes } from "sequelize";
 
-const TipoUsuarioModel = db.define("Tipo_Usuario", {
-  tipoUsuario: {
-    type: DataTypes.STRING,
+const TipoUsuarioModel = db.define("tipos_usuario", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
     allowNull: false,
   },
-  estado: {
-    type: DataTypes.INTEGER,
+  tipoUsuario: {
+    type: DataTypes.STRING,
     allowNull: false,
   },
 });

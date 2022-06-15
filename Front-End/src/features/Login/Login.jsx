@@ -43,7 +43,7 @@ function Login() {
       );
       if (email === res.data.user && password === res.data.password) {
         console.log("Login correcto");
-        navigate("/usuario/administrador");
+        navigate("/");
       }
     }
     document.getElementById("invalidEmail").innerHTML =

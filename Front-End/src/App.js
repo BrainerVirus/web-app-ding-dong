@@ -5,14 +5,15 @@ import Home from "./features/Home/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Navbar from "./features/Header/Navbar";
 import AdministradorHome from "./features/Mantenedores/Administrador/AdministradorHome";
-
+import AdministradorActualizarDatosDeCuenta from "./features/Mantenedores/Administrador/AdministradorActualizarDatosDeCuenta";
+import AdministradorCrearCuentaRepartidor from "./features/Mantenedores/Administrador/AdministradorCrearCuentaRepartidor";
 function App() {
   return (
     <div className="App" id="App">
       <BrowserRouter>
         <Routes>
           <Route
-            path="/Home"
+            path="/"
             element={
               <>
                 <Navbar />
@@ -25,8 +26,40 @@ function App() {
           />
           <Route path="/Login" element={<Login />} />
           <Route
-            path="/usuario/administrador"
-            element={<AdministradorHome />}
+            path="/cuenta/administrador"
+            element={
+              <>
+                <Navbar />
+                <main>
+                  <AdministradorHome />
+                </main>
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/cuenta/administrador/:id/add/repartidor"
+            element={
+              <>
+                <Navbar />
+                <main>
+                  <AdministradorCrearCuentaRepartidor />
+                </main>
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/cuenta/administrador/:id/update"
+            element={
+              <>
+                <Navbar />
+                <main>
+                  <AdministradorActualizarDatosDeCuenta />
+                </main>
+                <Footer />
+              </>
+            }
           />
         </Routes>
       </BrowserRouter>

@@ -2,6 +2,8 @@ import React from "react";
 import logoDark from "../../img/logos/Ding-Dong-Logo-transparent-Nav.svg";
 import logoLight from "../../img/logos/Ding-Dong-Logo-Nav-Light2.svg";
 import NavbarStyle from "../../scss/features/NavbarStyle.scss";
+import { Link } from "react-router-dom";
+
 function Navbar() {
   return (
     <nav className="navbar navbar-expand-lg bg-light sticky-top">
@@ -55,29 +57,29 @@ function Navbar() {
                   </a>
                 </li>
                 <li>
-                  <hr class="dropdown-divider" />
+                  <hr className="dropdown-divider" />
                 </li>
                 <li>
                   <a className="dropdown-item" href="#">
-                    <i class="fa-solid fa-universal-access me-2" />
+                    <i className="fa-solid fa-universal-access me-2" />
                     Accesibilidad
                   </a>
                 </li>
                 <li>
-                  <hr class="dropdown-divider" />
+                  <hr className="dropdown-divider" />
                 </li>
                 <li>
                   <a className="dropdown-item" href="#">
-                    <i class="fa-solid fa-circle-info me-2" />
+                    <i className="fa-solid fa-circle-info me-2" />
                     Ayuda
                   </a>
                 </li>
                 <li>
-                  <hr class="dropdown-divider" />
+                  <hr className="dropdown-divider" />
                 </li>
                 <li>
                   <a className="dropdown-item" href="#">
-                    <i class="fa-solid fa-arrow-right-from-bracket me-2" />
+                    <i className="fa-solid fa-arrow-right-from-bracket me-2" />
                     Cerrar Sesión
                   </a>
                 </li>

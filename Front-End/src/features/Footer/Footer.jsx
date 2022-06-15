@@ -60,7 +60,7 @@ function Footer() {
         </section>
         <section className="text-center mb-5">
           <a href="" className="text-white me-4">
-            <i class="fab fa-facebook-f"></i>
+            <i className="fab fa-facebook-f"></i>
           </a>
           <a href="" className="text-white me-4">
             <i className="fab fa-twitter"></i>

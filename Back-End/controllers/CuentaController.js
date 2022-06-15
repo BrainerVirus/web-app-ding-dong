@@ -1,13 +1,20 @@
 // importamos el modelo
 import CuentaModel from "../models/CuentaModel.js";
-
+import multer from "multer";
+import path from "path";
 //metodos del crud
 
 // crear un registro
 export const createCuenta = async (req, res) => {
   try {
-    const cuenta = await CuentaModel.create(req.body);
-    res.json({ message: "Cuenta creada correctamente", cuenta });
+    const info = {
+      user: req.body.user,
+      password: req.body.password,
+      isLogged: 0,
+      profileImg: req.file.path,
+    };
+    const cuenta = await CuentaModel.create(info);
+    res.json({ message: "Cuenta creada correctamente", info });
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -40,12 +47,17 @@ export const getAllCuentas = async (req, res) => {
 //actualizar un registro
 export const updateCuenta = async (req, res) => {
   try {
-    const cuenta = await CuentaModel.update(req.body, {
+    const info = {
+      user: req.body.user,
+      password: req.body.password,
+      profileImg: req.file.path,
+    };
+    const cuenta = await CuentaModel.update(info, {
       where: {
         id: req.params.id,
       },
     });
-    res.json({ message: "Cuenta actualizada correctamente", cuenta });
+    res.json({ message: "Cuenta actualizada correctamente", info });
   } catch (error) {
     res.json({ message: error.message });
   }
@@ -90,3 +102,29 @@ export const login = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+
+//img controller
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+export const uploadImg = multer({
+  storage: storage,
+  limits: { fileSize: "35000000" },
+  fileFilter: (req, file, cb) => {
+    const fileTypes = /jpeg|jpg|png/;
+    const mimeType = fileTypes.test(file.mimetype);
+    const extname = fileTypes.test(path.extname(file.originalname));
+
+    if (mimeType && extname) {
+      return cb(null, true);
+    }
+    cb("Give proper files formate to upload");
+  },
+}).single("profileImg");
