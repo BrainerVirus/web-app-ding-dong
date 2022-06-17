@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
-import "../../../scss/features/Administrador/AgregarRepartidorAdminStyle.scss";
+import "../../../scss/features/Administrador/ActualizarRepartidorAdminStyle.scss";
 import { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 const qs = require("qs");
 
 const URICuentas = "http://localhost:8080/cuentas/";
@@ -428,7 +428,7 @@ const RegionesYcomunas = [
   },
 ];
 
-function AdministradorCrearCuentaRepartidor() {
+function AdministradorActualizarCuentaRepartidor() {
   //states
   const [img, setImg] = useState("");
   const [preview, setPreview] = useState("");
@@ -446,6 +446,7 @@ function AdministradorCrearCuentaRepartidor() {
   const [comuna, setComuna] = useState("");
   const [celular, setCelular] = useState("");
   const tipoUsuario = "repartidor";
+  const { id } = useParams();
   //navitaion
   const navigate = useNavigate();
 
@@ -893,4 +894,4 @@ function AdministradorCrearCuentaRepartidor() {
   );
 }
 
-export default AdministradorCrearCuentaRepartidor;
+export default AdministradorActualizarCuentaRepartidor;

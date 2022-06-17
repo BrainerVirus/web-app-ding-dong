@@ -1,4 +1,5 @@
 import express from "express";
+import { createCuenta, uploadImg } from "../controllers/CuentaController.js";
 import {
   getUsuario,
   getAllUsuarios,

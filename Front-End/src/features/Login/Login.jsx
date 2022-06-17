@@ -1,9 +1,10 @@
 import "../../scss/features/LoginStyle.scss";
 import LightLogo from "../../img/logos/Ding-Dong-Logo-Light.svg";
 import PlayStoreLogo from "../../img/logos/get-it-on-google-play-logo.svg";
+import AppStoreLogo from "../../img/logos/Download_on_the_App_Store_Badge.svg";
 
 import React from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -34,17 +35,25 @@ function Login() {
   const store = async (e) => {
     e.preventDefault();
     if (validateMail(email) === true) {
-      const res = await axios.post(URI, {
-        email: email,
-        password: password,
-      });
-      console.log(
-        `El usuario es: ${res.data.user}, y la password es: ${res.data.password}`
-      );
-      if (email === res.data.user && password === res.data.password) {
-        console.log("Login correcto");
-        navigate("/");
-      }
+      const res = await axios
+        .post(URI, {
+          email: email,
+          password: password,
+        })
+        .then((result) => {
+          const userAth = {
+            id: result.data.id,
+            user: result.data.user,
+            psswd: result.data.password,
+          };
+          console.log(
+            `El id es: ${userAth.id}, el usuario es: ${userAth.user}, y la password es: ${userAth.psswd}`
+          );
+          if (email === userAth.user && password === userAth.psswd) {
+            console.log("Login correcto");
+            navigate(`/?id=${userAth.id}`);
+          }
+        });
     }
     document.getElementById("invalidEmail").innerHTML =
       "Email invalido, por favor escriba un email valido";

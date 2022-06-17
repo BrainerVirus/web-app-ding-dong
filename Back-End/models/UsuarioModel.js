@@ -6,9 +6,9 @@ import DireccionModel from "./DireccionesModel.js";
 
 const UsuarioModel = db.define("usuarios", {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
-    autoIncrement: true,
     allowNull: false,
   },
   nombre: {
@@ -41,16 +41,28 @@ const UsuarioModel = db.define("usuarios", {
 
 //asociaciones
 UsuarioModel.hasOne(CuentaModel, {
-  foreignKey: "created_by",
+  foreignKey: {
+    type: DataTypes.UUID,
+    //allowNull: false,
+  },
 });
+CuentaModel.belongsTo(UsuarioModel);
 
 UsuarioModel.hasOne(TipoUsuarioModel, {
-  foreignKey: "usuario_id",
+  foreignKey: {
+    type: DataTypes.UUID,
+    //allowNull: false,
+  },
 });
+TipoUsuarioModel.belongsTo(UsuarioModel);
 
 UsuarioModel.hasOne(DireccionModel, {
-  foreignKey: "usuario_id",
+  foreignKey: {
+    type: DataTypes.UUID,
+    //allowNull: false,
+  },
 });
+DireccionModel.belongsTo(UsuarioModel);
 
 //sincronizamos la base de datos
 UsuarioModel.sync({

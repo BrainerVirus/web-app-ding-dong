@@ -10,8 +10,8 @@ export const createCuenta = async (req, res) => {
     const info = {
       user: req.body.user,
       password: req.body.password,
-      isLogged: 0,
       profileImg: req.file.path,
+      usuarioId: req.body.usuarioId,
     };
     const cuenta = await CuentaModel.create(info);
     res.json({ message: "Cuenta creada correctamente", info });

@@ -5,9 +5,9 @@ import { DataTypes } from "sequelize";
 //definimos la entidad
 const CuentaModel = db.define("cuentas", {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
-    autoIncrement: true,
     allowNull: false,
   },
   user: {
@@ -20,10 +20,7 @@ const CuentaModel = db.define("cuentas", {
   },
   profileImg: {
     type: DataTypes.STRING,
-  },
-  isLogged: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+    defaultValue: "../images/default-profile-img.png",
   },
 });
 

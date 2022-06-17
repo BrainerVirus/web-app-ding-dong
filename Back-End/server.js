@@ -13,12 +13,13 @@ import routerUsuario from "./routes/RoutesUsuario.js";
 const app = express();
 //configuramos cors
 app.use(cors());
+app.use(express.json());
 app.use(
   express.urlencoded({
     extended: true,
   })
 );
-app.use(express.json());
+
 //routers
 app.use("/cuentas", routerCuentas);
 app.use("/tipoUsuario", routerTipoUsuario);

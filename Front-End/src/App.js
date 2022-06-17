@@ -7,6 +7,7 @@ import Navbar from "./features/Header/Navbar";
 import AdministradorHome from "./features/Mantenedores/Administrador/AdministradorHome";
 import AdministradorActualizarDatosDeCuenta from "./features/Mantenedores/Administrador/AdministradorActualizarDatosDeCuenta";
 import AdministradorCrearCuentaRepartidor from "./features/Mantenedores/Administrador/AdministradorCrearCuentaRepartidor";
+import AdministradorActualizarCuentaRepartidor from "./features/Mantenedores/Administrador/AdministradorActualizarCuentaRepartidor";
 function App() {
   return (
     <div className="App" id="App">
@@ -38,12 +39,24 @@ function App() {
             }
           />
           <Route
-            path="/cuenta/administrador/:id/add/repartidor"
+            path="/cuenta/administrador/:id/add/repartidor/:id"
             element={
               <>
                 <Navbar />
                 <main>
                   <AdministradorCrearCuentaRepartidor />
+                </main>
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/cuenta/administrador/:id/update/repartidor/:id"
+            element={
+              <>
+                <Navbar />
+                <main>
+                  <AdministradorActualizarCuentaRepartidor />
                 </main>
                 <Footer />
               </>

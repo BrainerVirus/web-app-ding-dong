@@ -3,9 +3,9 @@ import { DataTypes } from "sequelize";
 
 const TipoUsuarioModel = db.define("tipos_usuario", {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
-    autoIncrement: true,
     allowNull: false,
   },
   tipoUsuario: {

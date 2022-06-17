@@ -3,8 +3,19 @@ import UsuarioModel from "../models/UsuarioModel.js";
 //crear un usurio
 export const createUsuario = async (req, res) => {
   try {
-    await UsuarioModel.create(req.body);
-    res.json({ message: "Usuario creado correctamente" });
+    const info = {
+      run: req.body.run,
+      nombre: req.body.nombre,
+      apellidoPaterno: req.body.apellidoPaterno,
+      apellidoMaterno: req.body.apellidoMaterno,
+      celular: req.body.celular,
+      fecha_nacimiento: req.body.fecha_nacimiento,
+    };
+    const usuario = await UsuarioModel.create(info);
+    res.json({
+      message: "Usuario creado correctamente",
+      usuarioId: usuario.id,
+    });
   } catch (error) {
     res.json({ message: error.message });
   }

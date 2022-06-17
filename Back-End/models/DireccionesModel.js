@@ -3,9 +3,9 @@ import { DataTypes } from "sequelize";
 
 const DireccionModel = db.define("direcciones", {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
-    autoIncrement: true,
     allowNull: false,
   },
   calle: {
