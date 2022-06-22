@@ -77,6 +77,24 @@ export const deleteCuenta = async (req, res) => {
   }
 };
 
+//eliminar cuenta segun user id
+//eliminar un registro
+export const deleteCuentaByUserId = async (req, res) => {
+  try {
+    const cuenta = await CuentaModel.destroy({
+      where: {
+        usuarioId: req.params.id,
+      },
+    });
+    res.json({
+      message: "Cuenta eliminada por id de usuario correctamente",
+      cuenta,
+    });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
 //metodos adicionales
 
 //login

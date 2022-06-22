@@ -5,6 +5,7 @@ import {
   createTipoUsuario,
   updateTipoUsuario,
   deleteTipoUsuario,
+  deleteTipoUsuarioByUserId,
 } from "../controllers/TipoUsuarioController.js";
 
 //Inicializamos el router
@@ -20,5 +21,6 @@ routerTipoUsuario.post("/", createTipoUsuario);
 routerTipoUsuario.put("/:id", updateTipoUsuario);
 //ruta para eliminar un tipo de usuario
 routerTipoUsuario.delete("/:id", deleteTipoUsuario);
+routerTipoUsuario.delete("/usuario/:id", deleteTipoUsuarioByUserId);
 
 export default routerTipoUsuario;

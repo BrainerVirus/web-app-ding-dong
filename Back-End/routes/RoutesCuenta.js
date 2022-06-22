@@ -2,6 +2,7 @@ import express from "express";
 import {
   createCuenta,
   deleteCuenta,
+  deleteCuentaByUserId,
   getAllCuentas,
   getCuenta,
   login,
@@ -16,6 +17,7 @@ routerCuentas.get("/:id", getCuenta);
 routerCuentas.post("/", uploadImg, createCuenta);
 routerCuentas.put("/:id", uploadImg, updateCuenta);
 routerCuentas.delete("/:id", deleteCuenta);
+routerCuentas.delete("/usuario/:id", deleteCuentaByUserId);
 routerCuentas.post("/login", login);
 
 export default routerCuentas;

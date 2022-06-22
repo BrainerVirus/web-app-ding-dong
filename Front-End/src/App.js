@@ -8,6 +8,7 @@ import AdministradorHome from "./features/Mantenedores/Administrador/Administrad
 import AdministradorActualizarDatosDeCuenta from "./features/Mantenedores/Administrador/AdministradorActualizarDatosDeCuenta";
 import AdministradorCrearCuentaRepartidor from "./features/Mantenedores/Administrador/AdministradorCrearCuentaRepartidor";
 import AdministradorActualizarCuentaRepartidor from "./features/Mantenedores/Administrador/AdministradorActualizarCuentaRepartidor";
+import AdministradorMostrarRepartidores from "./features/Mantenedores/Administrador/AdministradorMostrarRepartidores";
 function App() {
   return (
     <div className="App" id="App">
@@ -39,7 +40,19 @@ function App() {
             }
           />
           <Route
-            path="/cuenta/administrador/:id/add/repartidor/:id"
+            path="/cuenta/administrador/list-repartidores"
+            element={
+              <>
+                <Navbar />
+                <main>
+                  <AdministradorMostrarRepartidores />
+                </main>
+                <Footer />
+              </>
+            }
+          />
+          <Route
+            path="/cuenta/administrador/add/repartidor"
             element={
               <>
                 <Navbar />

@@ -2,6 +2,7 @@ import express from "express";
 import {
   createDireccion,
   deleteDireccion,
+  deleteDireccionByUserId,
   getAllDirecciones,
   getDireccion,
   updateDireccion,
@@ -14,5 +15,6 @@ routerDireccion.get("/", getAllDirecciones);
 routerDireccion.post("/", createDireccion);
 routerDireccion.put("/:id", updateDireccion);
 routerDireccion.delete("/:id", deleteDireccion);
+routerDireccion.delete("/usuario/:id", deleteDireccionByUserId);
 
 export default routerDireccion;

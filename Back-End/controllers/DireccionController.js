@@ -64,3 +64,20 @@ export const deleteDireccion = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+
+//eliminar direcciones por usuario
+export const deleteDireccionByUserId = async (req, res) => {
+  try {
+    const cuenta = await DireccionModel.destroy({
+      where: {
+        usuarioId: req.params.id,
+      },
+    });
+    res.json({
+      message: "Direccion eliminada por id de usuario correctamente",
+      cuenta,
+    });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};

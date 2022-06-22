@@ -646,7 +646,7 @@ function AdministradorActualizarCuentaRepartidor() {
     };
     axios(options);*/
     await axios
-      .post(URIUsuarios, qs.stringify(usuarioData))
+      .put(URIUsuarios, qs.stringify(usuarioData))
       .then((result) => {
         console.log(result.data);
         console.log(result.data.usuarioId);

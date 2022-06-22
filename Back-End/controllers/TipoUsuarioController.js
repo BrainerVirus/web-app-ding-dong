@@ -62,3 +62,20 @@ export const deleteTipoUsuario = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+
+//eliminar un tipo de usuario por id de usuario
+export const deleteTipoUsuarioByUserId = async (req, res) => {
+  try {
+    const cuenta = await TipoUsuarioModel.destroy({
+      where: {
+        usuarioId: req.params.id,
+      },
+    });
+    res.json({
+      message: "Tipo de usuario eliminado por id de usuario correctamente",
+      cuenta,
+    });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
