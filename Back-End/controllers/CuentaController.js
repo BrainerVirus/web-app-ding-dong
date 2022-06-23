@@ -1,3 +1,7 @@
+//importamos jwt para la autenticacion
+import jwt from "jsonwebtoken";
+//importamos bcrypt para encriptar las contraseñas
+import bcrypt from "bcryptjs";
 // importamos el modelo
 import CuentaModel from "../models/CuentaModel.js";
 import multer from "multer";
@@ -7,10 +11,27 @@ import path from "path";
 // crear un registro
 export const createCuenta = async (req, res) => {
   try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const info = {
       user: req.body.user,
-      password: req.body.password,
+      password: hashedPassword,
       profileImg: req.file.path,
+      usuarioId: req.body.usuarioId,
+    };
+    const cuenta = await CuentaModel.create(info);
+    res.json({ message: "Cuenta creada correctamente", info });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
+export const createCuentaNoProfilePic = async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const info = {
+      user: req.body.user,
+      password: hashedPassword,
+      profileImg: req.body.profileImg,
       usuarioId: req.body.usuarioId,
     };
     const cuenta = await CuentaModel.create(info);

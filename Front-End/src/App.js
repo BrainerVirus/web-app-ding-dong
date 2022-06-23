@@ -9,6 +9,7 @@ import AdministradorActualizarDatosDeCuenta from "./features/Mantenedores/Admini
 import AdministradorCrearCuentaRepartidor from "./features/Mantenedores/Administrador/AdministradorCrearCuentaRepartidor";
 import AdministradorActualizarCuentaRepartidor from "./features/Mantenedores/Administrador/AdministradorActualizarCuentaRepartidor";
 import AdministradorMostrarRepartidores from "./features/Mantenedores/Administrador/AdministradorMostrarRepartidores";
+import Register from "./features/Login/Register";
 function App() {
   return (
     <div className="App" id="App">
@@ -21,6 +22,19 @@ function App() {
                 <Navbar />
                 <main>
                   <Home />
+                </main>
+                <Footer />
+              </>
+            }
+          />
+          <Route path="/Register" element={<Register />} />
+          <Route
+            path="/cuenta/administrador"
+            element={
+              <>
+                <Navbar />
+                <main>
+                  <AdministradorHome />
                 </main>
                 <Footer />
               </>

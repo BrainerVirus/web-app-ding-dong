@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createCuenta,
+  createCuentaNoProfilePic,
   deleteCuenta,
   deleteCuentaByUserId,
   getAllCuentas,
@@ -15,6 +16,7 @@ const routerCuentas = express.Router();
 routerCuentas.get("/", getAllCuentas);
 routerCuentas.get("/:id", getCuenta);
 routerCuentas.post("/", uploadImg, createCuenta);
+routerCuentas.post("/register", createCuentaNoProfilePic);
 routerCuentas.put("/:id", uploadImg, updateCuenta);
 routerCuentas.delete("/:id", deleteCuenta);
 routerCuentas.delete("/usuario/:id", deleteCuentaByUserId);

@@ -20,7 +20,7 @@ const CuentaModel = db.define("cuentas", {
   },
   profileImg: {
     type: DataTypes.STRING,
-    defaultValue: "../images/default-profile-img.png",
+    //defaultValue: "../images/default-profile-img.png",
   },
 });
 

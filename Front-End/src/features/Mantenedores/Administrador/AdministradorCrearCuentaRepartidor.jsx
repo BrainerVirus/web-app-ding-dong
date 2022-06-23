@@ -3,7 +3,7 @@ import axios from "axios";
 import "../../../scss/features/Administrador/AgregarRepartidorAdminStyle.scss";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import defultProfileImg from "../../../img/profile/default-profile-img.jpeg";
+//import defultProfileImg from "../../../img/profile/default-profile-img.jpeg";
 const qs = require("qs");
 
 const URICuentas = "http://localhost:8080/cuentas/";
@@ -872,6 +872,7 @@ function AdministradorCrearCuentaRepartidor() {
           axios.post(URIDirecciones, direccionData);
           axios.post(URITipoUsuario, tipoUsuarioData);
           //messege success
+          cleanStates(e);
           handleShowMessege();
         })
         .catch((err) => {

@@ -1,9 +1,16 @@
+//importamos la base de datos
+import db from "./database/db.js";
 //importamos express para poder crear el servidor
 import express from "express";
 //importamos cors
 import cors from "cors";
-//importamos la base de datos
-import db from "./database/db.js";
+//importamos dotenv para poder leer el archivo .env
+// import dotenv from "dotenv";
+// //variables de entorno
+// dotenv.config({ path: "./.env" });
+//importamos cookie-parser para poder leer las cookies
+import cookieParser from "cookie-parser";
+
 //importamos las rutas
 import routerCuentas from "./routes/RoutesCuenta.js";
 import routerTipoUsuario from "./routes/RoutesTipoUsuario.js";
@@ -13,6 +20,7 @@ import routerUsuario from "./routes/RoutesUsuario.js";
 const app = express();
 //configuramos cors
 app.use(cors());
+//para poder procesar los datos que vienen del formulario
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -20,7 +28,10 @@ app.use(
   })
 );
 
+//configuramos las cookies
+app.use(cookieParser());
 //routers
+console.log("test dotenv: " + process.env.DB_HOST);
 app.use("/cuentas", routerCuentas);
 app.use("/tipoUsuario", routerTipoUsuario);
 app.use("/usuario", routerUsuario);
