@@ -2,10 +2,13 @@
 import jwt from "jsonwebtoken";
 //importamos bcrypt para encriptar las contraseñas
 import bcrypt from "bcryptjs";
+//importamos la libreria de cookies
+import cookieParser from "cookie-parser";
 // importamos el modelo
 import CuentaModel from "../models/CuentaModel.js";
 import multer from "multer";
 import path from "path";
+import { Console } from "console";
 //metodos del crud
 
 // crear un registro
@@ -59,6 +62,7 @@ export const getCuenta = async (req, res) => {
 export const getAllCuentas = async (req, res) => {
   try {
     const cuentas = await CuentaModel.findAll();
+    console.log("estas son cookies: " + req.cookies.token);
     res.json(cuentas);
   } catch (error) {
     res.json({ message: error.message });
@@ -124,23 +128,101 @@ export const login = async (req, res) => {
     const cuenta = await CuentaModel.findAll({
       where: {
         user: req.body.email,
-        password: req.body.password,
       },
     });
-    await CuentaModel.update(
-      { isLogged: 1 },
-      {
-        where: {
-          user: req.body.email,
-          password: req.body.password,
-        },
-      }
-    );
-    res.json(cuenta[0]);
+    // await CuentaModel.update(
+    //   { isLogged: 1 },
+    //   {
+    //     where: {
+    //       user: req.body.email,
+    //       password: req.body.password,
+    //     },
+    //   }
+    // );
+    if (await bcrypt.compare(req.body.password, cuenta[0].password)) {
+      const id = cuenta[0].usuarioId;
+      const isLogged = true;
+      const token = jwt.sign({ id, isLogged }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES,
+      });
+      //console.log("token: " + token + "usuario: " + cuenta[0].user);
+      const cookiesOptions = {
+        expires: new Date(
+          Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+        ),
+        httpOnly: false,
+        path: "/",
+      };
+
+      console.log("cookies: " + cookiesOptions.expires);
+      // res.json({
+      //   login: true,
+      //   token: token,
+      //   user: cuenta[0].user,
+      //   id: cuenta[0].id,
+      //   password: cuenta[0].password,
+      //   cookiesOptions: cookiesOptions,
+      // });
+      await CuentaModel.update(
+        { isLogged: true },
+        {
+          where: {
+            user: req.body.email,
+          },
+        }
+      );
+      console.log("sobre las cookies");
+      res.cookie("token", token, cookiesOptions);
+      console.log("entra a login: " + req.cookies.token);
+      res.json({
+        user: cuenta[0].user,
+        id: cuenta[0].id,
+        password: cuenta[0].password,
+        usuarioId: cuenta[0].usuarioId,
+        isLogged: true,
+      });
+
+      //res.cookie("token", token, { maxAge: 900000, httpOnly: true });
+    }
   } catch (error) {
     res.json({ message: error.message });
   }
 };
+
+export const getLoginStatus = async (req, res) => {
+  console.log("entra a getLoginStatus");
+  if (req.cookies.token) {
+    console.log("entra a getLoginStatus");
+    try {
+      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      const cuenta = await CuentaModel.findAll({
+        where: {
+          id: decoded.id,
+        },
+      });
+      console.log("entra a getLoginStatus");
+      console.log("getLoginStatus id: " + decoded.id);
+      console.log("getLoginStatus isLogged: " + decoded.isLogged);
+      const loginStatus = {
+        isLogged: decoded.isLogged,
+        id: decoded.id,
+      };
+      res.json(loginStatus);
+    } catch (error) {
+      res.json({ message: error.message });
+    }
+  }
+};
+
+// export const getLoginStatus = async (req, res) => {
+//   try {
+//     const cuentas = await CuentaModel.findAll();
+//     console.log("estas son cookies: " + req.cookies.token);
+//     res.json(cuentas);
+//   } catch (error) {
+//     res.json({ message: error.message });
+//   }
+// };
 
 //img controller
 
@@ -167,3 +249,64 @@ export const uploadImg = multer({
     cb("Give proper files formate to upload");
   },
 }).single("profileImg");
+
+//autenticacion
+export const isAuthenticated = async (req, res, next) => {
+  console.log("entra a isAuthenticated");
+  if (req.cookies.token) {
+    try {
+      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      const cuenta = await CuentaModel.findAll({
+        where: {
+          id: decoded.id,
+        },
+      });
+      if (!res) {
+        return next();
+      }
+      req.user = cuenta[0];
+      console.log("entra a isAuthenticated");
+      console.log("id: " + decoded.id);
+      console.log("isLogged: " + decoded.isLogged);
+      return next();
+    } catch (error) {
+      res.json({ message: error.message });
+      return next();
+    }
+  } else {
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    res.redirect("http://localhost:3000/");
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    await CuentaModel.update(
+      { isLogged: false },
+      {
+        where: {
+          usuarioId: req.body.usuarioId,
+        },
+      }
+    );
+    const cookiesOptions = {
+      expires: new Date(
+        Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+      ),
+      httpOnly: false,
+      path: "/",
+    };
+    //console.log("entra a logout");
+    //console.log("id que llega al logout: " + req.body.usuarioId);
+    res.clearCookie("token");
+    res.json({ message: "success" }).end();
+    //console.log("logout correcto");
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};

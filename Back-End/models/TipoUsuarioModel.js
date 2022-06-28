@@ -7,10 +7,17 @@ const TipoUsuarioModel = db.define("tipos_usuario", {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
     allowNull: false,
+    validate: {
+      notNull: true,
+    },
   },
   tipoUsuario: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      notNull: true,
+      isAlpha: true,
+    },
   },
 });
 

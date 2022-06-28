@@ -13,14 +13,30 @@ const CuentaModel = db.define("cuentas", {
   user: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      isEmail: true,
+    },
   },
   password: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      is: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}/,
+      notNull: true,
+    },
   },
   profileImg: {
     type: DataTypes.STRING,
+    allowNull: false,
+    validate: {
+      notNull: true,
+    },
     //defaultValue: "../images/default-profile-img.png",
+  },
+  isLogged: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
   },
 });
 

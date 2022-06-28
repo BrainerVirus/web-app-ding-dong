@@ -6,7 +6,7 @@ import express from "express";
 import cors from "cors";
 //importamos dotenv para poder leer el archivo .env
 // import dotenv from "dotenv";
-// //variables de entorno
+//variables de entorno
 // dotenv.config({ path: "./.env" });
 //importamos cookie-parser para poder leer las cookies
 import cookieParser from "cookie-parser";
@@ -19,7 +19,13 @@ import routerUsuario from "./routes/RoutesUsuario.js";
 //definimos app como una variable de express
 const app = express();
 //configuramos cors
-app.use(cors());
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://localhost:8080"],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 //para poder procesar los datos que vienen del formulario
 app.use(express.json());
 app.use(
@@ -30,6 +36,7 @@ app.use(
 
 //configuramos las cookies
 app.use(cookieParser());
+
 //routers
 console.log("test dotenv: " + process.env.DB_HOST);
 app.use("/cuentas", routerCuentas);

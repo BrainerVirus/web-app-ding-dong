@@ -24,6 +24,19 @@ export const getTipoUsuario = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+export const getTipoUsuarioByUserId = async (req, res) => {
+  try {
+    const tipoUsuario = await TipoUsuarioModel.findAll({
+      where: {
+        usuarioId: req.params.id,
+      },
+    });
+    res.json(tipoUsuario[0]);
+    //console.log("tipo de usuario: " + tipoUsuario[0].tipoUsuario);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
 
 //mostrar todos los tipos de usuarios
 export const getAllTiposDeUsuario = async (req, res) => {

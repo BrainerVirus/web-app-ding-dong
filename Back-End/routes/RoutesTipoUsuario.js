@@ -6,6 +6,7 @@ import {
   updateTipoUsuario,
   deleteTipoUsuario,
   deleteTipoUsuarioByUserId,
+  getTipoUsuarioByUserId,
 } from "../controllers/TipoUsuarioController.js";
 
 //Inicializamos el router
@@ -13,6 +14,7 @@ const routerTipoUsuario = express.Router();
 
 //ruta para obtener un tipo de usuario
 routerTipoUsuario.get("/:id", getTipoUsuario);
+routerTipoUsuario.get("/usuario/:id", getTipoUsuarioByUserId);
 //ruta para obtener todos los tipos de usuarios
 routerTipoUsuario.get("/", getAllTiposDeUsuario);
 //ruta para crear un tipo de usuario

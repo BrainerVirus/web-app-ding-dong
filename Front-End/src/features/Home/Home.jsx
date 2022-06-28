@@ -1,7 +1,12 @@
 import React from "react";
 import "../../scss/features/HomeStyle.scss";
+//import { useUser, useUserUpdate } from "../context/AuthContext";
 
 function Home() {
+  // const userProvider = useUser();
+  // console.log(
+  //   "User:" + userProvider.user + userProvider.isLogged + userProvider.role
+  // );
   return (
     <div className="container-fluid" id="home-container">
       <div className="row  d-flex align-content-center justify-content-center gap-md-5 gap-sm-3">

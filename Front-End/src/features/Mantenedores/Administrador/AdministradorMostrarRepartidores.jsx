@@ -19,9 +19,12 @@ function AdministradorMostrarRepartidores() {
   useEffect(() => {
     getAllAccounts();
   }, [isDeleteted]);
-
+  axios.defaults.withCredentials = true;
   const getAllAccounts = async () => {
-    const response = await axios.get(URICuentas);
+    const response = await axios.get(URICuentas, {
+      withCredentials: true,
+      credentials: "include",
+    });
     setCuentas(response.data);
     setIsDeleted();
   };
@@ -35,7 +38,10 @@ function AdministradorMostrarRepartidores() {
   const deleteAccount = async (id) => {
     console.log("delete account: " + id);
     await axios
-      .delete(URITipoUsuario + "usuario/" + id)
+      .delete(URITipoUsuario + "usuario/" + id, {
+        withCredentials: true,
+        credentials: "include",
+      })
       .then(() => {
         axios.delete(URIDirecciones + "usuario/" + id);
       })
@@ -66,18 +72,21 @@ function AdministradorMostrarRepartidores() {
           <table className="table">
             <thead className="table-primary">
               <tr>
+                <th>Id</th>
                 <th>User</th>
-                <th>Password</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {cuentas.map((account) => (
                 <tr key={account.id}>
+                  <td>{account.usuarioId}</td>
                   <td>{account.user}</td>
-                  <td>{account.password}</td>
                   <td>
-                    <Link to={`/edit/${account.id}`} className="btn btn-info">
+                    <Link
+                      to={`/cuenta/administrador/update/repartidor/${account.usuarioId}`}
+                      className="btn btn-info"
+                    >
                       Editar
                     </Link>
                     <button

@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 import "../../scss/features/LoginStyle.scss";
 import LightLogo from "../../img/logos/Ding-Dong-Logo-Light.svg";
 import PlayStoreLogo from "../../img/logos/get-it-on-google-play-logo.svg";
@@ -9,7 +10,8 @@ import { useNavigate } from "react-router-dom";
 //import defultProfileImg from "../../img/profile/default-profile-img.jpeg";
 const qs = require("qs");
 
-const URICuentas = "http://localhost:8080/cuentas/register";
+const URICuentas = "http://localhost:8080/cuentas/";
+const URICuentasRegister = "http://localhost:8080/cuentas/register";
 const URIUsuarios = "http://localhost:8080/usuario/";
 const URIDirecciones = "http://localhost:8080/direccion/";
 const URITipoUsuario = "http://localhost:8080/tipoUsuario/";
@@ -25,7 +27,7 @@ const regexValidPass8length = /(?=.{8,})/;
 function Register() {
   //----------------------------------------------------------
   //form states
-  const [img, setImg] = useState("image/default-profile-img.png");
+  const [img, setImg] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rePassword, setRePassword] = useState("");
@@ -35,7 +37,7 @@ function Register() {
   const [apellidoMaterno, setApellidoMaterno] = useState("N/A");
   const [fechaNacimiento, setFechaNacimiento] = useState("0001-01-01");
   const [calle, setCalle] = useState("N/A");
-  const [numCalle, setNumCalle] = useState("N/A");
+  const [numCalle, setNumCalle] = useState("0");
   const [region, setRegion] = useState("N/A");
   const [comuna, setComuna] = useState("N/A");
   const [celular, setCelular] = useState("N/A");
@@ -90,7 +92,16 @@ function Register() {
     regexValidPass8length.test(password)
       ? setvalidPassword8Char(true)
       : setvalidPassword8Char(false);
-    if (password === rePassword && password && rePassword) {
+    if (
+      password === rePassword &&
+      password &&
+      rePassword &&
+      validPassword8Char &&
+      validPasswordNumbers &&
+      validPasswordSybmbos &&
+      validPasswordUpperCase &&
+      validPasswordLowerCase
+    ) {
       console.log("passwords match");
       setValidPassword(true);
     } else setValidPassword(false);
@@ -108,10 +119,12 @@ function Register() {
     e.preventDefault();
     setReShowPassword(!showRePassword);
   };
+
   const store = async (e) => {
-    e.preventDefault();
     console.log("valid mail: " + validEmail);
     console.log("valid pass: " + validPassword);
+
+    e.preventDefault();
     if (validEmail && validPassword) {
       const usuarioData = {
         nombre: nombre,
@@ -121,11 +134,21 @@ function Register() {
         celular: celular,
         fecha_nacimiento: fechaNacimiento,
       };
-
-      const cuentaData = new FormData();
-      cuentaData.append("profileImg", img);
-      cuentaData.append("user", email);
-      cuentaData.append("password", password);
+      let cuentaData = null;
+      if (img === "") {
+        console.log("entra al imga vacio" + img);
+        cuentaData = {
+          user: email,
+          password: password,
+          profileImg: "images\\default-profile-img.jpg",
+        };
+      } else {
+        console.log("entra al imga no vacio" + img);
+        cuentaData = new FormData();
+        cuentaData.append("profileImg", img);
+        cuentaData.append("user", email);
+        cuentaData.append("password", password);
+      }
 
       const direccionData = {
         calle: calle,
@@ -137,46 +160,66 @@ function Register() {
       const tipoUsuarioData = {
         tipoUsuario: tipoUsuario,
       };
+      /*const options = {
+        method: "POST",
+        headers: { "content-type": "application/form-data" },
+        data: cuenta,
+        url: URI,
+      };
+      axios(options);*/
       await axios
         .post(URIUsuarios, qs.stringify(usuarioData))
         .then((result) => {
           console.log(result.data);
           console.log(result.data.usuarioId);
-          cuentaData.append("usuarioId", result.data.usuarioId);
+          // cuentaData.append("usuarioId", result.data.usuarioId);
           direccionData.usuarioId = result.data.usuarioId;
           tipoUsuarioData.usuarioId = result.data.usuarioId;
           console.log("direcion user id: " + direccionData.usuarioId);
-          axios.post(URICuentas, cuentaData);
+          if (img === "") {
+            cuentaData.usuarioId = result.data.usuarioId;
+            axios.post(URICuentasRegister, cuentaData);
+          } else {
+            cuentaData.append("usuarioId", result.data.usuarioId);
+            axios.post(URICuentas, cuentaData);
+          }
           axios.post(URIDirecciones, direccionData);
           axios.post(URITipoUsuario, tipoUsuarioData);
           //messege success
           cleanStates(e);
-          handleShowMessege();
+          Swal.fire({
+            title: "Exito!",
+            text: "Usuario registrado correctamente",
+            icon: "success",
+            confirmButtonText: "Aceptar",
+            timer: 3000,
+          });
         })
         .catch((err) => {
           console.log(err);
         });
+      //const resp = res.id;
+      //history.push('/cuentas/')
+      //navigate("/");
     } else {
-      alert("Uno o más campos son inválidos");
+      Swal.fire({
+        title: "Error!",
+        text: "Uno o más campos no son válidos",
+        icon: "error",
+        confirmButtonText: "Aceptar",
+        timer: 3000,
+      });
     }
-  };
-  // show message after submit
-  const handleShowMessege = (e) => {
-    setShowMessege(!showMessege);
-  };
-  // show message close by x button
-  const handleCloseMessege = (e) => {
-    setShowMessege(false);
   };
   //discard btn
   const cleanStates = (e) => {
     e.preventDefault();
-    //datos usuario
-    //setEmail("");
-    //setPassword("");
-    //setRePassword("");
-    // setShowMessege(false);
-    //show password
+    // datos usuario
+    setEmail("");
+    setPassword("");
+    setRePassword("");
+    setShowMessege(false);
+    // show password
     setShowPassword(false);
     setReShowPassword(false);
   };
@@ -236,8 +279,6 @@ function Register() {
                 >
                   El email ingresado no es válido
                 </div>
-              </div>
-              <div className="d-flex flex-column">
                 <div>
                   <label htmlFor="password" className="form-label">
                     Nueva contraseña:
@@ -258,9 +299,13 @@ function Register() {
                       required
                     />
                     <i
-                      className="fa-solid fa-eye"
-                      style={{ color: "black" }}
+                      className={
+                        showPassword
+                          ? "fa-solid fa-eye-slash"
+                          : "fa-solid fa-eye"
+                      }
                       onClick={handleShowPassword}
+                      style={{ color: "black" }}
                     />
                   </div>
                 </div>
@@ -349,9 +394,13 @@ function Register() {
                       required
                     />
                     <i
-                      className="fa-solid fa-eye"
-                      style={{ color: "black" }}
+                      className={
+                        showRePassword
+                          ? "fa-solid fa-eye-slash eye-close"
+                          : "fa-solid fa-eye eye-open"
+                      }
                       onClick={handleReShowPassword}
+                      style={{ color: "black" }}
                     />
                   </div>
                 </div>

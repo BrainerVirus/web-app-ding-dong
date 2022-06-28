@@ -10,30 +10,52 @@ const UsuarioModel = db.define("usuarios", {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
     allowNull: false,
+    validate: {
+      notNull: true,
+    },
   },
   nombre: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      notNull: true,
+    },
   },
   apellidoPaterno: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      notNull: true,
+    },
   },
   apellidoMaterno: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      notNull: true,
+    },
   },
   run: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      notNull: true,
+    },
   },
   celular: {
     type: DataTypes.STRING,
     allowNull: false,
+    validate: {
+      notNull: true,
+    },
   },
   fecha_nacimiento: {
     type: DataTypes.DATEONLY,
     allowNull: false,
+    validate: {
+      notNull: true,
+      isDate: true,
+    },
   },
   //recuerda eliminar el campo direccion en el digrama ER.
   //Recuerda cambiar el campo "DesactivarRegistro" a estado en el digrama ER

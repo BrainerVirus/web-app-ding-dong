@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
 import "../../../scss/features/Administrador/AgregarRepartidorAdminStyle.scss";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const qs = require("qs");
 
 const URICuentas = "http://localhost:8080/cuentas/";
+const URICuentasRegister = "http://localhost:8080/cuentas/register";
 const URIUsuarios = "http://localhost:8080/usuario/";
 const URIDirecciones = "http://localhost:8080/direccion/";
 const URITipoUsuario = "http://localhost:8080/tipoUsuario/";
@@ -804,6 +806,7 @@ function AdministradorCrearCuentaRepartidor() {
   //----------------------------------------------------------
   //const params = new URLSearchParams();
   //axios post to database json way
+  axios.defaults.withCredentials = true;
   const store = async (e) => {
     console.log("valid mail: " + validEmail);
     console.log("valid pass: " + validPassword);
@@ -836,11 +839,21 @@ function AdministradorCrearCuentaRepartidor() {
         celular: celular,
         fecha_nacimiento: fechaNacimiento,
       };
-
-      const cuentaData = new FormData();
-      cuentaData.append("profileImg", img);
-      cuentaData.append("user", email);
-      cuentaData.append("password", password);
+      let cuentaData = null;
+      if (img === "") {
+        console.log("entra al imga vacio" + img);
+        cuentaData = {
+          user: email,
+          password: password,
+          profileImg: "images\\default-profile-img.jpg",
+        };
+      } else {
+        console.log("entra al imga no vacio" + img);
+        cuentaData = new FormData();
+        cuentaData.append("profileImg", img);
+        cuentaData.append("user", email);
+        cuentaData.append("password", password);
+      }
 
       const direccionData = {
         calle: calle,
@@ -864,16 +877,28 @@ function AdministradorCrearCuentaRepartidor() {
         .then((result) => {
           console.log(result.data);
           console.log(result.data.usuarioId);
-          cuentaData.append("usuarioId", result.data.usuarioId);
+          // cuentaData.append("usuarioId", result.data.usuarioId);
           direccionData.usuarioId = result.data.usuarioId;
           tipoUsuarioData.usuarioId = result.data.usuarioId;
           console.log("direcion user id: " + direccionData.usuarioId);
-          axios.post(URICuentas, cuentaData);
+          if (img === "") {
+            cuentaData.usuarioId = result.data.usuarioId;
+            axios.post(URICuentasRegister, cuentaData);
+          } else {
+            cuentaData.append("usuarioId", result.data.usuarioId);
+            axios.post(URICuentas, cuentaData);
+          }
           axios.post(URIDirecciones, direccionData);
           axios.post(URITipoUsuario, tipoUsuarioData);
           //messege success
           cleanStates(e);
-          handleShowMessege();
+          //handleShowMessege();
+          Swal.fire({
+            text: "Creación de cuenta exitosa",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 2000,
+          });
         })
         .catch((err) => {
           console.log(err);
@@ -1042,7 +1067,12 @@ function AdministradorCrearCuentaRepartidor() {
                 value={password}
                 required
               />
-              <i className="fa-solid fa-eye" onClick={handleShowPassword} />
+              <i
+                className={
+                  showPassword ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"
+                }
+                onClick={handleShowPassword}
+              />
             </div>
           </div>
           <div class="requirements">
@@ -1129,7 +1159,14 @@ function AdministradorCrearCuentaRepartidor() {
                 autoComplete="off"
                 required
               />
-              <i className="fa-solid fa-eye" onClick={handleReShowPassword} />
+              <i
+                className={
+                  showRePassword
+                    ? "fa-solid fa-eye-slash eye-close"
+                    : "fa-solid fa-eye eye-open"
+                }
+                onClick={handleReShowPassword}
+              />
             </div>
           </div>
           <div
