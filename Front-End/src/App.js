@@ -126,22 +126,50 @@ function App() {
                 </>
               }
             />
-            <Route path="/Register" element={<Register />} />
-            <Route path="/personas/login" element={<Login />} />
+            <Route
+              path="/personas/receptor/register"
+              element={
+                <>
+                  <Navbar />
+                  <main>
+                    <Register />
+                  </main>
+                  <Footer />
+                </>
+              }
+            />
+            <Route
+              path="/personas/login"
+              element={
+                <>
+                  <Navbar />
+                  <main>
+                    <Login />
+                  </main>
+                  <Footer />
+                </>
+              }
+            />
             <Route
               path="/empresas/login"
               element={
-                <LoginAdmin
-                  changeId={(id) => {
-                    setId(id);
-                  }}
-                  changeLogged={(isLogged) => {
-                    setIsLogged(isLogged);
-                  }}
-                  changeRole={(role) => {
-                    setRole(role);
-                  }}
-                />
+                <>
+                  <Navbar />
+                  <main>
+                    <LoginAdmin
+                      changeId={(id) => {
+                        setId(id);
+                      }}
+                      changeLogged={(isLogged) => {
+                        setIsLogged(isLogged);
+                      }}
+                      changeRole={(role) => {
+                        setRole(role);
+                      }}
+                    />
+                  </main>
+                  <Footer />
+                </>
               }
             />
             {/* Private routes Admin*/}

@@ -48,9 +48,9 @@ function NavbarAdministrador() {
   return (
     <nav className="navbar navbar-expand-lg bg-light sticky-top">
       <div className="container-fluid " id="nav-wrapper">
-        <a className="navbar-brand" href="#">
+        <Link to="/" className="navbar-brand">
           <img src={logoDark} width="100px" height="50px" />
-        </a>
+        </Link>
         <button
           className="navbar-toggler"
           type="button"
@@ -65,22 +65,33 @@ function NavbarAdministrador() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a
+              <Link
                 className="nav-link nav-item-base-status"
                 aria-current="page"
-                href="/cuenta/administrador/home"
+                to="/cuenta/administrador/home"
               >
                 <i className="fa-solid me-2 fa-house-chimney"></i>
                 Home
-              </a>
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link
+                className="nav-link nav-item-base-status"
+                aria-current="page"
+                to="/cuenta/administrador/list-repartidores"
+              >
+                <i className="fa-solid fa-users me-2" />
+                Mantenedor repartidores
+              </Link>
             </li>
             <li className="nav-item">
               <a
                 className="nav-link nav-item-base-status"
-                href="/cuenta/administrador/list-repartidores"
+                aria-current="page"
+                href="#"
               >
-                <i className="fa-solid fa-user me-2"></i> Mantenedor
-                Repartidores
+                <i className="fa-solid fa-message me-2"></i>
+                Ayuda
               </a>
             </li>
             <li className="nav-item dropdown ">
