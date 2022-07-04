@@ -1,0 +1,107 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap");
+$baseColor: #540b66;
+$black: black;
+$secondaryColor: #c48e3c;
+$thridColor: #8d12ab;
+$hoverColor: #a405cc;
+$box-shadow: 0 0.5rem 1rem rgba($black, 0.15);
+$box-shadow-sm: 0 0.125rem 0.25rem rgba($black, 0.075);
+$box-shadow-lg: 0 1rem 3rem rgba($black, 0.175);
+$box-shadow-inset: inset 0 1px 2px rgba($black, 0.075);
+
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 80vw;
+  align-items: center;
+  // gap: 2rem;
+  // margin-top: 2rem;
+  // margin-bottom: 2rem;
+  margin-bottom: 0 !important;
+  position: relative;
+}
+
+.custom-shape-divider-bottom-1656548343 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1656548343 svg {
+  position: relative;
+  display: block;
+  width: calc(116% + 1.3px);
+  height: 60px;
+}
+
+.custom-shape-divider-bottom-1656548343 .shape-fill {
+  fill: $baseColor;
+}
+
+.custom-btn-primary {
+  background-color: $thridColor !important;
+  border-color: $baseColor !important;
+  border: solid 1px $baseColor !important;
+  //align-self: flex-end;
+  color: white;
+}
+
+.custom-btn-primary:hover {
+  background-color: $hoverColor !important;
+  color: white;
+}
+
+.show-repartidores-table {
+  min-height: 60vh;
+  max-width: 90vw;
+  align-items: flex-end;
+}
+
+.content-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.row {
+  justify-content: center;
+}
+
+.custom-table {
+  max-width: 80vw;
+  max-height: 70vh;
+  th {
+    background-color: $baseColor;
+    color: white;
+  }
+}
+
+.center-page-content {
+  display: flex;
+  justify-content: center;
+}
+
+.scrollme {
+  min-width: 80vw !important;
+  height: 250px;
+  width: 200px;
+  overflow: scroll;
+}
+
+.divider {
+  min-height: 100px !important;
+}
+
+.actions-column {
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 10px;
+}
+
+.btn-wrapper {
+  justify-content: space-between;
+}

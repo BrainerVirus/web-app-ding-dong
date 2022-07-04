@@ -17,12 +17,13 @@ $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075);
 }
 
 .no-padding {
-  padding: 0;
+  padding: 0 !important;
   background-color: white;
   color: black;
 }
 .flex-container {
   display: flex;
+  flex-direction: column;
   // gap: 2rem;
   // margin-top: 2rem;
   // margin-bottom: 2rem;
@@ -43,6 +44,10 @@ $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075);
   p {
     text-align: justify;
     font-size: 1.2rem;
+  }
+  i {
+    align-self: center;
+    font-size: 2.5rem;
   }
 }
 
@@ -108,8 +113,32 @@ $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075);
   height: 60px;
 }
 
-.custom-shape-divider-bottom-1656548343 .shape-fill {
-  fill: $thridColor !important;
+.custom-shape-divider-bottom-1656548343 {
+  .shape-fill {
+    fill: $thridColor !important;
+  }
+}
+.custom-shape-divider-bottom-footer-1656548343 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-footer-1656548343 svg {
+  position: relative;
+  display: block;
+  width: calc(116% + 1.3px);
+  height: 60px;
+}
+
+.custom-shape-divider-bottom-footer-1656548343 {
+  .shape-fill {
+    fill: $baseColor;
+  }
 }
 
 .custom-shape-divider-top-1656548389 {
@@ -176,15 +205,10 @@ $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075);
   min-height: 200px !important;
 }
 
-#contact-us {
-  .custom-shape-divider-bottom-1656548343 .shape-fill {
-    fill: #540b66;
-  }
-}
-
 .custom-btn-primary {
   background-color: $thridColor;
   border-color: $thridColor;
+  min-width: 100%;
 }
 
 .custom-btn-primary:hover {

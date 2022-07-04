@@ -6,22 +6,31 @@ import {
   deleteCuentaByUserId,
   getAllCuentas,
   getCuenta,
+  getCuentaByUserId,
   getLoginStatus,
   isAuthenticated,
   login,
   logout,
   updateCuenta,
+  updateCuentaByUserId,
   uploadImg,
 } from "../controllers/CuentaController.js";
 
 const routerCuentas = express.Router();
 
 routerCuentas.get("/", isAuthenticated, getAllCuentas);
-routerCuentas.get("/:id", getCuenta);
+routerCuentas.get("/:id", isAuthenticated, getCuenta);
+routerCuentas.get("/usuario/:id", isAuthenticated, getCuentaByUserId);
 routerCuentas.post("/", uploadImg, createCuenta);
 routerCuentas.post("/register", createCuentaNoProfilePic);
-routerCuentas.put("/:id", uploadImg, updateCuenta);
-routerCuentas.delete("/:id", deleteCuenta);
+routerCuentas.put("/:id", isAuthenticated, uploadImg, updateCuenta);
+routerCuentas.put(
+  "/usuario/:id",
+  isAuthenticated,
+  uploadImg,
+  updateCuentaByUserId
+);
+routerCuentas.delete("/:id", isAuthenticated, deleteCuenta);
 routerCuentas.delete("/usuario/:id", isAuthenticated, deleteCuentaByUserId);
 routerCuentas.post("/login", login);
 routerCuentas.get("/login/status", getLoginStatus);

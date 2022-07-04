@@ -9,6 +9,7 @@ import CuentaModel from "../models/CuentaModel.js";
 import multer from "multer";
 import path from "path";
 import { Console } from "console";
+import e from "express";
 //metodos del crud
 
 // crear un registro
@@ -57,6 +58,18 @@ export const getCuenta = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+export const getCuentaByUserId = async (req, res) => {
+  try {
+    const cuenta = await CuentaModel.findAll({
+      where: {
+        usuarioId: req.params.id,
+      },
+    });
+    res.json(cuenta[0]);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
 
 // mostrar todos los registros
 export const getAllCuentas = async (req, res) => {
@@ -82,6 +95,47 @@ export const updateCuenta = async (req, res) => {
         id: req.params.id,
       },
     });
+    res.json({ message: "Cuenta actualizada correctamente", info });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+export const updateCuentaByUserId = async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const info = {
+      user: req.body.user,
+      password: hashedPassword,
+      profileImg: req.file.path,
+    };
+    const infoKeepOldPassword = {
+      user: req.body.user,
+      profileImg: req.file.path,
+    };
+    const cuentaToFindForPassValidation = await CuentaModel.findAll({
+      where: {
+        usuarioId: req.params.id,
+      },
+    });
+    if (
+      await bcrypt.compare(
+        req.body.password,
+        cuentaToFindForPassValidation[0].password
+      )
+    ) {
+      const cuenta = await CuentaModel.update(infoKeepOldPassword, {
+        where: {
+          usuarioId: req.params.id,
+        },
+      });
+    } else {
+      const cuenta = await CuentaModel.update(info, {
+        where: {
+          usuarioId: req.params.id,
+        },
+      });
+    }
+
     res.json({ message: "Cuenta actualizada correctamente", info });
   } catch (error) {
     res.json({ message: error.message });

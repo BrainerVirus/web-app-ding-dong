@@ -3,7 +3,7 @@ $baseColor: #540b66;
 $secondaryColor: #c48e3c;
 
 #container-login {
-  background-image: url("../../../src/img/logos/login-bg3.svg");
+  background-image: url("../../../../src/img/logos/login-bg3.svg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -12,7 +12,7 @@ $secondaryColor: #c48e3c;
 }
 
 #bg-logo {
-  content: url("../../../src/img/logos/Ding-Dong-Logo-Light.svg");
+  content: url("../../../../src/img/logos/Ding-Dong-Logo-Light.svg");
   width: 90%;
 }
 
@@ -115,7 +115,7 @@ $secondaryColor: #c48e3c;
   transition: all 0.4s ease-in-out;
 }
 
-.toggle input:checked + .slider {
+.togglesrc input:checked + .slider {
   background-color: $secondaryColor;
 }
 

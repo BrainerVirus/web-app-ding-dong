@@ -1,35 +1,23 @@
 import React from "react";
 import axios from "axios";
-import logoDark from "../../img/logos/Ding-Dong-Logo-transparent-Nav.svg";
-import logoLight from "../../img/logos/Ding-Dong-Logo-Nav-Light2.svg";
-import NavbarStyle from "../../scss/features/Administrador/NavbarAdministrador.scss";
-import { Link, Navigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import { useContext } from "react";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import logoDark from "../../../../img/logos/Ding-Dong-Logo-transparent-Nav.svg";
+import { Link } from "react-router-dom";
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
+//end points
 const URI = "http://localhost:8080/cuentas/logout/status";
+//------------------------------------------------------
 function NavbarAdministrador() {
+  //states
+  const [isToggled, setIsToggled] = useState(true);
   const navigate = useNavigate();
-  //const session = useContext(AuthContext);
-  //console.log("role del local: " + role);
-  // const [activeRole, setActiveRole] = useState(() => {
-  //   const savedItem = localStorage.getItem("tipoUsuario");
-  // });
-  // console.log("activeRole: " + activeRole);
+  //settings and data to close session
   const sessionId = localStorage.getItem("id");
-  //console.log("id navbar: " + session.role);
   const logoutId = {
     usuarioId: sessionId,
   };
-  // useEffect(() => {
-  //   const role = localStorage.getItem("tipoUsuario");
-  //   //setActiveRole(role);
-  //   console.log("effect montado: " + role);
-  // }, []);
   axios.defaults.withCredentials = true;
+  //close session
   const handleLogout = async (e) => {
     e.preventDefault();
     await axios
@@ -38,12 +26,13 @@ function NavbarAdministrador() {
         credentials: "include",
       })
       .then((res) => {
-        //console.log("session logout");
         localStorage.clear();
-        //setActiveRole("");
       });
-    //console.log("localStorage: " + session);
     navigate("/");
+  };
+  //close navbar
+  const handleClick = (e) => {
+    setIsToggled(!isToggled);
   };
   return (
     <nav className="navbar navbar-expand-lg bg-light sticky-top">
@@ -52,23 +41,28 @@ function NavbarAdministrador() {
           <img src={logoDark} width="100px" height="50px" />
         </Link>
         <button
-          className="navbar-toggler"
+          className="navbar-toggler collapsed"
+          onClick={handleClick}
           type="button"
-          data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
+          data-bs-toggle="collapse"
           aria-controls="navbarNav"
-          aria-expanded="false"
+          aria-expanded={isToggled ? true : false}
           aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
+        <div
+          className={isToggled ? "navbar-collapse collapse" : "navbar-collapse"}
+          id="navbarNav"
+        >
           <ul className="navbar-nav">
             <li className="nav-item">
               <Link
                 className="nav-link nav-item-base-status"
                 aria-current="page"
                 to="/cuenta/administrador/home"
+                onClick={handleClick}
               >
                 <i className="fa-solid me-2 fa-house-chimney"></i>
                 Home
@@ -79,6 +73,7 @@ function NavbarAdministrador() {
                 className="nav-link nav-item-base-status"
                 aria-current="page"
                 to="/cuenta/administrador/list-repartidores"
+                onClick={handleClick}
               >
                 <i className="fa-solid fa-users me-2" />
                 Mantenedor repartidores
@@ -88,6 +83,7 @@ function NavbarAdministrador() {
               <a
                 className="nav-link nav-item-base-status"
                 aria-current="page"
+                onClick={handleClick}
                 href="#"
               >
                 <i className="fa-solid fa-message me-2"></i>

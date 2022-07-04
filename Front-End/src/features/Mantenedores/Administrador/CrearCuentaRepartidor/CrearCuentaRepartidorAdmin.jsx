@@ -1,9 +1,10 @@
 import React from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import "../../../scss/features/Administrador/ActualizarRepartidorAdminStyle.scss";
+import crearCuentaRepatidorStyle from "./CrearCuentaRepartidorAdminStyle.module.scss";
+import booststrap from "../../../../scss/Global/bootstrap.min.module.css";
 import { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 //import defultProfileImg from "../../../img/profile/default-profile-img.jpeg";
 const qs = require("qs");
 
@@ -443,7 +444,7 @@ const excludedRuns = [
   111111111, 222222222, 333333333, 444444444, 555555555, 666666666, 777777777,
   888888888, 999999999,
 ];
-function AdministradorActualizarCuentaRepartidor() {
+function AdministradorCrearCuentaRepartidor() {
   //----------------------------------------------------------
   //form states
   const [img, setImg] = useState("");
@@ -484,7 +485,7 @@ function AdministradorActualizarCuentaRepartidor() {
   const [showMessege, setShowMessege] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setReShowPassword] = useState(false);
-  const tipoUsuario = "repartidor";
+  const tipoUsuario = "administrador";
   //navitaion
   const navigate = useNavigate();
   // profile photo upload
@@ -596,7 +597,7 @@ function AdministradorActualizarCuentaRepartidor() {
   const validateRun = (run) => {
     run = run.replace(/[.-]/g, "");
     run = run.toUpperCase();
-    var patt = /^\d{1,8}[0-9K]$/;
+    var patt = /^\d{8}[0-9K]$/;
     var ok = patt.test(run);
     var cStr = run.slice(0, -1);
     var cDig = run.slice(-1);
@@ -604,9 +605,10 @@ function AdministradorActualizarCuentaRepartidor() {
     var nVal = 0;
     var cVal = "";
     console.log("run equals excluded: " + run);
+    console.log("patt test: " + ok);
     let excludedRunTest = false;
     for (let i = 0; i < excludedRuns.length; i++) {
-      if (run == excludedRuns[i]) {
+      if (run === excludedRuns[i]) {
         console.log("Entra al false del run: ");
         return (excludedRunTest = true);
       }
@@ -974,16 +976,22 @@ function AdministradorActualizarCuentaRepartidor() {
   };
   return (
     <form onSubmit={store}>
-      <div className="container-fluid container-actualizar-datos-admin">
-        <div className="container-fluid grid-span-3">
-          <h1>Actualizar cuenta de repartidor</h1>
+      <div
+        className={`${booststrap["container-fluid"]} ${crearCuentaRepatidorStyle["container-actualizar-datos-admin"]}`}
+      >
+        <div
+          className={`${booststrap["container-fluid"]} ${crearCuentaRepatidorStyle["grid-span-3"]}`}
+        >
+          <h1>Crear cuenta de repartidor</h1>
         </div>
         <div
-          className="col-md-4 flex-container right-side-border"
+          className={`${booststrap["col-md-4"]} ${crearCuentaRepatidorStyle["flex-container"]} ${crearCuentaRepatidorStyle["right-side-border"]}`}
           id="datos-usuario-container"
         >
-          <h2 className="font-weight-bold">Foto de Pefil</h2>
-          <div className="flex-container">
+          <h2 className={`${crearCuentaRepatidorStyle["font-weight-bold"]}`}>
+            Foto de Pefil
+          </h2>
+          <div className={`${crearCuentaRepatidorStyle["flex-container"]}`}>
             <input
               type="file"
               style={{ display: "none" }}
@@ -994,22 +1002,33 @@ function AdministradorActualizarCuentaRepartidor() {
               id="profileImg"
             />
             {preview ? (
-              <div className="img-preview-wrapper flex-container no-margin-bottom">
-                <img src={preview} className="img-preview" alt="profile-img" />
+              <div
+                className={`${crearCuentaRepatidorStyle["img-preview-wrapper"]} ${crearCuentaRepatidorStyle["flex-container"]} ${crearCuentaRepatidorStyle["no-margin-bottom"]}`}
+              >
+                <img
+                  src={preview}
+                  className={`${crearCuentaRepatidorStyle["img-preview"]}`}
+                  alt="profile-img"
+                />
                 <button
-                  className="btn btn-primary img-preview-btn mt-2"
+                  className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${crearCuentaRepatidorStyle["img-preview-btn"]}`}
                   onClick={handleFileInput}
                 >
                   Actualizar
                 </button>
               </div>
             ) : (
-              <div className="flex-container no-margin-bottom">
-                <button className="round-img-btn" onClick={handleFileInput}>
+              <div
+                className={`${crearCuentaRepatidorStyle["flex-container"]} ${crearCuentaRepatidorStyle["no-margin-bottom"]}`}
+              >
+                <button
+                  className={`${crearCuentaRepatidorStyle["round-img-btn"]}`}
+                  onClick={handleFileInput}
+                >
                   Subir Imagen
                 </button>
                 <button
-                  className="btn btn-primary img-preview-btn mt-2 hidden-btn"
+                  className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${crearCuentaRepatidorStyle["img-preview-btn"]} ${crearCuentaRepatidorStyle["hidden-btn"]} ${booststrap["mt-2"]}`}
                   onClick={handleFileInput}
                 >
                   Actualizar
@@ -1017,19 +1036,21 @@ function AdministradorActualizarCuentaRepartidor() {
               </div>
             )}
           </div>
-          <h2 className="font-weight-bold">Datos de usuario</h2>
+          <h2 className={`${crearCuentaRepatidorStyle["font-weight-bold"]}`}>
+            Datos de usuario
+          </h2>
           <div>
-            <label htmlFor="email" className="form-label">
+            <label htmlFor="email" className={`${booststrap["form-label"]}`}>
               Email:
             </label>
             <input
               type="email"
               className={
                 email === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validEmail
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["invalid-input-border"]}`
               }
               id="email"
               onChange={handleEmailChange}
@@ -1042,25 +1063,25 @@ function AdministradorActualizarCuentaRepartidor() {
           <div
             className={
               validEmail || email === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${crearCuentaRepatidorStyle["valid-message-hidden"]}`
+                : `${crearCuentaRepatidorStyle["invalid-message"]}`
             }
           >
             El email ingresado no es válido
           </div>
           <div>
-            <label htmlFor="password" className="form-label">
+            <label htmlFor="password" className={`${booststrap["form-label"]}`}>
               Nueva contraseña:
             </label>
-            <div className="pass-container">
+            <div className={`${crearCuentaRepatidorStyle["pass-container"]}`}>
               <input
                 type={showPassword ? "text" : "password"}
                 className={
                   password === ""
-                    ? "form-control"
+                    ? `${booststrap["form-control"]}`
                     : validPassword
-                    ? "form-control valid-input-border"
-                    : "form-control invalid-input-border"
+                    ? `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
+                    : `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["invalid-input-border"]}`
                 }
                 id="password"
                 onChange={handlePasswordChange}
@@ -1081,10 +1102,10 @@ function AdministradorActualizarCuentaRepartidor() {
                 id="length"
                 className={
                   password === ""
-                    ? "valid-message-default"
+                    ? `${crearCuentaRepatidorStyle["valid-message-default"]}`
                     : validPassword8Char
-                    ? "valid-message"
-                    : "invalid-message"
+                    ? `${crearCuentaRepatidorStyle["valid-message"]}`
+                    : `${crearCuentaRepatidorStyle["invalid-message"]}`
                 }
               >
                 Mínimo 8 caracteres
@@ -1093,10 +1114,10 @@ function AdministradorActualizarCuentaRepartidor() {
                 id="uppercase"
                 className={
                   password === ""
-                    ? "valid-message-default"
+                    ? `${crearCuentaRepatidorStyle["valid-message-default"]}`
                     : validPasswordUpperCase
-                    ? "valid-message"
-                    : "invalid-message"
+                    ? `${crearCuentaRepatidorStyle["valid-message"]}`
+                    : `${crearCuentaRepatidorStyle["invalid-message"]}`
                 }
               >
                 Mínimo una mayúscula (A-Z)
@@ -1105,10 +1126,10 @@ function AdministradorActualizarCuentaRepartidor() {
                 id="lowercase"
                 className={
                   password === ""
-                    ? "valid-message-default"
+                    ? `${crearCuentaRepatidorStyle["valid-message-default"]}`
                     : validPasswordLowerCase
-                    ? "valid-message"
-                    : "invalid-message"
+                    ? `${crearCuentaRepatidorStyle["valid-message"]}`
+                    : `${crearCuentaRepatidorStyle["invalid-message"]}`
                 }
               >
                 Mínimo una minúscula (a-z)
@@ -1117,10 +1138,10 @@ function AdministradorActualizarCuentaRepartidor() {
                 id="numbers"
                 className={
                   password === ""
-                    ? "valid-message-default"
+                    ? `${crearCuentaRepatidorStyle["valid-message-default"]}`
                     : validPasswordNumbers
-                    ? "valid-message"
-                    : "invalid-message"
+                    ? `${crearCuentaRepatidorStyle["valid-message"]}`
+                    : `${crearCuentaRepatidorStyle["invalid-message"]}`
                 }
               >
                 Mínimo un número (0-9)
@@ -1129,10 +1150,10 @@ function AdministradorActualizarCuentaRepartidor() {
                 id="symbols"
                 className={
                   password === ""
-                    ? "valid-message-default"
+                    ? `${crearCuentaRepatidorStyle["valid-message-default"]}`
                     : validPasswordSybmbos
-                    ? "valid-message"
-                    : "invalid-message"
+                    ? `${crearCuentaRepatidorStyle["valid-message"]}`
+                    : `${crearCuentaRepatidorStyle["invalid-message"]}`
                 }
               >
                 Mínimo un símbolo (!, #, $, etc.)
@@ -1140,18 +1161,21 @@ function AdministradorActualizarCuentaRepartidor() {
             </ul>
           </div>
           <div>
-            <label htmlFor="rePassword" className="form-label">
+            <label
+              htmlFor="rePassword"
+              className={`${booststrap["form-label"]}`}
+            >
               Confirmar contraseña:
             </label>
-            <div className="pass-container">
+            <div className={`${crearCuentaRepatidorStyle["pass-container"]}`}>
               <input
                 type={showRePassword ? "text" : "password"}
                 className={
                   rePassword === ""
-                    ? "form-control"
+                    ? `${booststrap["form-control"]}`
                     : validPassword
-                    ? "form-control valid-input-border"
-                    : "form-control invalid-input-border"
+                    ? `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
+                    : `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["invalid-input-border"]}`
                 }
                 id="rePassword"
                 onChange={handleRePasswordChange}
@@ -1172,15 +1196,19 @@ function AdministradorActualizarCuentaRepartidor() {
           <div
             className={
               validPassword || password === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${crearCuentaRepatidorStyle["valid-message-hidden"]}`
+                : `${crearCuentaRepatidorStyle["invalid-message"]}`
             }
           >
             Las contraseñas no coninciden
           </div>
         </div>
-        <div className="col-md-4 flex-container space-between">
-          <h2 className="font-weight-bold">Datos Personales</h2>
+        <div
+          className={`${booststrap["col-md-4"]} ${crearCuentaRepatidorStyle["flex-container"]} ${crearCuentaRepatidorStyle["space-between"]}`}
+        >
+          <h2 className={`${crearCuentaRepatidorStyle["font-weight-bold"]}`}>
+            Datos Personales
+          </h2>
           <div>
             <label htmlFor="rut-empresa" className="form-label">
               RUN:
@@ -1189,10 +1217,10 @@ function AdministradorActualizarCuentaRepartidor() {
               type="text"
               className={
                 run === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validRun
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["invalid-input-border"]}`
               }
               id="rut-empresa"
               onChange={handleRunChange}
@@ -1205,24 +1233,27 @@ function AdministradorActualizarCuentaRepartidor() {
           <div
             className={
               validRun || run === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${crearCuentaRepatidorStyle["valid-message-hidden"]}`
+                : `${crearCuentaRepatidorStyle["invalid-message"]}`
             }
           >
             El run ingresado no es válido
           </div>
           <div>
-            <label htmlFor="nombre-empresa" className="form-label">
+            <label
+              htmlFor="nombre-empresa"
+              className={`${booststrap["form-label"]}`}
+            >
               Nombre:
             </label>
             <input
               type="text"
               className={
                 nombre === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validNombre
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["invalid-input-border"]}`
               }
               id="nombre-empresa"
               onChange={handleNombreChange}
@@ -1235,24 +1266,27 @@ function AdministradorActualizarCuentaRepartidor() {
           <div
             className={
               validNombre || nombre === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${crearCuentaRepatidorStyle["valid-message-hidden"]}`
+                : `${crearCuentaRepatidorStyle["invalid-message"]}`
             }
           >
             El nombre ingresado no es válido
           </div>
           <div>
-            <label htmlFor="apellido-paterno" className="form-label">
+            <label
+              htmlFor="apellido-paterno"
+              className={`${booststrap["form-label"]}`}
+            >
               Apellido paterno:
             </label>
             <input
               type="text"
               className={
                 apellidoPaterno === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validApellidoPaterno
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["invalid-input-border"]}`
               }
               id="apellido-paterno"
               onChange={handleApellidoPaternoChange}
@@ -1265,8 +1299,8 @@ function AdministradorActualizarCuentaRepartidor() {
           <div
             className={
               validApellidoPaterno || apellidoPaterno === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${crearCuentaRepatidorStyle["valid-message-hidden"]}`
+                : `${crearCuentaRepatidorStyle["invalid-message"]}`
             }
           >
             El apellido paterno ingresado no es válido
@@ -1279,10 +1313,10 @@ function AdministradorActualizarCuentaRepartidor() {
               type="text"
               className={
                 apellidoMaterno === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validApellidoMaterno
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["invalid-input-border"]}`
               }
               id="apellido-materno"
               onChange={handleApellidoMaternoChange}
@@ -1295,44 +1329,49 @@ function AdministradorActualizarCuentaRepartidor() {
           <div
             className={
               validApellidoMaterno || apellidoMaterno === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${crearCuentaRepatidorStyle["valid-message-hidden"]}`
+                : `${crearCuentaRepatidorStyle["invalid-message"]}`
             }
           >
             El apellido materno ingresado no es válido
           </div>
           <div>
-            <label htmlFor="fecha-nacimiento" className="form-label">
+            <label
+              htmlFor="fecha-nacimiento"
+              className={`${booststrap["form-label"]}`}
+            >
               Fecha de nacimiento:
             </label>
             <input
               type="date"
               className={
                 fechaNacimiento === ""
-                  ? "form-control"
-                  : "form-control valid-input-border"
+                  ? `${booststrap["form-control"]}`
+                  : `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
               }
               id="fecha-nacimiento"
               onChange={handleFechaNacimientoChange}
               value={fechaNacimiento}
               required
             />
-            <div className="valid-message-hidden">
+            <div
+              className={`${crearCuentaRepatidorStyle["valid-message-hidden"]}`}
+            >
               La calle ingresada no es válida
             </div>
           </div>
           <div>
-            <label htmlFor="calle" className="form-label">
+            <label htmlFor="calle" className={`${booststrap["form-label"]}`}>
               Calle:
             </label>
             <input
               type="text"
               className={
                 calle === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validCalle
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["invalid-input-border"]}`
               }
               id="calle"
               onChange={handleCalleChange}
@@ -1345,24 +1384,24 @@ function AdministradorActualizarCuentaRepartidor() {
           <div
             className={
               validCalle || calle === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${crearCuentaRepatidorStyle["valid-message-hidden"]}`
+                : `${crearCuentaRepatidorStyle["invalid-message"]}`
             }
           >
             La calle ingresada no es válida
           </div>
           <div>
-            <label htmlFor="numCalle" className="form-label">
+            <label htmlFor="numCalle" className={`${booststrap["form-label"]}`}>
               N° calle:
             </label>
             <input
               type="text"
               className={
                 numCalle === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validNumCalle
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["invalid-input-border"]}`
               }
               id="numCalle"
               onChange={handleNumCalleChange}
@@ -1375,19 +1414,21 @@ function AdministradorActualizarCuentaRepartidor() {
           <div
             className={
               validNumCalle || numCalle === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${crearCuentaRepatidorStyle["valid-message-hidden"]}`
+                : `${crearCuentaRepatidorStyle["invalid-message"]}`
             }
           >
             El número de calle ingresada no es válido
           </div>
           <div>
-            <label htmlFor="regiones" className="form-label">
+            <label htmlFor="regiones" className={`${booststrap["form-label"]}`}>
               Region:
             </label>
             <select
               className={
-                region === "" ? "form-select" : "form-select valid-input-border"
+                region === ""
+                  ? `${booststrap["form-select"]}`
+                  : `${booststrap["form-select"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
               }
               id="regiones"
               onChange={handleRegionChange}
@@ -1398,15 +1439,19 @@ function AdministradorActualizarCuentaRepartidor() {
               {mapRegion(RegionesYcomunas)}
             </select>
           </div>
-          <div className="valid-message-hidden">nothing here</div>
+          <div
+            className={`${crearCuentaRepatidorStyle["valid-message-hidden"]}`}
+          ></div>
           <div>
-            <label htmlFor="comunas" className="form-label">
+            <label htmlFor="comunas" className={`${booststrap["form-label"]}`}>
               Comuna:
             </label>
             <br />
             <select
               className={
-                comuna === "" ? "form-select" : "form-select valid-input-border"
+                comuna === ""
+                  ? `${booststrap["form-select"]}`
+                  : `${booststrap["form-select"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
               }
               id="comunas"
               onChange={handleComunaChange}
@@ -1418,20 +1463,27 @@ function AdministradorActualizarCuentaRepartidor() {
             </select>
           </div>
         </div>
-        <div className="col-md-4 flex-container space-between">
-          <h2 className="font-weight-bold">Datos de contacto</h2>
+        <div
+          className={`${booststrap["col-md-4"]} ${crearCuentaRepatidorStyle["flex-container"]} ${crearCuentaRepatidorStyle["space-between"]}`}
+        >
+          <h2 className={`${crearCuentaRepatidorStyle["font-weight-bold"]}`}>
+            Datos de contacto
+          </h2>
           <div>
-            <label htmlFor="numero-celular" className="form-label">
+            <label
+              htmlFor="numero-celular"
+              className={`${booststrap["form-label"]}`}
+            >
               N° Celular:
             </label>
             <input
               type="tel"
               className={
                 celular === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validCelular
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${crearCuentaRepatidorStyle["invalid-input-border"]}`
               }
               id="numero-celular"
               onChange={handleCelularChange}
@@ -1444,31 +1496,42 @@ function AdministradorActualizarCuentaRepartidor() {
           <div
             className={
               validCelular || celular === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${crearCuentaRepatidorStyle["valid-message-hidden"]}`
+                : `${crearCuentaRepatidorStyle["invalid-message"]}`
             }
           >
             El número de calle ingresada no es válido
           </div>
         </div>
-        <div className="flex-container flex-row gap-2 justify-content-around grid-span-1">
-          <button type="submit" className="btn btn-primary mt-2">
+        <div
+          className={`${crearCuentaRepatidorStyle["flex-container"]} ${booststrap["flex-row"]} ${booststrap["gap-2"]} ${booststrap["justify-content-around"]} ${crearCuentaRepatidorStyle["grid-span-1"]} ${crearCuentaRepatidorStyle["container-btn-crear-repatidor"]}`}
+        >
+          <button
+            type="submit"
+            className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${crearCuentaRepatidorStyle["btn-primary-color"]}`}
+          >
             Guardar cambios
           </button>
           <button
             type="reset"
-            className="btn btn-danger mt-2"
+            className={`${booststrap["btn"]} ${booststrap["btn-danger"]} ${booststrap["mt-2"]}`}
             onClick={cleanStates}
           >
             Descartar cambios
           </button>
+          <Link
+            className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${crearCuentaRepatidorStyle["btn-primary-color"]}`}
+            to="/cuenta/administrador/list-repartidores"
+          >
+            Volver
+          </Link>
         </div>
         <div
           //className="card grid-span-1 submit-successful-hidden"
           className={
             showMessege
-              ? "card grid-span-1 submit-successful-show fadeIn"
-              : "card grid-span-1 submit-successful-hidden fadeIn"
+              ? `${booststrap["card"]} ${crearCuentaRepatidorStyle["grid-span-1"]} ${crearCuentaRepatidorStyle["submit-successful-show"]} ${crearCuentaRepatidorStyle["fadeIn"]}`
+              : `${booststrap["card"]} ${crearCuentaRepatidorStyle["grid-span-1"]} ${crearCuentaRepatidorStyle["submit-successful-hidden"]} ${crearCuentaRepatidorStyle["fadeIn"]}`
           }
         >
           <p>Se ha creado la cuenta de forma satisfactoria!</p>
@@ -1478,4 +1541,5 @@ function AdministradorActualizarCuentaRepartidor() {
     </form>
   );
 }
-export default AdministradorActualizarCuentaRepartidor;
+
+export default AdministradorCrearCuentaRepartidor;

@@ -1,4 +1,4 @@
-import FooterSyle from "../../scss/features/FooterStyle.scss";
+import FooterSyle from "./FooterStyle.scss";
 
 import React from "react";
 

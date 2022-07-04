@@ -1,0 +1,112 @@
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap");
+$baseColor: #540b66;
+$secondaryColor: #c48e3c;
+
+#container-login {
+  background-image: url("../../../img/bg/login-bg3.svg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  color: white;
+  font-family: "Barlow", sans-serif;
+}
+
+#bg-logo {
+  content: url("../../../img/logos/Ding-Dong-Logo-Light.svg");
+  width: 90%;
+}
+
+#title-logo {
+  color: white;
+}
+
+#forgot-pass-link {
+  text-decoration: none;
+  color: white;
+  text-align: center;
+}
+
+#forgot-pass-link:hover {
+  color: $secondaryColor;
+}
+
+#forgot-pass-hr {
+  width: 100px;
+  border: 1px solid white;
+}
+
+#play-store-logo {
+  width: 200px;
+  height: 100px;
+}
+
+#rememberMe {
+  cursor: pointer;
+}
+
+#col-left {
+  height: 100vh;
+}
+
+#right-col {
+  height: 100vh;
+}
+
+#submit-btn:hover {
+  color: white !important;
+  background-color: #540b66 !important;
+}
+
+.requirements {
+  // position: relative;
+  // left: -30px;
+  display: flex;
+  li {
+  }
+}
+
+.pass-container {
+  position: relative;
+  i {
+    position: absolute;
+    top: 30%;
+    right: 2.5%;
+    cursor: pointer;
+  }
+}
+
+.valid-input-border {
+  border: 1px solid green !important;
+}
+
+.invalid-input-border {
+  border: 1px solid red !important;
+}
+
+.valid-message-hidden {
+  visibility: hidden;
+}
+
+.invalid-message {
+  color: red;
+}
+
+.valid-message {
+  color: rgb(0, 255, 0);
+}
+
+.valid-message-default {
+  color: white;
+}
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 30vw;
+  color: white;
+}
+
+.form-properties {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

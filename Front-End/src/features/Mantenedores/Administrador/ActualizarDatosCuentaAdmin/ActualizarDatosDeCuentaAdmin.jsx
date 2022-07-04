@@ -1,10 +1,19 @@
 import React from "react";
-import "../../../scss/features/Administrador/ActualizarDatosDeCuentaAdmin.scss";
+import "./ActualizarDatosDeCuentaAdminStyle.module.scss";
 import { useRef, useState, useEffect } from "react";
 function Administrador() {
   const [img, setImg] = useState("");
   const [preview, setPreview] = useState("");
   const fileInputRef = useRef();
+
+  useEffect(() => {
+    console.log("im scrolling");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   const handleFileInput = (e) => {
     e.preventDefault();
     fileInputRef.current.click();

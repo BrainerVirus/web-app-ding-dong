@@ -1,49 +1,15 @@
 import React from "react";
-import axios from "axios";
 import logoDark from "../../img/logos/Ding-Dong-Logo-transparent-Nav.svg";
-import logoLight from "../../img/logos/Ding-Dong-Logo-Nav-Light2.svg";
-import NavbarStyle from "../../scss/features/NavbarStyle.scss";
-import { Link, Navigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
-import { useContext } from "react";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import "./NavbarStyle.scss";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
-const URI = "http://localhost:8080/cuentas/logout/status";
 function Navbar() {
-  const navigate = useNavigate();
-  //const session = useContext(AuthContext);
-  //console.log("role del local: " + role);
-  // const [activeRole, setActiveRole] = useState(() => {
-  //   const savedItem = localStorage.getItem("tipoUsuario");
-  // });
-  // console.log("activeRole: " + activeRole);
-  const sessionId = localStorage.getItem("id");
-  //console.log("id navbar: " + session.role);
-  const logoutId = {
-    usuarioId: sessionId,
-  };
-  // useEffect(() => {
-  //   const role = localStorage.getItem("tipoUsuario");
-  //   //setActiveRole(role);
-  //   console.log("effect montado: " + role);
-  // }, []);
-  axios.defaults.withCredentials = true;
-  const handleLogout = async (e) => {
-    e.preventDefault();
-    await axios
-      .put(URI, logoutId, {
-        withCredentials: true,
-        credentials: "include",
-      })
-      .then((res) => {
-        //console.log("session logout");
-        localStorage.clear();
-        //setActiveRole("");
-      });
-    //console.log("localStorage: " + session);
-    navigate("/");
+  //states
+  const [isToggled, setIsToggled] = useState(true);
+  //close navbar
+  const handleClick = (e) => {
+    setIsToggled(!isToggled);
   };
   return (
     <nav className="navbar navbar-expand-lg bg-light sticky-top">
@@ -53,6 +19,7 @@ function Navbar() {
         </Link>
         <button
           className="navbar-toggler"
+          onClick={handleClick}
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
@@ -62,59 +29,22 @@ function Navbar() {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
+        <div
+          className={isToggled ? "navbar-collapse collapse" : "navbar-collapse"}
+          id="navbarNav"
+        >
           <ul className="navbar-nav">
             <li className="nav-item">
               <Link
                 className="nav-link nav-item-base-status"
                 aria-current="page"
                 to="/"
+                onClick={handleClick}
               >
                 <i className="fa-solid me-2 fa-house-chimney"></i>
                 Home
               </Link>
             </li>
-            <li className="nav-item">
-              <a
-                className="nav-link nav-item-base-status"
-                aria-current="page"
-                href="#receptor-navbar-link"
-              >
-                <i className="fa-solid me-2 fa-boxes-packing"></i>
-                Receptor
-              </a>
-            </li>
-            <li className="nav-item">
-              <a
-                className="nav-link nav-item-base-status"
-                aria-current="page"
-                href="#repartidor-navbar-link"
-              >
-                <i className="fa-solid me-2 fa-truck-fast"></i>
-                Repartidor
-              </a>
-            </li>
-            <li className="nav-item">
-              <a
-                className="nav-link nav-item-base-status"
-                aria-current="page"
-                href="#more-info-navbar-link"
-              >
-                <i className="fa-solid fa-circle-info me-2"></i>
-                Más información
-              </a>
-            </li>
-            <li className="nav-item">
-              <a
-                className="nav-link nav-item-base-status"
-                aria-current="page"
-                href="#contact-navbar-link"
-              >
-                <i className="fa-solid fa-message me-2"></i>
-                Contáctanos
-              </a>
-            </li>
-
             <li className="nav-item dropdown ">
               <a
                 className="nav-link dropdown-toggle nav-item-base-status"
@@ -130,6 +60,7 @@ function Navbar() {
                   <Link
                     className="dropdown-item drop-down-menu-element"
                     to="/empresas/login"
+                    onClick={handleClick}
                   >
                     <i className="fa-solid fa-user-tie me-2"></i>
                     Empresas
@@ -139,6 +70,7 @@ function Navbar() {
                   <Link
                     className="dropdown-item drop-down-menu-element"
                     to="/personas/login"
+                    onClick={handleClick}
                   >
                     <i className="fa-solid fa-user me-2"></i>
                     Personas
@@ -161,6 +93,7 @@ function Navbar() {
                   <Link
                     className="dropdown-item drop-down-menu-element"
                     to="/empresas/login"
+                    onClick={handleClick}
                   >
                     <i className="fa-solid fa-user-tie me-2"></i>
                     Empresas
@@ -170,6 +103,7 @@ function Navbar() {
                   <Link
                     className="dropdown-item drop-down-menu-element"
                     to="/personas/receptor/register"
+                    onClick={handleClick}
                   >
                     <i className="fa-solid fa-user me-2"></i>
                     Receptor

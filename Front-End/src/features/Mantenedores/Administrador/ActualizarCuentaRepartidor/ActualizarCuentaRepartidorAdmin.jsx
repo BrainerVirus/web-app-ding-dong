@@ -1,9 +1,10 @@
 import React from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import "../../../scss/features/Administrador/AgregarRepartidorAdminStyle.scss";
+import actualizarRepatidorStyle from "./ActualizarRepartidorAdminStyle.module.scss";
+import booststrap from "../../../../scss/Global/bootstrap.min.module.css";
 import { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 //import defultProfileImg from "../../../img/profile/default-profile-img.jpeg";
 const qs = require("qs");
 
@@ -443,7 +444,7 @@ const excludedRuns = [
   111111111, 222222222, 333333333, 444444444, 555555555, 666666666, 777777777,
   888888888, 999999999,
 ];
-function AdministradorCrearCuentaRepartidor() {
+function AdministradorActualizarCuentaRepartidor() {
   //----------------------------------------------------------
   //form states
   const [img, setImg] = useState("");
@@ -457,7 +458,7 @@ function AdministradorCrearCuentaRepartidor() {
   const [apellidoMaterno, setApellidoMaterno] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
   const [calle, setCalle] = useState("");
-  const [numCalle, setNumCalle] = useState("");
+  const [numCalle, setNumCalle] = useState(123);
   const [region, setRegion] = useState("");
   const [comuna, setComuna] = useState("");
   const [celular, setCelular] = useState("");
@@ -484,7 +485,50 @@ function AdministradorCrearCuentaRepartidor() {
   const [showMessege, setShowMessege] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setReShowPassword] = useState(false);
-  const tipoUsuario = "repartidor";
+  const params = useParams();
+  const tipoUsuario = "administrador";
+  //----------------------------------------------------------
+  //first states to update
+  useEffect(() => {
+    getAccountData();
+    getDireccionData();
+    getUserData();
+  }, []);
+  const getAccountData = async () => {
+    const response = await axios.get(URICuentas + "/usuario/" + params.id);
+    const oldImg = response.data.profileImg;
+    console.log("email: " + response.data.user);
+    console.log("imagen: " + response.data.profileImg);
+    setEmail(response.data.user);
+    setPreview(`http://localhost:8080/${oldImg}`);
+    setPassword(response.data.password);
+    setRePassword(response.data.password);
+  };
+  const getDireccionData = async () => {
+    const response = await axios.get(URIDirecciones + "/usuario/" + params.id);
+    console.log("comuna: " + comuna);
+    const numCalleTemp = response.data.numCalle;
+    console.log("num calle parseado: " + parseInt(numCalleTemp));
+    setCalle(response.data.calle);
+    //setNumCalle();
+    setRegion(response.data.region);
+    setComuna(response.data.comuna);
+  };
+
+  const getUserData = async () => {
+    const response = await axios.get(URIUsuarios + params.id);
+    console.log("nombre: " + response.data.nombre);
+    console.log("apellidoPaterno: " + response.data.apellidoPaterno);
+    setRun(response.data.run);
+    setNombre(response.data.nombre);
+    setApellidoPaterno(response.data.apellidoPaterno);
+    setApellidoMaterno(response.data.apellidoMaterno);
+    setFechaNacimiento(response.data.fecha_nacimiento);
+    setCelular(response.data.celular);
+    //setEmail(response.data.user);
+    //setPreview(`http://localhost:8080/${response.data.profileImg}`);
+  };
+  //----------------------------------------------------------
   //navitaion
   const navigate = useNavigate();
   // profile photo upload
@@ -596,7 +640,7 @@ function AdministradorCrearCuentaRepartidor() {
   const validateRun = (run) => {
     run = run.replace(/[.-]/g, "");
     run = run.toUpperCase();
-    var patt = /^\d{1,8}[0-9K]$/;
+    var patt = /^\d{8}[0-9K]$/;
     var ok = patt.test(run);
     var cStr = run.slice(0, -1);
     var cDig = run.slice(-1);
@@ -604,9 +648,10 @@ function AdministradorCrearCuentaRepartidor() {
     var nVal = 0;
     var cVal = "";
     console.log("run equals excluded: " + run);
+    console.log("patt test: " + ok);
     let excludedRunTest = false;
     for (let i = 0; i < excludedRuns.length; i++) {
-      if (run == excludedRuns[i]) {
+      if (run === excludedRuns[i]) {
         console.log("Entra al false del run: ");
         return (excludedRunTest = true);
       }
@@ -718,17 +763,18 @@ function AdministradorCrearCuentaRepartidor() {
   };
   const validateNumCalle = (numCalle) => {
     //Trimed and lowercase
-    const numCalleTrimed = numCalle.trim();
+    // const numCalleTrimed = numCalle.trim();
     //no more white spaces
-    const checkMultipleCalles = numCalleTrimed.split(" ");
-    if (checkMultipleCalles.length !== 1) {
+    // const checkMultipleCalles = numCalleTrimed.split(" ");
+    if (numCalle.isNaN) {
       setValidNumCalle(false);
     } else {
-      if (isNaN(numCalleTrimed)) {
-        setValidNumCalle(false);
-      } else {
-        setValidNumCalle(true);
-      }
+      setValidNumCalle(true);
+      // if (isNaN(numCalleTrimed)) {
+      //   setValidNumCalle(false);
+      // } else {
+      //   setValidNumCalle(true);
+      // }
     }
   };
   useEffect(() => {
@@ -773,39 +819,6 @@ function AdministradorCrearCuentaRepartidor() {
     e.preventDefault();
     setReShowPassword(!showRePassword);
   };
-
-  // Formulario de envio de datos a la api
-  /*const store = async (e) => {
-    console.log(email);
-    console.log(password);
-    console.log(img);
-    e.preventDefault();
-    //form data way
-    const formData = new FormData();
-    console.log(nombre);
-    console.log(apellidoMaterno);
-    console.log(apellidoPaterno);
-    console.log(run);
-    console.log(celular);
-    console.log(fechaNacimiento);
-    console.log(img);
-    console.log(email);
-    console.log(password);
-
-    formData.append("profileImg", img);
-    formData.append("user", email);
-    formData.append("password", password);
-    //formData.append("nombre", nombre);
-    //formData.append("apellidoPaterno", apellidoPaterno);
-    //formData.append("apellidoMaterno", apellidoMaterno);
-    //formData.append("run", run);
-    //formData.append("celular", celular);
-    //formData.append("fecha_nacimiento", fechaNacimiento);
-    console.log(formData);
-    await axios.post(URI, formData);*/
-  //----------------------------------------------------------
-  //const params = new URLSearchParams();
-  //axios post to database json way
   axios.defaults.withCredentials = true;
   const store = async (e) => {
     console.log("valid mail: " + validEmail);
@@ -815,7 +828,6 @@ function AdministradorCrearCuentaRepartidor() {
     console.log("valid apellidoMaterno: " + validApellidoMaterno);
     console.log("valid run: " + validRun);
     console.log("valid celular: " + validCelular);
-    //console.log("valid fechaNacimiento: " + validFechaNacimiento);
     console.log("valid calle: " + validCalle);
     console.log("valid numCalle: " + validNumCalle);
 
@@ -861,44 +873,23 @@ function AdministradorCrearCuentaRepartidor() {
         comuna: comuna,
         region: region,
       };
-
-      const tipoUsuarioData = {
-        tipoUsuario: tipoUsuario,
-      };
-      /*const options = {
-        method: "POST",
-        headers: { "content-type": "application/form-data" },
-        data: cuenta,
-        url: URI,
-      };
-      axios(options);*/
       await axios
-        .post(URIUsuarios, qs.stringify(usuarioData))
+        .put(URIUsuarios + params.id, qs.stringify(usuarioData))
         .then((result) => {
-          console.log(result.data);
-          console.log(result.data.usuarioId);
-          // cuentaData.append("usuarioId", result.data.usuarioId);
-          direccionData.usuarioId = result.data.usuarioId;
-          tipoUsuarioData.usuarioId = result.data.usuarioId;
-          console.log("direcion user id: " + direccionData.usuarioId);
-          if (img === "") {
-            cuentaData.usuarioId = result.data.usuarioId;
-            axios.post(URICuentasRegister, cuentaData);
-          } else {
-            cuentaData.append("usuarioId", result.data.usuarioId);
-            axios.post(URICuentas, cuentaData);
-          }
-          axios.post(URIDirecciones, direccionData);
-          axios.post(URITipoUsuario, tipoUsuarioData);
+          axios.put(URICuentas + "usuario/" + params.id, cuentaData);
+          axios.put(URIDirecciones + "usuario/" + params.id, direccionData);
           //messege success
           cleanStates(e);
           //handleShowMessege();
           Swal.fire({
-            text: "Creación de cuenta exitosa",
+            text: "Actualización de datos exitosa",
             icon: "success",
             showConfirmButton: false,
             timer: 2000,
           });
+          setTimeout(() => {
+            navigate("/cuenta/administrador/list-repartidores");
+          }, 2000);
         })
         .catch((err) => {
           console.log(err);
@@ -910,32 +901,6 @@ function AdministradorCrearCuentaRepartidor() {
       alert("Uno o más campos son inválidos");
     }
   };
-  //----------------------------------------------------------
-  //json way 2
-  //store
-  /*const store = async (e) => {
-    e.preventDefault();
-    await axios.post(
-      URI,
-      {
-        //nombre: nombre,
-        //apellidoPaterno: apellidoPaterno,
-        //apellidoMaterno: apellidoMaterno,
-        //run: run,
-        //celular: celular,
-        //fecha_nacimiento: fechaNacimiento,
-        user: email,
-        password: password,
-        profileImg: img,
-      },
-      {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          "Access-Control-Allow-Origin": "*",
-        },
-      }
-    );
-  };*/
   // show message after submit
   const handleShowMessege = (e) => {
     setShowMessege(!showMessege);
@@ -974,16 +939,22 @@ function AdministradorCrearCuentaRepartidor() {
   };
   return (
     <form onSubmit={store}>
-      <div className="container-fluid container-actualizar-datos-admin">
-        <div className="container-fluid grid-span-3">
+      <div
+        className={`${booststrap["container-fluid"]} ${actualizarRepatidorStyle["container-actualizar-datos-admin"]}`}
+      >
+        <div
+          className={`${booststrap["container-fluid"]} ${actualizarRepatidorStyle["grid-span-3"]}`}
+        >
           <h1>Crear cuenta de repartidor</h1>
         </div>
         <div
-          className="col-md-4 flex-container right-side-border"
+          className={`${booststrap["col-md-4"]} ${actualizarRepatidorStyle["flex-container"]} ${actualizarRepatidorStyle["right-side-border"]}`}
           id="datos-usuario-container"
         >
-          <h2 className="font-weight-bold">Foto de Pefil</h2>
-          <div className="flex-container">
+          <h2 className={`${actualizarRepatidorStyle["font-weight-bold"]}`}>
+            Foto de Pefil
+          </h2>
+          <div className={`${actualizarRepatidorStyle["flex-container"]}`}>
             <input
               type="file"
               style={{ display: "none" }}
@@ -993,43 +964,52 @@ function AdministradorCrearCuentaRepartidor() {
               name="profileImg"
               id="profileImg"
             />
-            {preview ? (
-              <div className="img-preview-wrapper flex-container no-margin-bottom">
-                <img src={preview} className="img-preview" alt="profile-img" />
-                <button
-                  className="btn btn-primary img-preview-btn mt-2"
-                  onClick={handleFileInput}
-                >
-                  Actualizar
-                </button>
-              </div>
-            ) : (
-              <div className="flex-container no-margin-bottom">
-                <button className="round-img-btn" onClick={handleFileInput}>
-                  Subir Imagen
-                </button>
-                <button
-                  className="btn btn-primary img-preview-btn mt-2 hidden-btn"
-                  onClick={handleFileInput}
-                >
-                  Actualizar
-                </button>
-              </div>
-            )}
+            <div
+              className={`${actualizarRepatidorStyle["img-preview-wrapper"]} ${actualizarRepatidorStyle["flex-container"]} ${actualizarRepatidorStyle["no-margin-bottom"]}`}
+            >
+              <img
+                src={preview}
+                className={`${actualizarRepatidorStyle["img-preview"]}`}
+                alt="profile-img"
+              />
+              <button
+                className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${actualizarRepatidorStyle["img-preview-btn"]}`}
+                onClick={handleFileInput}
+              >
+                Actualizar
+              </button>
+            </div>
+            {/* <div
+              className={`${actualizarRepatidorStyle["img-preview-wrapper"]} ${actualizarRepatidorStyle["flex-container"]} ${actualizarRepatidorStyle["no-margin-bottom"]}`}
+            >
+              <img
+                src={`http://localhost:8080/${preview}`}
+                className={`${actualizarRepatidorStyle["img-preview"]}`}
+                alt="profile-img"
+              />
+              <button
+                className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${actualizarRepatidorStyle["img-preview-btn"]}`}
+                onClick={handleFileInput}
+              >
+                Actualizar
+              </button>
+            </div> */}
           </div>
-          <h2 className="font-weight-bold">Datos de usuario</h2>
+          <h2 className={`${actualizarRepatidorStyle["font-weight-bold"]}`}>
+            Datos de usuario
+          </h2>
           <div>
-            <label htmlFor="email" className="form-label">
+            <label htmlFor="email" className={`${booststrap["form-label"]}`}>
               Email:
             </label>
             <input
               type="email"
               className={
                 email === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validEmail
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${actualizarRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${actualizarRepatidorStyle["invalid-input-border"]}`
               }
               id="email"
               onChange={handleEmailChange}
@@ -1042,25 +1022,25 @@ function AdministradorCrearCuentaRepartidor() {
           <div
             className={
               validEmail || email === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${actualizarRepatidorStyle["valid-message-hidden"]}`
+                : `${actualizarRepatidorStyle["invalid-message"]}`
             }
           >
             El email ingresado no es válido
           </div>
           <div>
-            <label htmlFor="password" className="form-label">
+            <label htmlFor="password" className={`${booststrap["form-label"]}`}>
               Nueva contraseña:
             </label>
-            <div className="pass-container">
+            <div className={`${actualizarRepatidorStyle["pass-container"]}`}>
               <input
                 type={showPassword ? "text" : "password"}
                 className={
                   password === ""
-                    ? "form-control"
+                    ? `${booststrap["form-control"]} ${booststrap["pe-4"]}`
                     : validPassword
-                    ? "form-control valid-input-border"
-                    : "form-control invalid-input-border"
+                    ? `${booststrap["form-control"]} ${booststrap["pe-4"]} ${actualizarRepatidorStyle["valid-input-border"]}`
+                    : `${booststrap["form-control"]} ${booststrap["pe-4"]} ${actualizarRepatidorStyle["invalid-input-border"]}`
                 }
                 id="password"
                 onChange={handlePasswordChange}
@@ -1081,10 +1061,10 @@ function AdministradorCrearCuentaRepartidor() {
                 id="length"
                 className={
                   password === ""
-                    ? "valid-message-default"
+                    ? `${actualizarRepatidorStyle["valid-message-default"]}`
                     : validPassword8Char
-                    ? "valid-message"
-                    : "invalid-message"
+                    ? `${actualizarRepatidorStyle["valid-message"]}`
+                    : `${actualizarRepatidorStyle["invalid-message"]}`
                 }
               >
                 Mínimo 8 caracteres
@@ -1093,10 +1073,10 @@ function AdministradorCrearCuentaRepartidor() {
                 id="uppercase"
                 className={
                   password === ""
-                    ? "valid-message-default"
+                    ? `${actualizarRepatidorStyle["valid-message-default"]}`
                     : validPasswordUpperCase
-                    ? "valid-message"
-                    : "invalid-message"
+                    ? `${actualizarRepatidorStyle["valid-message"]}`
+                    : `${actualizarRepatidorStyle["invalid-message"]}`
                 }
               >
                 Mínimo una mayúscula (A-Z)
@@ -1105,10 +1085,10 @@ function AdministradorCrearCuentaRepartidor() {
                 id="lowercase"
                 className={
                   password === ""
-                    ? "valid-message-default"
+                    ? `${actualizarRepatidorStyle["valid-message-default"]}`
                     : validPasswordLowerCase
-                    ? "valid-message"
-                    : "invalid-message"
+                    ? `${actualizarRepatidorStyle["valid-message"]}`
+                    : `${actualizarRepatidorStyle["invalid-message"]}`
                 }
               >
                 Mínimo una minúscula (a-z)
@@ -1117,10 +1097,10 @@ function AdministradorCrearCuentaRepartidor() {
                 id="numbers"
                 className={
                   password === ""
-                    ? "valid-message-default"
+                    ? `${actualizarRepatidorStyle["valid-message-default"]}`
                     : validPasswordNumbers
-                    ? "valid-message"
-                    : "invalid-message"
+                    ? `${actualizarRepatidorStyle["valid-message"]}`
+                    : `${actualizarRepatidorStyle["invalid-message"]}`
                 }
               >
                 Mínimo un número (0-9)
@@ -1129,10 +1109,10 @@ function AdministradorCrearCuentaRepartidor() {
                 id="symbols"
                 className={
                   password === ""
-                    ? "valid-message-default"
+                    ? `${actualizarRepatidorStyle["valid-message-default"]}`
                     : validPasswordSybmbos
-                    ? "valid-message"
-                    : "invalid-message"
+                    ? `${actualizarRepatidorStyle["valid-message"]}`
+                    : `${actualizarRepatidorStyle["invalid-message"]}`
                 }
               >
                 Mínimo un símbolo (!, #, $, etc.)
@@ -1140,18 +1120,21 @@ function AdministradorCrearCuentaRepartidor() {
             </ul>
           </div>
           <div>
-            <label htmlFor="rePassword" className="form-label">
+            <label
+              htmlFor="rePassword"
+              className={`${booststrap["form-label"]}`}
+            >
               Confirmar contraseña:
             </label>
-            <div className="pass-container">
+            <div className={`${actualizarRepatidorStyle["pass-container"]}`}>
               <input
                 type={showRePassword ? "text" : "password"}
                 className={
                   rePassword === ""
-                    ? "form-control"
+                    ? `${booststrap["form-control"]} ${booststrap["pe-4"]}`
                     : validPassword
-                    ? "form-control valid-input-border"
-                    : "form-control invalid-input-border"
+                    ? `${booststrap["form-control"]} ${booststrap["pe-4"]} ${actualizarRepatidorStyle["valid-input-border"]}`
+                    : `${booststrap["form-control"]} ${booststrap["pe-4"]} ${actualizarRepatidorStyle["invalid-input-border"]}`
                 }
                 id="rePassword"
                 onChange={handleRePasswordChange}
@@ -1172,15 +1155,19 @@ function AdministradorCrearCuentaRepartidor() {
           <div
             className={
               validPassword || password === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${actualizarRepatidorStyle["valid-message-hidden"]}`
+                : `${actualizarRepatidorStyle["invalid-message"]}`
             }
           >
             Las contraseñas no coninciden
           </div>
         </div>
-        <div className="col-md-4 flex-container space-between">
-          <h2 className="font-weight-bold">Datos Personales</h2>
+        <div
+          className={`${booststrap["col-md-4"]} ${actualizarRepatidorStyle["flex-container"]} ${actualizarRepatidorStyle["space-between"]}`}
+        >
+          <h2 className={`${actualizarRepatidorStyle["font-weight-bold"]}`}>
+            Datos Personales
+          </h2>
           <div>
             <label htmlFor="rut-empresa" className="form-label">
               RUN:
@@ -1189,10 +1176,10 @@ function AdministradorCrearCuentaRepartidor() {
               type="text"
               className={
                 run === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validRun
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${actualizarRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${actualizarRepatidorStyle["invalid-input-border"]}`
               }
               id="rut-empresa"
               onChange={handleRunChange}
@@ -1205,24 +1192,27 @@ function AdministradorCrearCuentaRepartidor() {
           <div
             className={
               validRun || run === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${actualizarRepatidorStyle["valid-message-hidden"]}`
+                : `${actualizarRepatidorStyle["invalid-message"]}`
             }
           >
             El run ingresado no es válido
           </div>
           <div>
-            <label htmlFor="nombre-empresa" className="form-label">
+            <label
+              htmlFor="nombre-empresa"
+              className={`${booststrap["form-label"]}`}
+            >
               Nombre:
             </label>
             <input
               type="text"
               className={
                 nombre === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validNombre
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${actualizarRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${actualizarRepatidorStyle["invalid-input-border"]}`
               }
               id="nombre-empresa"
               onChange={handleNombreChange}
@@ -1235,24 +1225,27 @@ function AdministradorCrearCuentaRepartidor() {
           <div
             className={
               validNombre || nombre === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${actualizarRepatidorStyle["valid-message-hidden"]}`
+                : `${actualizarRepatidorStyle["invalid-message"]}`
             }
           >
             El nombre ingresado no es válido
           </div>
           <div>
-            <label htmlFor="apellido-paterno" className="form-label">
+            <label
+              htmlFor="apellido-paterno"
+              className={`${booststrap["form-label"]}`}
+            >
               Apellido paterno:
             </label>
             <input
               type="text"
               className={
                 apellidoPaterno === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validApellidoPaterno
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${actualizarRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${actualizarRepatidorStyle["invalid-input-border"]}`
               }
               id="apellido-paterno"
               onChange={handleApellidoPaternoChange}
@@ -1265,8 +1258,8 @@ function AdministradorCrearCuentaRepartidor() {
           <div
             className={
               validApellidoPaterno || apellidoPaterno === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${actualizarRepatidorStyle["valid-message-hidden"]}`
+                : `${actualizarRepatidorStyle["invalid-message"]}`
             }
           >
             El apellido paterno ingresado no es válido
@@ -1279,10 +1272,10 @@ function AdministradorCrearCuentaRepartidor() {
               type="text"
               className={
                 apellidoMaterno === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validApellidoMaterno
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${actualizarRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${actualizarRepatidorStyle["invalid-input-border"]}`
               }
               id="apellido-materno"
               onChange={handleApellidoMaternoChange}
@@ -1295,44 +1288,49 @@ function AdministradorCrearCuentaRepartidor() {
           <div
             className={
               validApellidoMaterno || apellidoMaterno === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${actualizarRepatidorStyle["valid-message-hidden"]}`
+                : `${actualizarRepatidorStyle["invalid-message"]}`
             }
           >
             El apellido materno ingresado no es válido
           </div>
           <div>
-            <label htmlFor="fecha-nacimiento" className="form-label">
+            <label
+              htmlFor="fecha-nacimiento"
+              className={`${booststrap["form-label"]}`}
+            >
               Fecha de nacimiento:
             </label>
             <input
               type="date"
               className={
                 fechaNacimiento === ""
-                  ? "form-control"
-                  : "form-control valid-input-border"
+                  ? `${booststrap["form-control"]}`
+                  : `${booststrap["form-control"]} ${actualizarRepatidorStyle["valid-input-border"]}`
               }
               id="fecha-nacimiento"
               onChange={handleFechaNacimientoChange}
               value={fechaNacimiento}
               required
             />
-            <div className="valid-message-hidden">
+            <div
+              className={`${actualizarRepatidorStyle["valid-message-hidden"]}`}
+            >
               La calle ingresada no es válida
             </div>
           </div>
           <div>
-            <label htmlFor="calle" className="form-label">
+            <label htmlFor="calle" className={`${booststrap["form-label"]}`}>
               Calle:
             </label>
             <input
               type="text"
               className={
                 calle === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validCalle
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${actualizarRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${actualizarRepatidorStyle["invalid-input-border"]}`
               }
               id="calle"
               onChange={handleCalleChange}
@@ -1345,24 +1343,24 @@ function AdministradorCrearCuentaRepartidor() {
           <div
             className={
               validCalle || calle === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${actualizarRepatidorStyle["valid-message-hidden"]}`
+                : `${actualizarRepatidorStyle["invalid-message"]}`
             }
           >
             La calle ingresada no es válida
           </div>
           <div>
-            <label htmlFor="numCalle" className="form-label">
+            <label htmlFor="numCalle" className={`${booststrap["form-label"]}`}>
               N° calle:
             </label>
             <input
-              type="text"
+              type="number"
               className={
                 numCalle === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validNumCalle
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${actualizarRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${actualizarRepatidorStyle["invalid-input-border"]}`
               }
               id="numCalle"
               onChange={handleNumCalleChange}
@@ -1375,19 +1373,21 @@ function AdministradorCrearCuentaRepartidor() {
           <div
             className={
               validNumCalle || numCalle === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${actualizarRepatidorStyle["valid-message-hidden"]}`
+                : `${actualizarRepatidorStyle["invalid-message"]}`
             }
           >
             El número de calle ingresada no es válido
           </div>
           <div>
-            <label htmlFor="regiones" className="form-label">
+            <label htmlFor="regiones" className={`${booststrap["form-label"]}`}>
               Region:
             </label>
             <select
               className={
-                region === "" ? "form-select" : "form-select valid-input-border"
+                region === ""
+                  ? `${booststrap["form-select"]}`
+                  : `${booststrap["form-select"]} ${actualizarRepatidorStyle["valid-input-border"]}`
               }
               id="regiones"
               onChange={handleRegionChange}
@@ -1398,15 +1398,21 @@ function AdministradorCrearCuentaRepartidor() {
               {mapRegion(RegionesYcomunas)}
             </select>
           </div>
-          <div className="valid-message-hidden">nothing here</div>
+          <div
+            className={`${actualizarRepatidorStyle["valid-message-hidden"]}`}
+          >
+            nothing here
+          </div>
           <div>
-            <label htmlFor="comunas" className="form-label">
+            <label htmlFor="comunas" className={`${booststrap["form-label"]}`}>
               Comuna:
             </label>
             <br />
             <select
               className={
-                comuna === "" ? "form-select" : "form-select valid-input-border"
+                comuna === ""
+                  ? `${booststrap["form-select"]}`
+                  : `${booststrap["form-select"]} ${actualizarRepatidorStyle["valid-input-border"]}`
               }
               id="comunas"
               onChange={handleComunaChange}
@@ -1418,20 +1424,27 @@ function AdministradorCrearCuentaRepartidor() {
             </select>
           </div>
         </div>
-        <div className="col-md-4 flex-container space-between">
-          <h2 className="font-weight-bold">Datos de contacto</h2>
+        <div
+          className={`${booststrap["col-md-4"]} ${actualizarRepatidorStyle["flex-container"]} ${actualizarRepatidorStyle["space-between"]}`}
+        >
+          <h2 className={`${actualizarRepatidorStyle["font-weight-bold"]}`}>
+            Datos de contacto
+          </h2>
           <div>
-            <label htmlFor="numero-celular" className="form-label">
+            <label
+              htmlFor="numero-celular"
+              className={`${booststrap["form-label"]}`}
+            >
               N° Celular:
             </label>
             <input
               type="tel"
               className={
                 celular === ""
-                  ? "form-control"
+                  ? `${booststrap["form-control"]}`
                   : validCelular
-                  ? "form-control valid-input-border"
-                  : "form-control invalid-input-border"
+                  ? `${booststrap["form-control"]} ${actualizarRepatidorStyle["valid-input-border"]}`
+                  : `${booststrap["form-control"]} ${actualizarRepatidorStyle["invalid-input-border"]}`
               }
               id="numero-celular"
               onChange={handleCelularChange}
@@ -1444,31 +1457,42 @@ function AdministradorCrearCuentaRepartidor() {
           <div
             className={
               validCelular || celular === ""
-                ? "valid-message-hidden"
-                : "invalid-message"
+                ? `${actualizarRepatidorStyle["valid-message-hidden"]}`
+                : `${actualizarRepatidorStyle["invalid-message"]}`
             }
           >
             El número de calle ingresada no es válido
           </div>
         </div>
-        <div className="flex-container flex-row gap-2 justify-content-around grid-span-1">
-          <button type="submit" className="btn btn-primary mt-2">
+        <div
+          className={`${actualizarRepatidorStyle["flex-container"]} ${booststrap["flex-row"]} ${booststrap["gap-2"]} ${booststrap["justify-content-around"]} ${actualizarRepatidorStyle["grid-span-1"]} ${actualizarRepatidorStyle["container-btn-crear-repatidor"]}`}
+        >
+          <button
+            type="submit"
+            className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${actualizarRepatidorStyle["btn-primary-color"]}`}
+          >
             Guardar cambios
           </button>
           <button
             type="reset"
-            className="btn btn-danger mt-2"
+            className={`${booststrap["btn"]} ${booststrap["btn-danger"]} ${booststrap["mt-2"]}`}
             onClick={cleanStates}
           >
             Descartar cambios
           </button>
+          <Link
+            className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${actualizarRepatidorStyle["btn-primary-color"]}`}
+            to="/cuenta/administrador/list-repartidores"
+          >
+            Volver
+          </Link>
         </div>
         <div
           //className="card grid-span-1 submit-successful-hidden"
           className={
             showMessege
-              ? "card grid-span-1 submit-successful-show fadeIn"
-              : "card grid-span-1 submit-successful-hidden fadeIn"
+              ? `${booststrap["card"]} ${actualizarRepatidorStyle["grid-span-1"]} ${actualizarRepatidorStyle["submit-successful-show"]} ${actualizarRepatidorStyle["fadeIn"]}`
+              : `${booststrap["card"]} ${actualizarRepatidorStyle["grid-span-1"]} ${actualizarRepatidorStyle["submit-successful-hidden"]} ${actualizarRepatidorStyle["fadeIn"]}`
           }
         >
           <p>Se ha creado la cuenta de forma satisfactoria!</p>
@@ -1478,5 +1502,4 @@ function AdministradorCrearCuentaRepartidor() {
     </form>
   );
 }
-
-export default AdministradorCrearCuentaRepartidor;
+export default AdministradorActualizarCuentaRepartidor;

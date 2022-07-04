@@ -23,6 +23,18 @@ export const getDireccion = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+export const getDireccionByUserId = async (req, res) => {
+  try {
+    const direccion = await DireccionModel.findAll({
+      where: {
+        usuarioId: req.params.id,
+      },
+    });
+    res.json(direccion[0]);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
 
 //mostrar todos los usuarios
 
@@ -42,6 +54,18 @@ export const updateDireccion = async (req, res) => {
     await DireccionModel.update(req.body, {
       where: {
         id: req.params.id,
+      },
+    });
+    res.json({ message: "Direccion actualizada correctamente" });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+export const updateDireccionByUserId = async (req, res) => {
+  try {
+    await DireccionModel.update(req.body, {
+      where: {
+        usuarioId: req.params.id,
       },
     });
     res.json({ message: "Direccion actualizada correctamente" });

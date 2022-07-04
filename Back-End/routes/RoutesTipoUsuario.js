@@ -1,4 +1,5 @@
 import express from "express";
+import { isAuthenticated } from "../controllers/CuentaController.js";
 import {
   getTipoUsuario,
   getAllTiposDeUsuario,
@@ -13,16 +14,20 @@ import {
 const routerTipoUsuario = express.Router();
 
 //ruta para obtener un tipo de usuario
-routerTipoUsuario.get("/:id", getTipoUsuario);
-routerTipoUsuario.get("/usuario/:id", getTipoUsuarioByUserId);
+routerTipoUsuario.get("/:id", isAuthenticated, getTipoUsuario);
+routerTipoUsuario.get("/usuario/:id", isAuthenticated, getTipoUsuarioByUserId);
 //ruta para obtener todos los tipos de usuarios
-routerTipoUsuario.get("/", getAllTiposDeUsuario);
+routerTipoUsuario.get("/", isAuthenticated, getAllTiposDeUsuario);
 //ruta para crear un tipo de usuario
 routerTipoUsuario.post("/", createTipoUsuario);
 //ruta para actualizar un tipo de usuario
-routerTipoUsuario.put("/:id", updateTipoUsuario);
+routerTipoUsuario.put("/:id", isAuthenticated, updateTipoUsuario);
 //ruta para eliminar un tipo de usuario
-routerTipoUsuario.delete("/:id", deleteTipoUsuario);
-routerTipoUsuario.delete("/usuario/:id", deleteTipoUsuarioByUserId);
+routerTipoUsuario.delete("/:id", isAuthenticated, deleteTipoUsuario);
+routerTipoUsuario.delete(
+  "/usuario/:id",
+  isAuthenticated,
+  deleteTipoUsuarioByUserId
+);
 
 export default routerTipoUsuario;

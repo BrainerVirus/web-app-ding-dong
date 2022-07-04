@@ -1,39 +1,26 @@
 import React from "react";
 import Swal from "sweetalert2";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import "../../scss/features/LoginStyle.scss";
-import LightLogo from "../../img/logos/Ding-Dong-Logo-Light.svg";
-import PlayStoreLogo from "../../img/logos/get-it-on-google-play-logo.svg";
-import AppStoreLogo from "../../img/logos/Download_on_the_App_Store_Badge.svg";
-//import AuthContext from "../context/AuthContext";
-// import { useUser, useUserUpdate } from "../context/AuthContext";
-//import { useUser } from "../context/AuthContext";
+import "./LoginAdminStyle.module.scss";
+// import LightLogo from "../../img/logos/Ding-Dong-Logo-Light.svg";
+// import PlayStoreLogo from "../../img/logos/get-it-on-google-play-logo.svg";
+// import AppStoreLogo from "../../img/logos/Download_on_the_App_Store_Badge.svg";
+
 import Cookies from "js-cookie";
 const URI = "http://localhost:8080/cuentas/login";
 const URITipoUsuario = "http://localhost:8080/tipoUsuario";
 const regexValidEmail =
   /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|cl|com|org|net|es)\b/;
 
-function Login() {
+function LoginAdmin(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isToggled, setIsToggled] = useState(false);
-  const [role, setRole] = useState("receptor");
-  const [upperCaseRole, setUpperCaseRole] = useState("Receptores");
-  const [mssgBienvenida, setmssgBienvenida] = useState();
-  // const [usuario, setUsuario] = useState(useUser);
+  const [role, setRole] = useState("administrador");
   const [isInvaliadEmailPass, setIsInvaliadEmailPass] = useState(false);
-  //const { user } = useUser();
-  // const userUpdater = useUserUpdate();
-  //const [user, setUser] = useState("");
-  //console.log(user);
   const navigate = useNavigate();
-  // console.log(
-  //   "User:" + userProvider.user + userProvider.isLogged + userProvider.role
-  // );
   //setear el valor del email al escribir
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -50,29 +37,14 @@ function Login() {
       return false;
     }
   }
-
-  const handleRoleToggle = (e) => {
-    setIsToggled(!isToggled);
-  };
-  useEffect(() => {
-    if (isToggled) {
-      setUpperCaseRole("Repartidores");
-      setRole("repartidor");
-    } else {
-      setUpperCaseRole("Receptores");
-      setRole("receptor");
-    }
-  }, [isToggled]);
+  //get cookies
   const handleSession = () => {
     Cookies.get("token");
   };
+  //login
   useEffect(() => {
     handleSession();
-    console.log("this are the cookies in login: " + Cookies.get("token"));
   }, []);
-  // useEffect(() => {
-  //   validateMail(email);
-  // }, [email]);
   axios.defaults.withCredentials = true;
   // Consulta a la api para el login
   const store = async (e) => {
@@ -88,37 +60,29 @@ function Login() {
             id: result.data.id,
             user: result.data.user,
             usuarioId: result.data.usuarioId,
+            isLogged: result.data.isLogged,
           };
-          console.log(
-            `El id de la cuenta es: ${userAth.id}, el usuario es: ${userAth.user}, y el id del usuario es: ${userAth.usuarioId}`
-          );
           axios
             .get(URITipoUsuario + "/usuario/" + userAth.usuarioId)
             .then((res) => {
-              console.log(
-                "Entra al tipo de usuario, y el id del usu es: " +
-                  userAth.usuarioId
-              );
               userAth.tipoUsuario = res.data.tipoUsuario;
-              console.log("tipo de usuario: " + userAth.tipoUsuario);
-              console.log("role: " + role);
-              // if (role === userAth.tipoUsuario) {
-              //   console.log("rol correcto");
-              // }
+
               if (email === userAth.user && role === userAth.tipoUsuario) {
-                // console.log("Login correcto");
-                console.log("rol correcto");
                 setIsInvaliadEmailPass(false);
+                localStorage.setItem("id", result.data.usuarioId);
+                localStorage.setItem("isLogged", result.data.isLogged);
+                localStorage.setItem("tipoUsuario", res.data.tipoUsuario);
+                props.changeId(result.data.usuarioId);
+                props.changeLogged(result.data.isLogged);
+                props.changeRole(res.data.tipoUsuario);
                 Swal.fire({
                   text: "Inicio de sesion exitoso",
                   icon: "success",
                   showConfirmButton: false,
                   timer: 2000,
                 });
-                console.log(role);
-                //navigate(`/?id=${userAth.id}`);
                 setTimeout(() => {
-                  navigate(`/?id=${userAth.id}`);
+                  navigate(`/cuenta/administrador/home`);
                 }, 2000);
               } else {
                 setIsInvaliadEmailPass(true);
@@ -131,9 +95,6 @@ function Login() {
     } else {
       setIsInvaliadEmailPass(true);
     }
-    // document.getElementById("invalidEmail").innerHTML =
-    //   "Email invalido, por favor escriba un email valido";
-    //navigate("/");
   };
   return (
     <div className="container-fluid vh-100" id="container-login">
@@ -151,25 +112,16 @@ function Login() {
             id="header-login"
           >
             <h1>
-              <i>¡Bienvenidos!</i>
+              <i>¡Bienvenidas!</i>
             </h1>
             <h2>
-              Usuarios <i className="fa-solid fa-dolly" id="title-logo"></i>{" "}
-              {upperCaseRole}
+              Empresas <i className="fa-solid fa-dolly" id="title-logo"></i>{" "}
+              Repartidoras
             </h2>
           </div>
           <div id="form-wrapper">
             <form onSubmit={store}>
               <div className="mb-3 d-flex flex-column">
-                <label className="toggle col-sm-6 offset-sm-3">
-                  <input type="checkbox" onClick={handleRoleToggle} />
-                  <span className="slider"></span>
-                  <span
-                    className="labels"
-                    data-on="Receptor"
-                    data-off="Repartidor"
-                  ></span>
-                </label>
                 <label
                   htmlFor="staticEmail"
                   className="col-sm-1 offset-sm-3 col-form-label"
@@ -251,4 +203,4 @@ function Login() {
     </div>
   );
 }
-export default Login;
+export default LoginAdmin;

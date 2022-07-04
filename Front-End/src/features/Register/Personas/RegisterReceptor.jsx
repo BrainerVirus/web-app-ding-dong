@@ -1,21 +1,19 @@
 import React from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
-import "../../scss/features/LoginStyle.scss";
-import LightLogo from "../../img/logos/Ding-Dong-Logo-Light.svg";
-import PlayStoreLogo from "../../img/logos/get-it-on-google-play-logo.svg";
-import AppStoreLogo from "../../img/logos/Download_on_the_App_Store_Badge.svg";
-import { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-//import defultProfileImg from "../../img/profile/default-profile-img.jpeg";
+import { useState, useEffect } from "react";
+import registerStyle from "./RegisterStyle.scss";
+import booststrap from "../../../scss/Global/bootstrap.min.module.css";
 const qs = require("qs");
 
+//end points
 const URICuentas = "http://localhost:8080/cuentas/";
 const URICuentasRegister = "http://localhost:8080/cuentas/register";
 const URIUsuarios = "http://localhost:8080/usuario/";
 const URIDirecciones = "http://localhost:8080/direccion/";
 const URITipoUsuario = "http://localhost:8080/tipoUsuario/";
 
+//regex for email validation
 const regexValidEmail =
   /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|cl|com|org|net|es)\b/;
 const regexValidPassLowerCase = /(?=.*[a-z])/;
@@ -53,12 +51,9 @@ function Register() {
 
   //----------------------------------------------------------
   //other states
-  const [showMessege, setShowMessege] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setReShowPassword] = useState(false);
   const tipoUsuario = "repartidor";
-  //navitaion
-  const navigate = useNavigate();
   //email set and validate
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -160,19 +155,11 @@ function Register() {
       const tipoUsuarioData = {
         tipoUsuario: tipoUsuario,
       };
-      /*const options = {
-        method: "POST",
-        headers: { "content-type": "application/form-data" },
-        data: cuenta,
-        url: URI,
-      };
-      axios(options);*/
       await axios
         .post(URIUsuarios, qs.stringify(usuarioData))
         .then((result) => {
           console.log(result.data);
           console.log(result.data.usuarioId);
-          // cuentaData.append("usuarioId", result.data.usuarioId);
           direccionData.usuarioId = result.data.usuarioId;
           tipoUsuarioData.usuarioId = result.data.usuarioId;
           console.log("direcion user id: " + direccionData.usuarioId);
@@ -198,9 +185,6 @@ function Register() {
         .catch((err) => {
           console.log(err);
         });
-      //const resp = res.id;
-      //history.push('/cuentas/')
-      //navigate("/");
     } else {
       Swal.fire({
         title: "Error!",
@@ -218,7 +202,6 @@ function Register() {
     setEmail("");
     setPassword("");
     setRePassword("");
-    setShowMessege(false);
     // show password
     setShowPassword(false);
     setReShowPassword(false);
@@ -247,9 +230,9 @@ function Register() {
             </h2>
           </div>
           <div id="form-wrapper">
-            <form onSubmit={store}>
-              <div className="mb-3 d-flex flex-column">
-                <div>
+            <form onSubmit={store} className="form-properties">
+              <div className="mb-3 d-flex flex-column flex-container">
+                <div className="flex-container">
                   <label htmlFor="email" className="form-label">
                     Email:
                   </label>
@@ -279,7 +262,7 @@ function Register() {
                 >
                   El email ingresado no es válido
                 </div>
-                <div>
+                <div className="form-data-wrapper">
                   <label htmlFor="password" className="form-label">
                     Nueva contraseña:
                   </label>
@@ -309,7 +292,7 @@ function Register() {
                     />
                   </div>
                 </div>
-                <div class="requirements">
+                <div className="requirements">
                   <ul>
                     <li
                       id="length"
@@ -373,7 +356,7 @@ function Register() {
                     </li>
                   </ul>
                 </div>
-                <div>
+                <div className="form-data-wrapper">
                   <label htmlFor="rePassword" className="form-label">
                     Confirmar contraseña:
                   </label>
@@ -412,20 +395,6 @@ function Register() {
                   }
                 >
                   Las contraseñas no coninciden
-                </div>
-              </div>
-              <div className="mb-3 form-check">
-                <div className="d-flex flex-row">
-                  <div className="offset-sm-3 ps-2">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="rememberMe"
-                    />
-                  </div>
-                  <label className="form-check-label" htmlFor="rememberMe">
-                    Recordarme
-                  </label>
                 </div>
               </div>
               <div
