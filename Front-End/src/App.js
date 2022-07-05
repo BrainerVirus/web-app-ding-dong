@@ -7,19 +7,33 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 import "./App.scss";
+//Landing page
 import Footer from "./features/Footer/Footer";
 import Login from "./features/Login/Personas/Login";
 import Home from "./features/Home/Home";
 import Navbar from "./features/Header/Navbar";
+//scrooling
+import ScrollToTop from "./features/ScrollToTop/ScrollToTop";
+//Administrador
 import AdministradorHome from "./features/Mantenedores/Administrador/Home/AdministradorHome";
 import AdministradorActualizarDatosDeCuentaAdmin from "./features/Mantenedores/Administrador/ActualizarDatosCuentaAdmin/ActualizarDatosDeCuentaAdmin";
 import AdministradorCrearCuentaRepartidor from "./features/Mantenedores/Administrador/CrearCuentaRepartidor/CrearCuentaRepartidorAdmin";
 import AdministradorActualizarCuentaRepartidor from "./features/Mantenedores/Administrador/ActualizarCuentaRepartidor/ActualizarCuentaRepartidorAdmin";
 import AdministradorMostrarRepartidores from "./features/Mantenedores/Administrador/MostrarRepartidores/AdministradorMostrarRepartidores";
-import RegisterReceptor from "./features/Register/Personas/RegisterReceptor";
 import LoginAdmin from "./features/Login/Empresas/LoginAdministrador";
 import NavbarAdministrador from "./features/Mantenedores/Administrador/Header/NavbarAdministrador";
-import ScrollToTop from "./features/ScrollToTop/ScrollToTop";
+
+//Receptor
+import RegisterReceptor from "./features/Register/Personas/RegisterReceptor";
+import NavbarReceptor from "./features/Mantenedores/Receptor/Header/NavbarReceptor";
+import HomeReceptor from "./features/Mantenedores/Receptor/Home/ReceptorHome";
+import ActualizarDatosCuentaReceptor from "./features/Mantenedores/Receptor/ActualizarCuentaReceptor/ActualizarCuentaReceptor";
+import MostrarPaquetesReceptor from "./features/Mantenedores/Receptor/MostrarPaquetes/ReceptorMostrarPaquetes";
+//repartidor
+import ActualizarDatosAccessoRepartidor from "./features/Mantenedores/Repartidor/ActualizarDatosDeAcceso/ActualizarDatosDeAccesoRepartidor";
+import NavbarRepartidor from "./features/Mantenedores/Repartidor/Header/NavbarRepartidor";
+import HomeRepartidor from "./features/Mantenedores/Repartidor/Home/RepartidorHome";
+import MostrarCalificaciones from "./features/Mantenedores/Repartidor/MostrarCalificaciones/RepartidorMostrarCalificaciones";
 
 const URI = "http://localhost:8080/cuentas/login/status";
 const URITipoUsuario = "http://localhost:8080/tipoUsuario/usuario/";
@@ -121,7 +135,17 @@ function App() {
                     <>
                       <Navbar />
                       <main>
-                        <Login />
+                        <Login
+                          changeId={(id) => {
+                            setId(id);
+                          }}
+                          changeLogged={(isLogged) => {
+                            setIsLogged(isLogged);
+                          }}
+                          changeRole={(role) => {
+                            setRole(role);
+                          }}
+                        />
                       </main>
                       <Footer />
                     </>
@@ -207,6 +231,90 @@ function App() {
                           <NavbarAdministrador />
                           <main>
                             <AdministradorActualizarDatosDeCuentaAdmin />
+                          </main>
+                          <Footer />
+                        </>
+                      }
+                    />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </>
+                )}
+                {/* Private routes Receptor*/}
+                {isLogged && role === roles[1] && (
+                  <>
+                    <Route
+                      path="/cuenta/receptor/home"
+                      element={
+                        <>
+                          <NavbarReceptor />
+                          <main>
+                            <HomeReceptor />
+                          </main>
+                          <Footer />
+                        </>
+                      }
+                    />
+                    <Route
+                      path="/cuenta/receptor/list-packages"
+                      element={
+                        <>
+                          <NavbarReceptor />
+                          <main>
+                            <MostrarPaquetesReceptor />
+                          </main>
+                          <Footer />
+                        </>
+                      }
+                    />
+                    <Route
+                      path="/cuenta/receptor/update/:id"
+                      element={
+                        <>
+                          <NavbarReceptor />
+                          <main>
+                            <ActualizarDatosCuentaReceptor />
+                          </main>
+                          <Footer />
+                        </>
+                      }
+                    />
+                    <Route path="*" element={<Navigate to="/" replace />} />
+                  </>
+                )}
+                {/* Private routes Repartidor*/}
+                {isLogged && role === roles[2] && (
+                  <>
+                    <Route
+                      path="/cuenta/repartidor/home/"
+                      element={
+                        <>
+                          <NavbarRepartidor />
+                          <main>
+                            <HomeRepartidor />
+                          </main>
+                          <Footer />
+                        </>
+                      }
+                    />
+                    <Route
+                      path="/cuenta/repartidor/list-packages"
+                      element={
+                        <>
+                          <NavbarRepartidor />
+                          <main>
+                            <MostrarCalificaciones />
+                          </main>
+                          <Footer />
+                        </>
+                      }
+                    />
+                    <Route
+                      path="/cuenta/repartidor/update/:id"
+                      element={
+                        <>
+                          <NavbarRepartidor />
+                          <main>
+                            <ActualizarDatosAccessoRepartidor />
                           </main>
                           <Footer />
                         </>

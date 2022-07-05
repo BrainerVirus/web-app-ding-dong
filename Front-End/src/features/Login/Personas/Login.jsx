@@ -17,7 +17,7 @@ const URITipoUsuario = "http://localhost:8080/tipoUsuario";
 const regexValidEmail =
   /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|cl|com|org|net|es)\b/;
 
-function Login() {
+function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isToggled, setIsToggled] = useState(false);
@@ -88,37 +88,37 @@ function Login() {
             id: result.data.id,
             user: result.data.user,
             usuarioId: result.data.usuarioId,
+            isLogged: result.data.isLogged,
           };
-          console.log(
-            `El id de la cuenta es: ${userAth.id}, el usuario es: ${userAth.user}, y el id del usuario es: ${userAth.usuarioId}`
-          );
           axios
             .get(URITipoUsuario + "/usuario/" + userAth.usuarioId)
             .then((res) => {
-              console.log(
-                "Entra al tipo de usuario, y el id del usu es: " +
-                  userAth.usuarioId
-              );
               userAth.tipoUsuario = res.data.tipoUsuario;
-              console.log("tipo de usuario: " + userAth.tipoUsuario);
-              console.log("role: " + role);
-              // if (role === userAth.tipoUsuario) {
-              //   console.log("rol correcto");
-              // }
+              console.log(
+                "tipo de usuario login persona: " + userAth.tipoUsuario
+              );
               if (email === userAth.user && role === userAth.tipoUsuario) {
-                // console.log("Login correcto");
-                console.log("rol correcto");
                 setIsInvaliadEmailPass(false);
+                localStorage.setItem("id", result.data.usuarioId);
+                localStorage.setItem("isLogged", result.data.isLogged);
+                localStorage.setItem("tipoUsuario", res.data.tipoUsuario);
+                props.changeId(result.data.usuarioId);
+                props.changeLogged(result.data.isLogged);
+                props.changeRole(res.data.tipoUsuario);
                 Swal.fire({
                   text: "Inicio de sesion exitoso",
                   icon: "success",
                   showConfirmButton: false,
                   timer: 2000,
                 });
-                console.log(role);
-                //navigate(`/?id=${userAth.id}`);
                 setTimeout(() => {
-                  navigate(`/?id=${userAth.id}`);
+                  if (res.data.tipoUsuario === "receptor") {
+                    navigate(`/cuenta/receptor/home`);
+                  } else {
+                    if (res.data.tipoUsuario === "repartidor") {
+                      navigate(`/cuenta/repartidor/home`);
+                    }
+                  }
                 }, 2000);
               } else {
                 setIsInvaliadEmailPass(true);

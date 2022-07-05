@@ -3,6 +3,8 @@ import { DataTypes } from "sequelize";
 import CuentaModel from "./CuentaModel.js";
 import TipoUsuarioModel from "./TipoUsuarioModel.js";
 import DireccionModel from "./DireccionesModel.js";
+import PaqueteModel from "./PaqueteModel.js";
+import QRModel from "./QRModel.js";
 
 const UsuarioModel = db.define("usuarios", {
   id: {
@@ -85,8 +87,32 @@ UsuarioModel.hasOne(DireccionModel, {
   },
 });
 DireccionModel.belongsTo(UsuarioModel);
+//nuevas tablas
+UsuarioModel.hasMany(PaqueteModel, {
+  foreignKey: {
+    type: DataTypes.UUID,
+    //allowNull: false,
+  },
+});
+PaqueteModel.belongsTo(UsuarioModel);
+
+UsuarioModel.hasMany(QRModel, {
+  foreignKey: {
+    type: DataTypes.UUID,
+    //allowNull: false,
+  },
+});
+QRModel.belongsTo(UsuarioModel);
+
+PaqueteModel.hasOne(QRModel, {
+  foreignKey: {
+    type: DataTypes.UUID,
+    //allowNull: false,
+  },
+});
 
 //sincronizamos la base de datos
+db.sync();
 UsuarioModel.sync({
   alter: true,
 }).then(() => {
@@ -103,6 +129,14 @@ TipoUsuarioModel.sync({ alter: true }).then(() => {
 
 DireccionModel.sync({ alter: true }).then(() => {
   console.log("working on table direccion");
+});
+// nuevas tablas
+PaqueteModel.sync({ alter: true }).then(() => {
+  console.log("working on table paquete");
+});
+
+QRModel.sync({ alter: true }).then(() => {
+  console.log("working on table qr");
 });
 
 export default UsuarioModel;

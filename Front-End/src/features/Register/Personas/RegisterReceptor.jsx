@@ -53,7 +53,7 @@ function Register() {
   //other states
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setReShowPassword] = useState(false);
-  const tipoUsuario = "repartidor";
+  const tipoUsuario = "receptor";
   //email set and validate
   const handleEmailChange = (e) => {
     setEmail(e.target.value);

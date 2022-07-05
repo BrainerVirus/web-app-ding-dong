@@ -16,6 +16,8 @@ import routerCuentas from "./routes/RoutesCuenta.js";
 import routerTipoUsuario from "./routes/RoutesTipoUsuario.js";
 import routerDireccion from "./routes/RoutesDireccion.js";
 import routerUsuario from "./routes/RoutesUsuario.js";
+import routerPaquete from "./routes/RoutesPaquete.js";
+import routerQR from "./routes/RoutesQR.js";
 //definimos app como una variable de express
 const app = express();
 //configuramos cors
@@ -43,8 +45,12 @@ app.use("/cuentas", routerCuentas);
 app.use("/tipoUsuario", routerTipoUsuario);
 app.use("/usuario", routerUsuario);
 app.use("/direccion", routerDireccion);
+app.use("/paquete", routerPaquete);
+app.use("/qr", routerQR);
 //static files
 app.use("/images", express.static("./images"));
+app.use("/qr/certificado", express.static("./QRCodes/CertificadoParaPaquetes"));
+app.use("/qr/identidad", express.static("./QRCodes/ValidaciónReceptor"));
 
 //test db
 try {
