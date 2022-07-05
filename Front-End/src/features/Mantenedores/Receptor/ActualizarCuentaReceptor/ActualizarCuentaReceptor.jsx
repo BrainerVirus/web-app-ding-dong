@@ -487,6 +487,8 @@ function AdministradorActualizarCuentaRepartidor() {
   const [showRePassword, setReShowPassword] = useState(false);
   const params = useParams();
   const tipoUsuario = "administrador";
+  const [edit, setEdit] = useState(false);
+
   //----------------------------------------------------------
   //first states to update
   useEffect(() => {
@@ -651,8 +653,8 @@ function AdministradorActualizarCuentaRepartidor() {
     console.log("patt test: " + ok);
     let excludedRunTest = false;
     for (let i = 0; i < excludedRuns.length; i++) {
-      if (run === excludedRuns[i]) {
-        console.log("Entra al false del run: ");
+      if (run == excludedRuns[i]) {
+        console.log("Entra al false del run: " + excludedRuns[i]);
         return (excludedRunTest = true);
       }
     }
@@ -675,7 +677,7 @@ function AdministradorActualizarCuentaRepartidor() {
       }
       ok = cVal === cDig;
     }
-    ok ? setValidRun(true) : setValidRun(false);
+    ok || run == "N/A" ? setValidRun(true) : setValidRun(false);
   };
   useEffect(() => {
     validateRun(run);
@@ -696,7 +698,6 @@ function AdministradorActualizarCuentaRepartidor() {
         setValidNombre(false);
       } else {
         setValidNombre(true);
-        setNombre(nombreTrimedLowerCase);
       }
     }
   };
@@ -794,7 +795,11 @@ function AdministradorActualizarCuentaRepartidor() {
       setValidCelular(false);
     } else {
       if (isNaN(celularTrimed)) {
-        setValidCelular(false);
+        if (celularTrimed == "N/A") {
+          setValidCelular(true);
+        } else {
+          setValidCelular(false);
+        }
       } else {
         if (regexValidCelular.test(celularTrimed)) {
           console.log("valid cel regex");
@@ -945,7 +950,7 @@ function AdministradorActualizarCuentaRepartidor() {
         <div
           className={`${booststrap["container-fluid"]} ${actualizarRepatidorStyle["grid-span-3"]}`}
         >
-          <h1>Crear cuenta de repartidor</h1>
+          <h1>Datos de cuenta</h1>
         </div>
         <div
           className={`${booststrap["col-md-4"]} ${actualizarRepatidorStyle["flex-container"]} ${actualizarRepatidorStyle["right-side-border"]}`}
@@ -973,7 +978,8 @@ function AdministradorActualizarCuentaRepartidor() {
                 alt="profile-img"
               />
               <button
-                className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${actualizarRepatidorStyle["img-preview-btn"]}`}
+                className={`${booststrap["btn"]}  ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${actualizarRepatidorStyle["img-preview-btn"]} ${actualizarRepatidorStyle["btn-primary-color"]}`}
+                disabled={edit === true ? false : true}
                 onClick={handleFileInput}
               >
                 Actualizar
@@ -1004,6 +1010,7 @@ function AdministradorActualizarCuentaRepartidor() {
             </label>
             <input
               type="email"
+              disabled={edit === true ? false : true}
               className={
                 email === ""
                   ? `${booststrap["form-control"]}`
@@ -1035,6 +1042,7 @@ function AdministradorActualizarCuentaRepartidor() {
             <div className={`${actualizarRepatidorStyle["pass-container"]}`}>
               <input
                 type={showPassword ? "text" : "password"}
+                disabled={edit === true ? false : true}
                 className={
                   password === ""
                     ? `${booststrap["form-control"]} ${booststrap["pe-4"]}`
@@ -1129,6 +1137,7 @@ function AdministradorActualizarCuentaRepartidor() {
             <div className={`${actualizarRepatidorStyle["pass-container"]}`}>
               <input
                 type={showRePassword ? "text" : "password"}
+                disabled={edit === true ? false : true}
                 className={
                   rePassword === ""
                     ? `${booststrap["form-control"]} ${booststrap["pe-4"]}`
@@ -1174,6 +1183,7 @@ function AdministradorActualizarCuentaRepartidor() {
             </label>
             <input
               type="text"
+              disabled={edit === true ? false : true}
               className={
                 run === ""
                   ? `${booststrap["form-control"]}`
@@ -1207,6 +1217,7 @@ function AdministradorActualizarCuentaRepartidor() {
             </label>
             <input
               type="text"
+              disabled={edit === true ? false : true}
               className={
                 nombre === ""
                   ? `${booststrap["form-control"]}`
@@ -1240,6 +1251,7 @@ function AdministradorActualizarCuentaRepartidor() {
             </label>
             <input
               type="text"
+              disabled={edit === true ? false : true}
               className={
                 apellidoPaterno === ""
                   ? `${booststrap["form-control"]}`
@@ -1270,6 +1282,7 @@ function AdministradorActualizarCuentaRepartidor() {
             </label>
             <input
               type="text"
+              disabled={edit === true ? false : true}
               className={
                 apellidoMaterno === ""
                   ? `${booststrap["form-control"]}`
@@ -1303,6 +1316,7 @@ function AdministradorActualizarCuentaRepartidor() {
             </label>
             <input
               type="date"
+              disabled={edit === true ? false : true}
               className={
                 fechaNacimiento === ""
                   ? `${booststrap["form-control"]}`
@@ -1325,6 +1339,7 @@ function AdministradorActualizarCuentaRepartidor() {
             </label>
             <input
               type="text"
+              disabled={edit === true ? false : true}
               className={
                 calle === ""
                   ? `${booststrap["form-control"]}`
@@ -1355,6 +1370,7 @@ function AdministradorActualizarCuentaRepartidor() {
             </label>
             <input
               type="number"
+              disabled={edit === true ? false : true}
               className={
                 numCalle === ""
                   ? `${booststrap["form-control"]}`
@@ -1384,6 +1400,7 @@ function AdministradorActualizarCuentaRepartidor() {
               Region:
             </label>
             <select
+              disabled={edit === true ? false : true}
               className={
                 region === ""
                   ? `${booststrap["form-select"]}`
@@ -1409,6 +1426,7 @@ function AdministradorActualizarCuentaRepartidor() {
             </label>
             <br />
             <select
+              disabled={edit === true ? false : true}
               className={
                 comuna === ""
                   ? `${booststrap["form-select"]}`
@@ -1439,6 +1457,7 @@ function AdministradorActualizarCuentaRepartidor() {
             </label>
             <input
               type="tel"
+              disabled={edit === true ? false : true}
               className={
                 celular === ""
                   ? `${booststrap["form-control"]}`
@@ -1480,12 +1499,31 @@ function AdministradorActualizarCuentaRepartidor() {
           >
             Descartar cambios
           </button>
-          <Link
+          <button
             className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${actualizarRepatidorStyle["btn-primary-color"]}`}
-            to="/cuenta/administrador/list-repartidores"
+            onClick={(e) => {
+              e.preventDefault();
+              if (!edit) {
+                Swal.fire({
+                  text: "Edición habilitada",
+                  icon: "success",
+                  showConfirmButton: false,
+                  timer: 2500,
+                });
+                setEdit(!edit);
+              } else {
+                Swal.fire({
+                  text: "Edición desabilitada",
+                  icon: "warning",
+                  showConfirmButton: false,
+                  timer: 2500,
+                });
+                setEdit(!edit);
+              }
+            }}
           >
-            Volver
-          </Link>
+            Editar
+          </button>
         </div>
         <div
           //className="card grid-span-1 submit-successful-hidden"

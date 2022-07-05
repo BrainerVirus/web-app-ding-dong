@@ -48,8 +48,8 @@ function AdministradorMostrarRepartidores() {
   };
   const defineAllPackagesAndQRsByUserId = () => {
     const tempArr = [];
-    packages.map((parcel) => {
-      qrs.map((qr) => {
+    packages.forEach((parcel) => {
+      qrs.forEach((qr) => {
         if (parcel.usuarioId === qr.usuarioId && parcel.id === qr.paqueteId) {
           setPackagesAndQRs([...packagesAndQRs, qr]);
           parcel.qrId = qr.id;

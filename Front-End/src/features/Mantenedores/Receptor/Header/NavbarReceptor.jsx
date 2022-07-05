@@ -80,6 +80,16 @@ function NavbarReceptor() {
               </Link>
             </li>
             <li className="nav-item">
+              <Link
+                className="nav-link nav-item-base-status"
+                aria-current="page"
+                to={`/cuenta/receptor/update/${sessionId}`}
+                onClick={handleClick}
+              >
+                <i className="fa-solid fa-user me-2"></i> Mi Cuenta
+              </Link>
+            </li>
+            <li className="nav-item">
               <a
                 className="nav-link nav-item-base-status"
                 aria-current="page"
@@ -101,11 +111,6 @@ function NavbarReceptor() {
                 <i className="fa-solid fa-gears me-2"></i>Ajustes
               </a>
               <ul className="dropdown-menu dropdown-menu-end drop-down-border-radious-none">
-                <li>
-                  <a className="dropdown-item  drop-down-menu-element" href="#">
-                    <i className="fa-solid fa-user me-2"></i> Mi Cuenta
-                  </a>
-                </li>
                 <li>
                   <a className="dropdown-item drop-down-menu-element" href="#">
                     <i className="fa-solid fa-moon me-2 " />

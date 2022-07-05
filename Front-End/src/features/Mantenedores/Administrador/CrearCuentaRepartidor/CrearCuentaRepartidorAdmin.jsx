@@ -485,7 +485,7 @@ function AdministradorCrearCuentaRepartidor() {
   const [showMessege, setShowMessege] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setReShowPassword] = useState(false);
-  const tipoUsuario = "administrador";
+  const tipoUsuario = "repartidor";
   //navitaion
   const navigate = useNavigate();
   // profile photo upload

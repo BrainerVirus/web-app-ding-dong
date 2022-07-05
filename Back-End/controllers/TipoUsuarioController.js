@@ -47,6 +47,18 @@ export const getAllTiposDeUsuario = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+export const getAllRepartidores = async (req, res) => {
+  try {
+    const tiposDeUsuario = await TipoUsuarioModel.findAll({
+      where: {
+        tipoUsuario: "repartidor",
+      },
+    });
+    res.json(tiposDeUsuario);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
 
 //actualizar un tipo de usuario
 export const updateTipoUsuario = async (req, res) => {

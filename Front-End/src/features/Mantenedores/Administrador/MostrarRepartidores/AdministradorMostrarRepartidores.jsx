@@ -9,10 +9,13 @@ const URICuentas = "http://localhost:8080/cuentas/";
 const URIUsuarios = "http://localhost:8080/usuario/";
 const URIDirecciones = "http://localhost:8080/direccion/";
 const URITipoUsuario = "http://localhost:8080/tipoUsuario/";
+const URIShowRepartidores =
+  "http://localhost:8080/tipoUsuario/show/list/repartidores";
 
 function AdministradorMostrarRepartidores() {
   const [cuentas, setCuentas] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
+  const [repartidores, setRepartidores] = useState([]);
   const [userLookup, setUserLookup] = useState("");
   const [userForTable, setUserForTable] = useState([]);
   const [isDeleteted, setIsDeleted] = useState(false);
@@ -41,12 +44,12 @@ function AdministradorMostrarRepartidores() {
   const getAllAccounts = async () => {
     const response = await axios.get(URICuentas);
     setCuentas(response.data);
-    setIsDeleted();
   };
 
   useEffect(() => {
     getAllUsers();
     getAllAccounts();
+    getAllRepartidores();
   }, []);
 
   useEffect(() => {
@@ -57,7 +60,10 @@ function AdministradorMostrarRepartidores() {
   const getAllUsers = async () => {
     const response = await axios.get(URIUsuarios);
     setUsuarios(response.data);
-    setIsDeleted();
+  };
+  const getAllRepartidores = async () => {
+    const response = await axios.get(URIShowRepartidores);
+    setRepartidores(response.data);
   };
 
   const deleteAccount = async (id) => {
@@ -85,14 +91,26 @@ function AdministradorMostrarRepartidores() {
 
   const setUserInfoInAccount = () => {
     const testArray = [];
-    cuentas.map((cuenta) => {
-      usuarios.map((usuario) => {
+    cuentas.forEach((cuenta) => {
+      usuarios.forEach((usuario) => {
         if (usuario.id === cuenta.usuarioId) {
-          cuenta.nombre = usuario.nombre;
-          cuenta.apellidoPaterno = usuario.apellidoPaterno;
-          cuenta.apellidoMaterno = usuario.apellidoMaterno;
-          cuenta.run = usuario.run;
-          testArray.push(cuenta);
+          repartidores.forEach((repartidor) => {
+            if (
+              repartidor.tipoUsuario === "repartidor" &&
+              repartidor.usuarioId === usuario.id
+            ) {
+              console.log(
+                "entra de repawrtidor tipo: " + repartidor.tipoUsuario
+              );
+              cuenta.nombre = usuario.nombre;
+              cuenta.apellidoPaterno = usuario.apellidoPaterno;
+              cuenta.apellidoMaterno = usuario.apellidoMaterno;
+              cuenta.run = usuario.run;
+              testArray.push(cuenta);
+            } else {
+              console.log("no entra de repawrtidor tipo: ");
+            }
+          });
         }
       });
     });

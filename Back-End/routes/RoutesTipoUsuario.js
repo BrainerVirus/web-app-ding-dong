@@ -8,6 +8,7 @@ import {
   deleteTipoUsuario,
   deleteTipoUsuarioByUserId,
   getTipoUsuarioByUserId,
+  getAllRepartidores,
 } from "../controllers/TipoUsuarioController.js";
 
 //Inicializamos el router
@@ -18,6 +19,11 @@ routerTipoUsuario.get("/:id", isAuthenticated, getTipoUsuario);
 routerTipoUsuario.get("/usuario/:id", isAuthenticated, getTipoUsuarioByUserId);
 //ruta para obtener todos los tipos de usuarios
 routerTipoUsuario.get("/", isAuthenticated, getAllTiposDeUsuario);
+routerTipoUsuario.get(
+  "/show/list/repartidores",
+  isAuthenticated,
+  getAllRepartidores
+);
 //ruta para crear un tipo de usuario
 routerTipoUsuario.post("/", createTipoUsuario);
 //ruta para actualizar un tipo de usuario
