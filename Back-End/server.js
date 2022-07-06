@@ -4,6 +4,7 @@ import db from "./database/db.js";
 import express from "express";
 //importamos cors
 import cors from "cors";
+import path from "path";
 //importamos dotenv para poder leer el archivo .env
 // import dotenv from "dotenv";
 //variables de entorno
@@ -51,6 +52,12 @@ app.use("/qr", routerQR);
 app.use("/images", express.static("./images"));
 app.use("/qr/certificado", express.static("./QRCodes/CertificadoParaPaquetes"));
 app.use("/qr/identidad", express.static("./QRCodes/ValidaciónReceptor"));
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("build"));
+  app.get("*", (req, res) => {
+    req.sendFile(path.resolve(__dirname, "build", "index.html"));
+  });
+}
 
 //test db
 try {
