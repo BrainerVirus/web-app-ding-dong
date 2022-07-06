@@ -1,6 +1,7 @@
 import React from "react";
 import axios from "axios";
 import logoDark from "../../../../img/logos/Ding-Dong-Logo-transparent-Nav.svg";
+import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +34,17 @@ function NavbarAdministrador() {
   //close navbar
   const handleClick = (e) => {
     setIsToggled(!isToggled);
+  };
+  //coomning soon mssg
+  const showCommingSoonMssg = (e) => {
+    e.preventDefault();
+    Swal.fire({
+      icon: "error",
+      title: "Lo sentimos",
+      text: "Esta función aún no está disponible",
+    }).then((result) => {
+      handleClick();
+    });
   };
   return (
     <nav className="navbar navbar-expand-lg bg-light sticky-top">
@@ -83,7 +95,7 @@ function NavbarAdministrador() {
               <a
                 className="nav-link nav-item-base-status"
                 aria-current="page"
-                onClick={handleClick}
+                onClick={showCommingSoonMssg}
                 href="#"
               >
                 <i className="fa-solid fa-message me-2"></i>
@@ -102,26 +114,33 @@ function NavbarAdministrador() {
               </a>
               <ul className="dropdown-menu dropdown-menu-end drop-down-border-radious-none">
                 <li>
-                  <a className="dropdown-item  drop-down-menu-element" href="#">
+                  <Link
+                    to={`/cuenta/administrador/update/${sessionId}`}
+                    onClick={handleClick}
+                    className="dropdown-item  drop-down-menu-element"
+                    href="#"
+                  >
                     <i className="fa-solid fa-user me-2"></i> Mi Cuenta
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a className="dropdown-item drop-down-menu-element" href="#">
+                  <a
+                    onClick={showCommingSoonMssg}
+                    className="dropdown-item drop-down-menu-element"
+                    href="#"
+                  >
                     <i className="fa-solid fa-moon me-2 " />
                     Dark mode
                   </a>
                 </li>
                 <li>
-                  <a className="dropdown-item drop-down-menu-element" href="#">
+                  <a
+                    onClick={showCommingSoonMssg}
+                    className="dropdown-item drop-down-menu-element"
+                    href="#"
+                  >
                     <i className="fa-solid fa-universal-access me-2" />
                     Accesibilidad
-                  </a>
-                </li>
-                <li>
-                  <a className="dropdown-item drop-down-menu-element" href="#">
-                    <i className="fa-solid fa-circle-info me-2" />
-                    Ayuda
                   </a>
                 </li>
                 <li onClick={handleLogout}>

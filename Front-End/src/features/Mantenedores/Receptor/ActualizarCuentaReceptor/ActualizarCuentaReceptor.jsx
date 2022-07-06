@@ -857,6 +857,7 @@ function AdministradorActualizarCuentaRepartidor() {
         fecha_nacimiento: fechaNacimiento,
       };
       let cuentaData = null;
+      let imgURL = "";
       if (img === "") {
         console.log("entra al imga vacio" + img);
         cuentaData = {
@@ -864,12 +865,14 @@ function AdministradorActualizarCuentaRepartidor() {
           password: password,
           profileImg: "images\\default-profile-img.jpg",
         };
+        imgURL = "/usuario/access-data/";
       } else {
         console.log("entra al imga no vacio" + img);
         cuentaData = new FormData();
         cuentaData.append("profileImg", img);
         cuentaData.append("user", email);
         cuentaData.append("password", password);
+        imgURL = "usuario/";
       }
 
       const direccionData = {
@@ -881,10 +884,8 @@ function AdministradorActualizarCuentaRepartidor() {
       await axios
         .put(URIUsuarios + params.id, qs.stringify(usuarioData))
         .then((result) => {
-          axios.put(URICuentas + "usuario/" + params.id, cuentaData);
+          axios.put(URICuentas + imgURL + params.id, cuentaData);
           axios.put(URIDirecciones + "usuario/" + params.id, direccionData);
-          //messege success
-          cleanStates(e);
           //handleShowMessege();
           Swal.fire({
             text: "Actualización de datos exitosa",
@@ -892,9 +893,6 @@ function AdministradorActualizarCuentaRepartidor() {
             showConfirmButton: false,
             timer: 2000,
           });
-          setTimeout(() => {
-            navigate("/cuenta/administrador/list-repartidores");
-          }, 2000);
         })
         .catch((err) => {
           console.log(err);
@@ -905,10 +903,6 @@ function AdministradorActualizarCuentaRepartidor() {
     } else {
       alert("Uno o más campos son inválidos");
     }
-  };
-  // show message after submit
-  const handleShowMessege = (e) => {
-    setShowMessege(!showMessege);
   };
   // show message close by x button
   const handleCloseMessege = (e) => {
@@ -1488,6 +1482,7 @@ function AdministradorActualizarCuentaRepartidor() {
         >
           <button
             type="submit"
+            disabled={edit === true ? false : true}
             className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${actualizarRepatidorStyle["btn-primary-color"]}`}
           >
             Guardar cambios
@@ -1508,7 +1503,7 @@ function AdministradorActualizarCuentaRepartidor() {
                   text: "Edición habilitada",
                   icon: "success",
                   showConfirmButton: false,
-                  timer: 2500,
+                  timer: 1500,
                 });
                 setEdit(!edit);
               } else {
@@ -1516,7 +1511,7 @@ function AdministradorActualizarCuentaRepartidor() {
                   text: "Edición desabilitada",
                   icon: "warning",
                   showConfirmButton: false,
-                  timer: 2500,
+                  timer: 1500,
                 });
                 setEdit(!edit);
               }

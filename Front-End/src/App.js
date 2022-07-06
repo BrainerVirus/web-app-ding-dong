@@ -225,7 +225,7 @@ function App() {
                       }
                     />
                     <Route
-                      path="/cuenta/administrador/:id/update"
+                      path="/cuenta/administrador/update/:id"
                       element={
                         <>
                           <NavbarAdministrador />
@@ -297,7 +297,7 @@ function App() {
                       }
                     />
                     <Route
-                      path="/cuenta/repartidor/list-packages"
+                      path="/cuenta/repartidor/calificaciones"
                       element={
                         <>
                           <NavbarRepartidor />

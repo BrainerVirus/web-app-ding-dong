@@ -1,9 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Barlow:wght@300&display=swap");
 $baseColor: #540b66;
+$baseColorSemiTrasnparent: #540b666c;
 $baseColorSecondary: #ccb6d1;
 $black: black;
 $textColor: #fff;
 $secondaryColor: #c48e3c;
+$thridColor: #8d12ab;
+$hoverColor: #a405cc;
 $dropdown-link-active-color: $baseColorSecondary;
 $box-shadow: 0 0.5rem 1rem rgba($black, 0.15);
 $box-shadow-sm: 0 0.125rem 0.25rem rgba($black, 0.075);
@@ -17,12 +20,12 @@ $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075);
 .container-actualizar-datos-admin {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 3rem 1fr;
-  gap: 1.5rem;
+  grid-template-rows: 3rem 1fr !important;
+  gap: 0.5rem !important;
   min-height: 87vh;
 }
 
-.container-actualizar-datos-admin > h1 {
+.container-actualizar-datos-admin > div > h1 {
   font-weight: bold;
 }
 
@@ -37,15 +40,18 @@ $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075);
 .grid-span-2 {
   grid-column: span 2;
 }
-
-#datos-usuario-container {
-  grid-row: 2/4;
+.grid-span-1 {
+  grid-column: span 1;
 }
+
+// #datos-usuario-container {
+//   grid-row: 2/4;
+// }
 
 #datos-contacto-container {
   padding-right: 7%;
   padding-left: 5%;
-  grid-column: 2 / span 2;
+  //grid-column: 2 / span 2;
 }
 
 .right-side-border {
@@ -98,6 +104,134 @@ $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075);
   align-self: center;
 }
 
+.hidden-btn {
+  visibility: hidden;
+}
+
 .text-shadow {
   font-size: 18px;
+}
+
+.submit-successful-show {
+  display: flex;
+  position: relative;
+  left: 8%;
+  top: 8%;
+  box-shadow: $box-shadow-lg;
+  max-height: 80%;
+  max-width: 85.2%;
+  justify-content: center;
+  text-align: center;
+  animation: fadeIn 0.5s linear;
+  background-color: $baseColor;
+  color: white;
+  p {
+    align-self: center;
+    border-color: green;
+    max-height: 80%;
+    max-width: 60%;
+  }
+  //padding-top: -5%;
+  i {
+    position: absolute;
+    top: 3px;
+    right: 5px;
+    cursor: pointer;
+  }
+}
+
+.submit-successful-hidden {
+  display: flex;
+  justify-content: center;
+  //border-color: green;
+  text-align: center;
+  visibility: hidden;
+  box-shadow: $box-shadow-lg;
+  max-height: 80%;
+  max-width: 100%;
+  position: relative;
+  //grid-column: 2 / 4;
+  //grid-row: 1/2;
+
+  p {
+    align-self: center;
+    border-color: green;
+    max-height: 80%;
+    max-width: 60%;
+  }
+  //padding-top: -5%;
+  i {
+    position: absolute;
+    top: 3px;
+    right: 5px;
+    cursor: pointer;
+  }
+}
+
+.pass-container {
+  position: relative;
+  i {
+    position: absolute;
+    top: 30%;
+    right: 2.5%;
+    cursor: pointer;
+  }
+}
+
+//animations
+@keyframes fadeIn {
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  0% {
+    opacity: 0;
+  }
+}
+
+.valid-input-border {
+  border: 1px solid green !important;
+}
+
+.invalid-input-border {
+  border: 1px solid red !important;
+}
+
+.valid-message-hidden {
+  visibility: hidden;
+  //min-height: 30px !important;
+}
+
+.invalid-message {
+  color: red;
+}
+
+.valid-message {
+  color: green;
+}
+
+.valid-message-default {
+  color: black;
+}
+
+.container-btn-crear-repatidor {
+  grid-column: -3/-2;
+}
+
+.btn-primary-color {
+  background-color: $thridColor;
+}
+
+.btn-primary-color:hover {
+  background-color: $hoverColor;
+}
+
+.btn-primary-color:focus {
+  background-color: $hoverColor;
+}
+
+.btn-primary-color:disabled {
+  background-color: $baseColor;
 }

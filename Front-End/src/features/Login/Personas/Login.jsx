@@ -84,46 +84,50 @@ function Login(props) {
           password: password,
         })
         .then((result) => {
-          const userAth = {
-            id: result.data.id,
-            user: result.data.user,
-            usuarioId: result.data.usuarioId,
-            isLogged: result.data.isLogged,
-          };
-          axios
-            .get(URITipoUsuario + "/usuario/" + userAth.usuarioId)
-            .then((res) => {
-              userAth.tipoUsuario = res.data.tipoUsuario;
-              console.log(
-                "tipo de usuario login persona: " + userAth.tipoUsuario
-              );
-              if (email === userAth.user && role === userAth.tipoUsuario) {
-                setIsInvaliadEmailPass(false);
-                localStorage.setItem("id", result.data.usuarioId);
-                localStorage.setItem("isLogged", result.data.isLogged);
-                localStorage.setItem("tipoUsuario", res.data.tipoUsuario);
-                props.changeId(result.data.usuarioId);
-                props.changeLogged(result.data.isLogged);
-                props.changeRole(res.data.tipoUsuario);
-                Swal.fire({
-                  text: "Inicio de sesion exitoso",
-                  icon: "success",
-                  showConfirmButton: false,
-                  timer: 2000,
-                });
-                setTimeout(() => {
-                  if (res.data.tipoUsuario === "receptor") {
-                    navigate(`/cuenta/receptor/home`);
-                  } else {
-                    if (res.data.tipoUsuario === "repartidor") {
-                      navigate(`/cuenta/repartidor/home`);
+          if (result.data.id) {
+            const userAth = {
+              id: result.data.id,
+              user: result.data.user,
+              usuarioId: result.data.usuarioId,
+              isLogged: result.data.isLogged,
+            };
+            axios
+              .get(URITipoUsuario + "/usuario/" + userAth.usuarioId)
+              .then((res) => {
+                userAth.tipoUsuario = res.data.tipoUsuario;
+                console.log(
+                  "tipo de usuario login persona: " + userAth.tipoUsuario
+                );
+                if (email === userAth.user && role === userAth.tipoUsuario) {
+                  setIsInvaliadEmailPass(false);
+                  localStorage.setItem("id", result.data.usuarioId);
+                  localStorage.setItem("isLogged", result.data.isLogged);
+                  localStorage.setItem("tipoUsuario", res.data.tipoUsuario);
+                  props.changeId(result.data.usuarioId);
+                  props.changeLogged(result.data.isLogged);
+                  props.changeRole(res.data.tipoUsuario);
+                  Swal.fire({
+                    text: "Inicio de sesion exitoso",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 2000,
+                  });
+                  setTimeout(() => {
+                    if (res.data.tipoUsuario === "receptor") {
+                      navigate(`/cuenta/receptor/home`);
+                    } else {
+                      if (res.data.tipoUsuario === "repartidor") {
+                        navigate(`/cuenta/repartidor/home`);
+                      }
                     }
-                  }
-                }, 2000);
-              } else {
-                setIsInvaliadEmailPass(true);
-              }
-            });
+                  }, 2000);
+                } else {
+                  setIsInvaliadEmailPass(true);
+                }
+              });
+          } else {
+            setIsInvaliadEmailPass(true);
+          }
         })
         .catch((error) => {
           console.log("error: " + error);

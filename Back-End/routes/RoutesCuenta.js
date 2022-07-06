@@ -13,6 +13,7 @@ import {
   logout,
   updateCuenta,
   updateCuentaByUserId,
+  updateCuentaByUserIdNoPic,
   uploadImg,
 } from "../controllers/CuentaController.js";
 
@@ -29,6 +30,11 @@ routerCuentas.put(
   isAuthenticated,
   uploadImg,
   updateCuentaByUserId
+);
+routerCuentas.put(
+  "/usuario/access-data/:id",
+  uploadImg,
+  updateCuentaByUserIdNoPic
 );
 routerCuentas.delete("/:id", isAuthenticated, deleteCuenta);
 routerCuentas.delete("/usuario/:id", isAuthenticated, deleteCuentaByUserId);

@@ -112,23 +112,61 @@ export const updateCuentaByUserId = async (req, res) => {
       user: req.body.user,
       profileImg: req.file.path,
     };
+    console.log("id por paramas en update: " + req.params.id);
     const cuentaToFindForPassValidation = await CuentaModel.findAll({
       where: {
         usuarioId: req.params.id,
       },
     });
-    if (
-      await bcrypt.compare(
-        req.body.password,
-        cuentaToFindForPassValidation[0].password
-      )
-    ) {
+    if (req.body.password === cuentaToFindForPassValidation[0].password) {
       const cuenta = await CuentaModel.update(infoKeepOldPassword, {
         where: {
           usuarioId: req.params.id,
         },
       });
+      console.log("la password se mantiene igual");
     } else {
+      console.log("la password se han actualizado");
+      const cuenta = await CuentaModel.update(info, {
+        where: {
+          usuarioId: req.params.id,
+        },
+      });
+    }
+
+    res.json({ message: "Cuenta actualizada correctamente", info });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
+export const updateCuentaByUserIdNoPic = async (req, res) => {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const info = {
+      user: req.body.user,
+      password: hashedPassword,
+      profileImg: req.body.profileImg,
+    };
+    const infoKeepOldPassword = {
+      user: req.body.user,
+      profileImg: req.body.profileImg,
+    };
+    console.log("id por paramas en update: " + req.params.id);
+    const cuentaToFindForPassValidation = await CuentaModel.findAll({
+      where: {
+        usuarioId: req.params.id,
+      },
+    });
+    if (req.body.password === cuentaToFindForPassValidation[0].password) {
+      const cuenta = await CuentaModel.update(infoKeepOldPassword, {
+        where: {
+          usuarioId: req.params.id,
+        },
+      });
+      console.log("la password se mantiene igual");
+    } else {
+      console.log("la password se han actualizado");
       const cuenta = await CuentaModel.update(info, {
         where: {
           usuarioId: req.params.id,
