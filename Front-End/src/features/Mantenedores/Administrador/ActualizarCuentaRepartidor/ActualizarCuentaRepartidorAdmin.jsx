@@ -1450,7 +1450,7 @@ function AdministradorActualizarCuentaRepartidor() {
             className={`${booststrap["btn"]} ${booststrap["btn-danger"]} ${booststrap["mt-2"]}`}
             onClick={cleanStates}
           >
-            Descartar cambios
+            Limpiar campos
           </button>
           <Link
             className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${actualizarRepatidorStyle["btn-primary-color"]} ${actualizarRepatidorStyle["volver-btn"]}`}

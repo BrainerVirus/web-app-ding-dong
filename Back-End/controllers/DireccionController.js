@@ -35,6 +35,18 @@ export const getDireccionByUserId = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+export const getDireccionByUserIdBodyReq = async (req, res) => {
+  try {
+    const direccion = await DireccionModel.findAll({
+      where: {
+        usuarioId: req.body.id,
+      },
+    });
+    res.json(direccion[0]);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
 
 //mostrar todos los usuarios
 

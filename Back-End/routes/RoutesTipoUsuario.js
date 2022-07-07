@@ -9,6 +9,8 @@ import {
   deleteTipoUsuarioByUserId,
   getTipoUsuarioByUserId,
   getAllRepartidores,
+  createUsuarioReceptor,
+  createUsuarioRepartidor,
 } from "../controllers/TipoUsuarioController.js";
 
 //Inicializamos el router
@@ -26,6 +28,8 @@ routerTipoUsuario.get(
 );
 //ruta para crear un tipo de usuario
 routerTipoUsuario.post("/", createTipoUsuario);
+routerTipoUsuario.post("/register/receptor", createUsuarioReceptor);
+routerTipoUsuario.post("/register/repartidor", createUsuarioRepartidor);
 //ruta para actualizar un tipo de usuario
 routerTipoUsuario.put("/:id", isAuthenticated, updateTipoUsuario);
 //ruta para eliminar un tipo de usuario

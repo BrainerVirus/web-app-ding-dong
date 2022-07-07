@@ -11,7 +11,8 @@ const URICuentas = "http://localhost:8080/cuentas/";
 const URICuentasRegister = "http://localhost:8080/cuentas/register";
 const URIUsuarios = "http://localhost:8080/usuario/";
 const URIDirecciones = "http://localhost:8080/direccion/";
-const URITipoUsuario = "http://localhost:8080/tipoUsuario/";
+const URITipoUsuario = "http://localhost:8080/tipoUsuario/register/receptor";
+const URICheckEmail = "http://localhost:8080/cuentas/register/verify/mail/";
 
 //regex for email validation
 const regexValidEmail =
@@ -153,38 +154,50 @@ function Register() {
       };
 
       const tipoUsuarioData = {
-        tipoUsuario: tipoUsuario,
+        tipoUsuario: null,
       };
-      await axios
-        .post(URIUsuarios, qs.stringify(usuarioData))
-        .then((result) => {
-          console.log(result.data);
-          console.log(result.data.usuarioId);
-          direccionData.usuarioId = result.data.usuarioId;
-          tipoUsuarioData.usuarioId = result.data.usuarioId;
-          console.log("direcion user id: " + direccionData.usuarioId);
-          if (img === "") {
-            cuentaData.usuarioId = result.data.usuarioId;
-            axios.post(URICuentasRegister, cuentaData);
-          } else {
-            cuentaData.append("usuarioId", result.data.usuarioId);
-            axios.post(URICuentas, cuentaData);
-          }
-          axios.post(URIDirecciones, direccionData);
-          axios.post(URITipoUsuario, tipoUsuarioData);
-          //messege success
-          cleanStates(e);
+      await axios.get(URICheckEmail + email).then((res) => {
+        if (!res.data.user) {
+          axios
+            .post(URIUsuarios, qs.stringify(usuarioData))
+            .then((result) => {
+              console.log(result.data);
+              console.log(result.data.usuarioId);
+              direccionData.usuarioId = result.data.usuarioId;
+              tipoUsuarioData.usuarioId = result.data.usuarioId;
+              console.log("direcion user id: " + direccionData.usuarioId);
+              if (img === "") {
+                cuentaData.usuarioId = result.data.usuarioId;
+                axios.post(URICuentasRegister, cuentaData);
+              } else {
+                cuentaData.append("usuarioId", result.data.usuarioId);
+                axios.post(URICuentas, cuentaData);
+              }
+              axios.post(URIDirecciones, direccionData);
+              axios.post(URITipoUsuario, tipoUsuarioData);
+              //messege success
+              cleanStates(e);
+              Swal.fire({
+                title: "Exito!",
+                text: "Usuario registrado correctamente",
+                icon: "success",
+                confirmButtonText: "Aceptar",
+                timer: 3000,
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
           Swal.fire({
-            title: "Exito!",
-            text: "Usuario registrado correctamente",
-            icon: "success",
+            title: "Error!",
+            text: "El email ya existe",
+            icon: "error",
             confirmButtonText: "Aceptar",
             timer: 3000,
           });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        }
+      });
     } else {
       Swal.fire({
         title: "Error!",

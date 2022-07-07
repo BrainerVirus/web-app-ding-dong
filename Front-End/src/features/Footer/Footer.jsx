@@ -18,28 +18,21 @@ function Footer() {
             <div className="col-md-2">
               <h6 className="text-uppercase font-weight-bold">
                 <a href="#!" className="text-white">
-                  Products
+                  Productos
                 </a>
               </h6>
             </div>
             <div className="col-md-2">
               <h6 className="text-uppercase font-weight-bold">
                 <a href="#!" className="text-white">
-                  Awards
+                  Ayuda
                 </a>
               </h6>
             </div>
             <div className="col-md-2">
               <h6 className="text-uppercase font-weight-bold">
                 <a href="#!" className="text-white">
-                  Help
-                </a>
-              </h6>
-            </div>
-            <div className="col-md-2">
-              <h6 className="text-uppercase font-weight-bold">
-                <a href="#!" className="text-white">
-                  Contact
+                  Contacto
                 </a>
               </h6>
             </div>
@@ -50,10 +43,8 @@ function Footer() {
           <div className="row d-flex justify-content-center">
             <div className="col-lg-8">
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sunt
-                distinctio earum repellat quaerat voluptatibus placeat nam,
-                commodi optio pariatur est quia magnam eum harum corrupti dicta,
-                aliquam sequi voluptate quas.
+                Ding dong app tanto en su formato web como móvil son parte de la
+                suite de soluciones de ding dong enterprises.
               </p>
             </div>
           </div>
@@ -83,9 +74,9 @@ function Footer() {
         className="text-center p-3"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.2)" }}
       >
-        © 2020 Copyright:
+        © 2022 Copyright:
         <a className="text-white ms-2" href="https://mdbootstrap.com/">
-          MDBootstrap.com
+          ding-dong-app.com
         </a>
       </div>
     </footer>

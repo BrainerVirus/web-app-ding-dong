@@ -58,6 +58,18 @@ export const getCuenta = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+export const getCuentaByMail = async (req, res) => {
+  try {
+    const cuenta = await CuentaModel.findAll({
+      where: {
+        user: req.params.user,
+      },
+    });
+    res.json(cuenta[0]);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
 export const getCuentaByUserId = async (req, res) => {
   try {
     const cuenta = await CuentaModel.findAll({

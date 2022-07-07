@@ -18,7 +18,7 @@ routerQR.get("/:id", isAuthenticated, getQR);
 routerQR.get("/usuario/:id", isAuthenticated, getQRByUserId);
 routerQR.get("/", isAuthenticated, getAllQRs);
 routerQR.get("/usuario/all-qrs/:id", isAuthenticated, getAllQRsByUserId);
-routerQR.post("/", createQR);
+routerQR.post("/", isAuthenticated, createQR);
 routerQR.put("/:id", isAuthenticated, updateQR);
 routerQR.put("/usuario/:id", isAuthenticated, updateQRByUserId);
 routerQR.delete("/:id", isAuthenticated, deleteQR);

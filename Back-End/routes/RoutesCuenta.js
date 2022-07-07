@@ -6,6 +6,7 @@ import {
   deleteCuentaByUserId,
   getAllCuentas,
   getCuenta,
+  getCuentaByMail,
   getCuentaByUserId,
   getLoginStatus,
   isAuthenticated,
@@ -22,6 +23,7 @@ const routerCuentas = express.Router();
 routerCuentas.get("/", isAuthenticated, getAllCuentas);
 routerCuentas.get("/:id", isAuthenticated, getCuenta);
 routerCuentas.get("/usuario/:id", isAuthenticated, getCuentaByUserId);
+routerCuentas.get("/register/verify/mail/:user", getCuentaByMail);
 routerCuentas.post("/", uploadImg, createCuenta);
 routerCuentas.post("/register", createCuentaNoProfilePic);
 routerCuentas.put("/:id", isAuthenticated, uploadImg, updateCuenta);

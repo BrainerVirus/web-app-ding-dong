@@ -10,6 +10,30 @@ export const createTipoUsuario = async (req, res) => {
     res.json({ message: error.message });
   }
 };
+export const createUsuarioReceptor = async (req, res) => {
+  try {
+    const info = {
+      tipoUsuario: "receptor",
+      usuarioId: req.body.usuarioId,
+    };
+    await TipoUsuarioModel.create(info);
+    res.json({ message: "El receptor se creado correctamente" });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+export const createUsuarioRepartidor = async (req, res) => {
+  try {
+    const info = {
+      tipoUsuario: "repartidor",
+      usuarioId: req.body.usuarioId,
+    };
+    await TipoUsuarioModel.create(info);
+    res.json({ message: "El repartidor se creado correctamente" });
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
 
 //mostrar un tipo de usuario
 export const getTipoUsuario = async (req, res) => {

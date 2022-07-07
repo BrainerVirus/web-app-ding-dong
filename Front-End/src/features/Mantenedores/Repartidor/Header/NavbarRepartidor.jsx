@@ -81,15 +81,15 @@ function NavbarAdministrador() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link
+              <a
                 className="nav-link nav-item-base-status"
                 aria-current="page"
-                to="/cuenta/repartidor/calificaciones"
-                onClick={handleClick}
+                href="#"
+                onClick={showCommingSoonMssg}
               >
                 <i className="fa-solid fa-star me-2" />
                 Calificaciones
-              </Link>
+              </a>
             </li>
             <li className="nav-item">
               <Link

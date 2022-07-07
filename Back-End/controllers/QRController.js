@@ -1,24 +1,74 @@
 import QRModel from "../models/QRModel.js";
+import DireccionModel from "../models/DireccionesModel.js";
 import QRCode from "qrcode";
 import path from "path";
 //crear un usurio
 export const createQR = async (req, res) => {
   try {
-    const qr = await QRModel.create(req.body).then((response) => {
-      generateQRReceptorIdentityValidation(response);
+    const info = {
+      qr: req.body.qr,
+      tipoQr: req.body.tipoQr,
+      status: req.body.status,
+      calle: req.body.calle,
+      numCalle: req.body.numCalle,
+      comuna: req.body.comuna,
+      region: req.body.region,
+      usuarioId: req.body.usuarioId,
+      paqueteId: req.body.paqueteId,
+    };
+    const qr = await QRModel.create(info).then((response) => {
+      response.tipoQr === "certificado"
+        ? generateQRPackageValidation(req, response)
+        : generateQRReceptorIdentityValidation(response);
       console.log("el id es: " + response.id);
+      console.log("usuario id: " + response.usuarioId);
     });
     res.json({ message: "QR creado correctamente" });
   } catch (error) {
     res.json({ message: error.message });
   }
 };
-
+//Generar un QR para el receptor
 const generateQRReceptorIdentityValidation = async (response) => {
   try {
     const qrPath = path.join("./QRCodes", "/ValidaciónReceptor/");
     const content = JSON.stringify({
       id: response.id,
+      tipoQr: response.tipoQr,
+      usuarioId: response.usuarioId,
+      paqueteId: response.paqueteId,
+    });
+    console.log("el contenido es: " + content);
+    await QRCode.toFile(
+      `${qrPath}${response.id}.png`,
+      content,
+      {
+        scale: 10,
+        color: {
+          dark: "#000", // Blue dots
+          light: "#fff", // Transparent background
+        },
+      },
+      function (err) {
+        if (err) throw err;
+        console.log("done");
+      }
+    );
+  } catch (err) {
+    console.error(err);
+  }
+};
+//generar un QR para el Paquete
+const generateQRPackageValidation = async (req, response) => {
+  try {
+    const qrPath = path.join("./QRCodes", "/CertificadoParaPaquetes/");
+    const content = JSON.stringify({
+      id: response.id,
+      status: req.body.status,
+      calle: req.body.calle,
+      numCalle: req.body.numCalle,
+      comuna: req.body.comuna,
+      region: req.body.region,
       tipoQr: response.tipoQr,
       usuarioId: response.usuarioId,
       paqueteId: response.paqueteId,

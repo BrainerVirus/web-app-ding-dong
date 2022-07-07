@@ -17,7 +17,37 @@ $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075);
   font-weight: bold;
 }
 
+.divider {
+  min-height: 100px !important;
+}
+
+.custom-shape-divider-bottom-1656548343 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1656548343 svg {
+  position: relative;
+  display: block;
+  width: calc(116% + 1.3px);
+  height: 60px;
+}
+
+.custom-shape-divider-bottom-1656548343 .shape-fill {
+  fill: $baseColor;
+}
+
+.position-relative {
+  position: relative;
+}
+
 .container-actualizar-datos-admin {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 3rem 1fr !important;
@@ -225,4 +255,9 @@ $box-shadow-inset: inset 0 1px 2px rgba($black, 0.075);
 
 .btn-primary-color:hover {
   background-color: $hoverColor;
+}
+
+.btn-primary-color:focus {
+  background-color: $hoverColor;
+  color: white;
 }

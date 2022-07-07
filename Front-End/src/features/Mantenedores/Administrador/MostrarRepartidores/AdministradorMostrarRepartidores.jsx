@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import mostrarRepartidores from "./MostrarRepartidoresAdminStyle.module.scss";
 import booststrap from "../../../../scss/Global/bootstrap.min.module.css";
+import Swal from "sweetalert2";
 
 const URICuentas = "http://localhost:8080/cuentas/";
 const URIUsuarios = "http://localhost:8080/usuario/";
@@ -38,6 +39,7 @@ function AdministradorMostrarRepartidores() {
   useEffect(() => {
     getAllUsers();
     getAllAccounts();
+    getAllRepartidores();
     //setUserInfoInAccount();
   }, [isDeleteted]);
   axios.defaults.withCredentials = true;
@@ -67,23 +69,41 @@ function AdministradorMostrarRepartidores() {
   };
 
   const deleteAccount = async (id) => {
-    await axios
-      .delete(URITipoUsuario + "usuario/" + id, {
-        withCredentials: true,
-        credentials: "include",
-      })
-      .then(() => {
-        axios.delete(URIDirecciones + "usuario/" + id);
-      })
-      .then(() => {
-        axios.delete(URICuentas + "usuario/" + id);
-      })
-      .then(() => {
-        axios.delete(URIUsuarios + "/" + id);
-      });
-    //getAllAccounts();
-    setIsDeleted(true);
-
+    Swal.fire({
+      title: "¿Estás seguro que quieres eliminar a este repartidor?",
+      text: "¡Este cambio no podrá ser revertido!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      cancelButtonText: "Cancelar",
+      confirmButtonText: "¡Si elimínalo!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          "¡Elimnado!",
+          "El repartidor ha sido eliminado de forma satisfactoria.",
+          "success"
+        );
+        axios
+          .delete(URITipoUsuario + "usuario/" + id, {
+            withCredentials: true,
+            credentials: "include",
+          })
+          .then(() => {
+            axios.delete(URIDirecciones + "usuario/" + id);
+          })
+          .then(() => {
+            axios.delete(URICuentas + "usuario/" + id);
+          })
+          .then(() => {
+            axios.delete(URIUsuarios + "/" + id);
+            setIsDeleted(true);
+          });
+        //getAllAccounts();
+        setIsDeleted(true);
+      }
+    });
     //await axios.delete(URITipoUsuario + "usuario/" + id);
     //await axios.delete(URIDirecciones + "usuario/" + id);
     //await axios.delete(URIUsuarios + "usuario/" + id);
