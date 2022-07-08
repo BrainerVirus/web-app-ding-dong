@@ -448,6 +448,7 @@ function AdministradorActualizarCuentaRepartidor() {
   //----------------------------------------------------------
   //form states
   const [img, setImg] = useState("");
+  const [oldProfileImg, setOldProfileImg] = useState("");
   const [preview, setPreview] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -499,6 +500,7 @@ function AdministradorActualizarCuentaRepartidor() {
   const getAccountData = async () => {
     const response = await axios.get(URICuentas + "/usuario/" + params.id);
     const oldImg = response.data.profileImg;
+    setOldProfileImg(oldImg);
     console.log("email: " + response.data.user);
     console.log("imagen: " + response.data.profileImg);
     setEmail(response.data.user);
@@ -857,22 +859,22 @@ function AdministradorActualizarCuentaRepartidor() {
         fecha_nacimiento: fechaNacimiento,
       };
       let cuentaData = null;
-      let imgURL = "";
       if (img === "") {
-        console.log("entra al imga vacio" + img);
+        console.log("entra a sin pic cuenta data: " + oldProfileImg);
         cuentaData = {
           user: email,
           password: password,
-          profileImg: "images\\default-profile-img.jpg",
+          profileImg:
+            oldProfileImg == "images\\default-profile-img.jpg"
+              ? "images\\default-profile-img.jpg"
+              : oldProfileImg,
         };
-        imgURL = "/usuario/access-data/";
       } else {
-        console.log("entra al imga no vacio" + img);
+        console.log("ntra a con pic cuenta data: " + oldProfileImg);
         cuentaData = new FormData();
         cuentaData.append("profileImg", img);
         cuentaData.append("user", email);
         cuentaData.append("password", password);
-        imgURL = "usuario/";
       }
 
       const direccionData = {
@@ -884,8 +886,17 @@ function AdministradorActualizarCuentaRepartidor() {
       await axios
         .put(URIUsuarios + params.id, qs.stringify(usuarioData))
         .then((result) => {
-          axios.put(URICuentas + imgURL + params.id, cuentaData);
+          if (img === "") {
+            axios.put(
+              URICuentas + "/usuario/access-data/" + params.id,
+              cuentaData
+            );
+          } else {
+            axios.put(URICuentas + "usuario/update/" + params.id, cuentaData);
+          }
           axios.put(URIDirecciones + "usuario/" + params.id, direccionData);
+          //messege success
+          //cleanStates(e);
           //handleShowMessege();
           Swal.fire({
             text: "Actualización de datos exitosa",
