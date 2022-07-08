@@ -68,7 +68,7 @@ function AdministradorMostrarRepartidores() {
     setRepartidores(response.data);
   };
 
-  const deleteAccount = async (id) => {
+  const deleteMssge = (id) => {
     Swal.fire({
       title: "¿Estás seguro que quieres eliminar a este repartidor?",
       text: "¡Este cambio no podrá ser revertido!",
@@ -85,25 +85,47 @@ function AdministradorMostrarRepartidores() {
           "El repartidor ha sido eliminado de forma satisfactoria.",
           "success"
         );
-        axios
-          .delete(URITipoUsuario + "usuario/" + id, {
-            withCredentials: true,
-            credentials: "include",
-          })
-          .then(() => {
-            axios.delete(URIDirecciones + "usuario/" + id);
-          })
-          .then(() => {
-            axios.delete(URICuentas + "usuario/" + id);
-          })
-          .then(() => {
-            axios.delete(URIUsuarios + "/" + id);
-            setIsDeleted(true);
-          });
-        //getAllAccounts();
-        setIsDeleted(true);
+        deleteAccount(id);
       }
     });
+  };
+
+  const deleteAccount = async (id) => {
+    await axios
+      .delete(URITipoUsuario + "usuario/" + id, {
+        withCredentials: true,
+        credentials: "include",
+      })
+      .then(() => {
+        axios.delete(URIDirecciones + "usuario/" + id);
+      })
+      .then(() => {
+        axios.delete(URICuentas + "usuario/" + id);
+      })
+      .then(() => {
+        axios.delete(URIUsuarios + "/" + id);
+        setIsDeleted(true);
+      });
+    //getAllAccounts();
+    setIsDeleted(true);
+    // Swal.fire({
+    //   title: "¿Estás seguro que quieres eliminar a este repartidor?",
+    //   text: "¡Este cambio no podrá ser revertido!",
+    //   icon: "warning",
+    //   showCancelButton: true,
+    //   confirmButtonColor: "#3085d6",
+    //   cancelButtonColor: "#d33",
+    //   cancelButtonText: "Cancelar",
+    //   confirmButtonText: "¡Si elimínalo!",
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     Swal.fire(
+    //       "¡Elimnado!",
+    //       "El repartidor ha sido eliminado de forma satisfactoria.",
+    //       "success"
+    //     );
+    //   }
+    // });
     //await axios.delete(URITipoUsuario + "usuario/" + id);
     //await axios.delete(URIDirecciones + "usuario/" + id);
     //await axios.delete(URIUsuarios + "usuario/" + id);
@@ -159,7 +181,7 @@ function AdministradorMostrarRepartidores() {
             Editar
           </Link>
           <button
-            onClick={() => deleteAccount(data.usuarioId)}
+            onClick={() => deleteMssge(data.usuarioId)}
             className={`${booststrap["btn"]} ${booststrap["btn-danger"]}`}
           >
             Eliminar

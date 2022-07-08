@@ -41,7 +41,7 @@ function Home() {
         <div className={`${homeStyle["header"]} ${homeStyle["span-2"]}`}>
           <div id="receptor-navbar-link"></div>
           <h1>
-            "Ding Dong", la última exprenciencia de seguimiento de paquetes hoy"
+            "Ding Dong", la última experiencia de seguimiento de paquetes hoy"
           </h1>
         </div>
         <div className={`${homeStyle["divider"]}`}></div>

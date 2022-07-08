@@ -26,9 +26,17 @@ routerCuentas.get("/usuario/:id", isAuthenticated, getCuentaByUserId);
 routerCuentas.get("/register/verify/mail/:user", getCuentaByMail);
 routerCuentas.post("/", uploadImg, createCuenta);
 routerCuentas.post("/register", createCuentaNoProfilePic);
-routerCuentas.put("/:id", isAuthenticated, uploadImg, updateCuenta);
 routerCuentas.put(
-  "/usuario/:id",
+  "/:id",
+  isAuthenticated,
+  isAuthenticated,
+  isAuthenticated,
+  uploadImg,
+  updateCuenta
+);
+routerCuentas.put(
+  "/usuario/update/:id",
+  isAuthenticated,
   isAuthenticated,
   uploadImg,
   updateCuentaByUserId

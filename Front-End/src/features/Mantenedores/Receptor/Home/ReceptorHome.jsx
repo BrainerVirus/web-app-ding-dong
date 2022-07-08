@@ -45,7 +45,7 @@ function AdministradorHome() {
         >
           <div id="receptor-navbar-link"></div>
           <h1>
-            "Ding Dong", la última exprenciencia de seguimiento de paquetes hoy"
+            "Ding Dong", la última experiencia de seguimiento de paquetes hoy"
           </h1>
         </div>
         <div className={`${adminHomeStyle["divider"]}`}></div>

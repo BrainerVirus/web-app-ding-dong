@@ -20,7 +20,7 @@ const routerTipoUsuario = express.Router();
 routerTipoUsuario.get("/:id", isAuthenticated, getTipoUsuario);
 routerTipoUsuario.get("/usuario/:id", isAuthenticated, getTipoUsuarioByUserId);
 //ruta para obtener todos los tipos de usuarios
-routerTipoUsuario.get("/", isAuthenticated, getAllTiposDeUsuario);
+routerTipoUsuario.get("/", getAllTiposDeUsuario);
 routerTipoUsuario.get(
   "/show/list/repartidores",
   isAuthenticated,

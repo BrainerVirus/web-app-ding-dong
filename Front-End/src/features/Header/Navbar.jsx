@@ -92,16 +92,6 @@ function Navbar() {
                 <li>
                   <Link
                     className="dropdown-item drop-down-menu-element"
-                    to="/empresas/login"
-                    onClick={handleClick}
-                  >
-                    <i className="fa-solid fa-user-tie me-2"></i>
-                    Empresas
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className="dropdown-item drop-down-menu-element"
                     to="/personas/receptor/register"
                     onClick={handleClick}
                   >
