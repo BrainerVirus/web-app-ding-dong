@@ -1,11 +1,16 @@
 {
   "name": "back-end",
   "version": "1.0.0",
+  "engines": {
+    "node": "18.1.0",
+    "npm": "8.8.0"
+  },
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "serverStart": "nodemon server.js"
+    "start": "node server.js",
+    "devStart": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
