@@ -8,8 +8,6 @@ import cors from "cors";
 // import dotenv from "dotenv";
 //variables de entorno
 // dotenv.config({ path: "./.env" });
-//importamos cookie-parser para poder leer las cookies
-import cookieParser from "cookie-parser";
 
 //importamos las rutas
 import routerCuentas from "./routes/RoutesCuenta.js";
@@ -23,8 +21,8 @@ const app = express();
 //configuramos cors
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:8080"],
-    credentials: true,
+    origin: "*",
+    credentials: false,
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );
@@ -35,9 +33,6 @@ app.use(
     extended: true,
   })
 );
-
-//configuramos las cookies
-app.use(cookieParser());
 
 //routers
 console.log("test dotenv: " + process.env.DB_HOST);

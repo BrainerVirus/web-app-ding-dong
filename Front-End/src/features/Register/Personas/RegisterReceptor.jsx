@@ -55,6 +55,14 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setReShowPassword] = useState(false);
   const tipoUsuario = "receptor";
+  //axios config
+  axios.defaults.withCredentials = false;
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
   //email set and validate
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -156,7 +164,7 @@ function Register() {
       const tipoUsuarioData = {
         tipoUsuario: null,
       };
-      await axios.get(URICheckEmail + email).then((res) => {
+      await axios.get(URICheckEmail + email, config).then((res) => {
         if (!res.data.user) {
           axios
             .post(URIUsuarios, qs.stringify(usuarioData))
@@ -235,11 +243,11 @@ function Register() {
             id="header-login"
           >
             <h1>
-              <i>¡Bienvenidas!</i>
+              <i>¡Bienvenidos!</i>
             </h1>
             <h2>
-              Empresas <i className="fa-solid fa-dolly" id="title-logo"></i>{" "}
-              Repartidoras
+              Usuarios <i className="fa-solid fa-dolly" id="title-logo"></i>{" "}
+              Receptores
             </h2>
           </div>
           <div id="form-wrapper">

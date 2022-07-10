@@ -11,21 +11,22 @@ import {
   updatePaquete,
   updatePaqueteByUserId,
 } from "../controllers/PaqueteController.js";
+import authController from "../controllers/AuthController.js";
 
 const routerPaquete = express.Router();
 
-routerPaquete.get("/:id", isAuthenticated, getPaquete);
-routerPaquete.get("/usuario/:id", isAuthenticated, getPaqueteByUserId);
-routerPaquete.get("/", isAuthenticated, getAllPaquetes);
+routerPaquete.get("/:id", authController, getPaquete);
+routerPaquete.get("/usuario/:id", authController, getPaqueteByUserId);
+routerPaquete.get("/", authController, getAllPaquetes);
 routerPaquete.get(
   "/usuario/all-packages/:id",
-  isAuthenticated,
+  authController,
   getAllPaquetesByUserId
 );
 routerPaquete.post("/", createPaquete);
-routerPaquete.put("/:id", isAuthenticated, updatePaquete);
-routerPaquete.put("/usuario/:id", isAuthenticated, updatePaqueteByUserId);
-routerPaquete.delete("/:id", isAuthenticated, deletePaquete);
-routerPaquete.delete("/usuario/:id", isAuthenticated, deletePaqueteByUserId);
+routerPaquete.put("/:id", authController, updatePaquete);
+routerPaquete.put("/usuario/:id", authController, updatePaqueteByUserId);
+routerPaquete.delete("/:id", authController, deletePaquete);
+routerPaquete.delete("/usuario/:id", authController, deletePaqueteByUserId);
 
 export default routerPaquete;

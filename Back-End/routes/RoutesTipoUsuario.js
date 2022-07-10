@@ -1,5 +1,4 @@
 import express from "express";
-import { isAuthenticated } from "../controllers/CuentaController.js";
 import {
   getTipoUsuario,
   getAllTiposDeUsuario,
@@ -12,31 +11,36 @@ import {
   createUsuarioReceptor,
   createUsuarioRepartidor,
 } from "../controllers/TipoUsuarioController.js";
+import authController from "../controllers/AuthController.js";
 
 //Inicializamos el router
 const routerTipoUsuario = express.Router();
 
 //ruta para obtener un tipo de usuario
-routerTipoUsuario.get("/:id", isAuthenticated, getTipoUsuario);
-routerTipoUsuario.get("/usuario/:id", isAuthenticated, getTipoUsuarioByUserId);
+routerTipoUsuario.get("/:id", authController, getTipoUsuario);
+routerTipoUsuario.get("/usuario/:id", getTipoUsuarioByUserId);
 //ruta para obtener todos los tipos de usuarios
-routerTipoUsuario.get("/", getAllTiposDeUsuario);
+routerTipoUsuario.get("/", authController, getAllTiposDeUsuario);
 routerTipoUsuario.get(
   "/show/list/repartidores",
-  isAuthenticated,
+  authController,
   getAllRepartidores
 );
 //ruta para crear un tipo de usuario
 routerTipoUsuario.post("/", createTipoUsuario);
 routerTipoUsuario.post("/register/receptor", createUsuarioReceptor);
-routerTipoUsuario.post("/register/repartidor", createUsuarioRepartidor);
+routerTipoUsuario.post(
+  "/register/repartidor",
+  authController,
+  createUsuarioRepartidor
+);
 //ruta para actualizar un tipo de usuario
-routerTipoUsuario.put("/:id", isAuthenticated, updateTipoUsuario);
+routerTipoUsuario.put("/:id", authController, updateTipoUsuario);
 //ruta para eliminar un tipo de usuario
-routerTipoUsuario.delete("/:id", isAuthenticated, deleteTipoUsuario);
+routerTipoUsuario.delete("/:id", authController, deleteTipoUsuario);
 routerTipoUsuario.delete(
   "/usuario/:id",
-  isAuthenticated,
+  authController,
   deleteTipoUsuarioByUserId
 );
 

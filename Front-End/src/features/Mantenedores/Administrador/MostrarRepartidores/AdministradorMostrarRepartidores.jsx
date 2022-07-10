@@ -20,6 +20,15 @@ function AdministradorMostrarRepartidores() {
   const [userLookup, setUserLookup] = useState("");
   const [userForTable, setUserForTable] = useState([]);
   const [isDeleteted, setIsDeleted] = useState(false);
+  //---------------------------------------------------------------------------------
+  //axios config
+  const config = {
+    headers: {
+      Authorization: localStorage.getItem("token"),
+    },
+  };
+  //---------------------------------------------------------------------------------
+
   const columns = [
     { name: "Run", selector: (row) => row.run },
     {
@@ -31,40 +40,45 @@ function AdministradorMostrarRepartidores() {
     { name: "Apellido Materno", selector: (row) => row.apellidoMaterno },
   ];
   //getting data from backend
-  useEffect(() => {
-    getAllAccounts();
-    getAllUsers();
-  }, []);
 
+  useEffect(() => {
+    getAllUsers();
+    getAllAccounts();
+    getAllRepartidores();
+  }, []);
+  useEffect(() => {
+    getAllUsers();
+    getAllAccounts();
+    //getAllRepartidores();
+  }, [repartidores]);
+  useEffect(() => {
+    //getAllUsers();
+    getAllAccounts();
+    //getAllRepartidores();
+  }, [usuarios]);
   useEffect(() => {
     getAllUsers();
     getAllAccounts();
     getAllRepartidores();
     //setUserInfoInAccount();
   }, [isDeleteted]);
-  axios.defaults.withCredentials = true;
-  const getAllAccounts = async () => {
-    const response = await axios.get(URICuentas);
-    setCuentas(response.data);
-  };
-
-  useEffect(() => {
-    getAllUsers();
-    getAllAccounts();
-    getAllRepartidores();
-  }, []);
-
   useEffect(() => {
     setUserInfoInAccount();
     //filterRepartidor();
   }, [cuentas]);
 
+  axios.defaults.withCredentials = false;
+  const getAllAccounts = async () => {
+    const response = await axios.get(URICuentas, config);
+    setCuentas(response.data);
+  };
+
   const getAllUsers = async () => {
-    const response = await axios.get(URIUsuarios);
+    const response = await axios.get(URIUsuarios, config);
     setUsuarios(response.data);
   };
   const getAllRepartidores = async () => {
-    const response = await axios.get(URIShowRepartidores);
+    const response = await axios.get(URIShowRepartidores, config);
     setRepartidores(response.data);
   };
 
@@ -92,22 +106,18 @@ function AdministradorMostrarRepartidores() {
 
   const deleteAccount = async (id) => {
     await axios
-      .delete(URITipoUsuario + "usuario/" + id, {
-        withCredentials: true,
-        credentials: "include",
+      .delete(URITipoUsuario + "usuario/" + id, config)
+      .then(() => {
+        axios.delete(URIDirecciones + "usuario/" + id, config);
       })
       .then(() => {
-        axios.delete(URIDirecciones + "usuario/" + id);
+        axios.delete(URICuentas + "usuario/" + id, config);
       })
       .then(() => {
-        axios.delete(URICuentas + "usuario/" + id);
-      })
-      .then(() => {
-        axios.delete(URIUsuarios + "/" + id);
-        setIsDeleted(true);
+        axios.delete(URIUsuarios + "/" + id, config);
+        setIsDeleted(!isDeleteted);
       });
     //getAllAccounts();
-    setIsDeleted(true);
     // Swal.fire({
     //   title: "¿Estás seguro que quieres eliminar a este repartidor?",
     //   text: "¡Este cambio no podrá ser revertido!",

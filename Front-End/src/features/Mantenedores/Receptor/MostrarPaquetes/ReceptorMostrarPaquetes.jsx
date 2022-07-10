@@ -15,7 +15,14 @@ function AdministradorMostrarRepartidores() {
   const [packagesAndQRs, setPackagesAndQRs] = useState([]);
   const [userLookup, setUserLookup] = useState("");
   const [isfilterByStatus, setIsFilterByStatus] = useState("todos");
-
+  //axios config
+  axios.defaults.withCredentials = false;
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
   const filterByStatus = useRef();
   //data table columns
   const columns = [
@@ -33,16 +40,17 @@ function AdministradorMostrarRepartidores() {
     defineAllPackagesAndQRsByUserId();
   }, [packages, qrs]);
 
-  axios.defaults.withCredentials = true;
   const getAllPackagesByUserId = async () => {
     const response = await axios.get(
-      URIAllPackagesByUserId + localStorage.getItem("id")
+      URIAllPackagesByUserId + localStorage.getItem("id"),
+      config
     );
     setPackages(response.data);
   };
   const getAllQRsByUserId = async () => {
     const response = await axios.get(
-      URIAllQRsByUserId + localStorage.getItem("id")
+      URIAllQRsByUserId + localStorage.getItem("id"),
+      config
     );
     setQRs(response.data);
   };
@@ -85,9 +93,13 @@ function AdministradorMostrarRepartidores() {
             onClick={(e) => {
               e.preventDefault();
               axios
-                .get(`http://localhost:8080/qr/identidad/${data.qrId}.png`, {
-                  responseType: "blob",
-                })
+                .get(
+                  `http://localhost:8080/qr/identidad/${data.qrId}.png`,
+                  {
+                    responseType: "blob",
+                  },
+                  config
+                )
                 .then((res) => fileDownload(res.data, "identificadorQR.png"));
             }}
             className={`${booststrap["btn"]} ${booststrap["btn-danger"]}`}

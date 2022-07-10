@@ -486,7 +486,22 @@ function AdministradorActualizarCuentaRepartidor() {
   const [showRePassword, setReShowPassword] = useState(false);
   const params = useParams();
 
-  //----------------------------------------------------------
+  //---------------------------------------------------------------------------------
+  //axios config
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
+  const configForm = {
+    headers: {
+      "Content-type": "application/x-www-form-urlencoded",
+      Authorization: token,
+    },
+  };
+  axios.defaults.withCredentials = false;
+  //---------------------------------------------------------------------------------
   //first states to update
   useEffect(() => {
     getAccountData();
@@ -494,7 +509,10 @@ function AdministradorActualizarCuentaRepartidor() {
     getUserData();
   }, []);
   const getAccountData = async () => {
-    const response = await axios.get(URICuentas + "/usuario/" + params.id);
+    const response = await axios.get(
+      URICuentas + "/usuario/" + params.id,
+      config
+    );
     const oldImg = response.data.profileImg;
     setOldProfileImg(oldImg);
     console.log("entra al get accout data");
@@ -506,7 +524,10 @@ function AdministradorActualizarCuentaRepartidor() {
     setRePassword(response.data.password);
   };
   const getDireccionData = async () => {
-    const response = await axios.get(URIDirecciones + "/usuario/" + params.id);
+    const response = await axios.get(
+      URIDirecciones + "/usuario/" + params.id,
+      config
+    );
     console.log("comuna: " + comuna);
     const numCalleTemp = response.data.numCalle;
     console.log("num calle parseado: " + parseInt(numCalleTemp));
@@ -517,7 +538,7 @@ function AdministradorActualizarCuentaRepartidor() {
   };
 
   const getUserData = async () => {
-    const response = await axios.get(URIUsuarios + params.id);
+    const response = await axios.get(URIUsuarios + params.id, config);
     console.log("nombre: " + response.data.nombre);
     console.log("apellidoPaterno: " + response.data.apellidoPaterno);
     setRun(response.data.run);
@@ -823,7 +844,7 @@ function AdministradorActualizarCuentaRepartidor() {
     e.preventDefault();
     setReShowPassword(!showRePassword);
   };
-  axios.defaults.withCredentials = true;
+
   const store = async (e) => {
     console.log("valid mail: " + validEmail);
     console.log("valid pass: " + validPassword);
@@ -881,17 +902,26 @@ function AdministradorActualizarCuentaRepartidor() {
         region: region,
       };
       await axios
-        .put(URIUsuarios + params.id, qs.stringify(usuarioData))
+        .put(URIUsuarios + params.id, qs.stringify(usuarioData), config)
         .then((result) => {
           if (img === "") {
             axios.put(
               URICuentas + "/usuario/access-data/" + params.id,
-              cuentaData
+              cuentaData,
+              config
             );
           } else {
-            axios.put(URICuentas + "usuario/update/" + params.id, cuentaData);
+            axios.put(
+              URICuentas + "usuario/update/" + params.id,
+              cuentaData,
+              config
+            );
           }
-          axios.put(URIDirecciones + "usuario/" + params.id, direccionData);
+          axios.put(
+            URIDirecciones + "usuario/" + params.id,
+            direccionData,
+            config
+          );
           //messege success
           cleanStates(e);
           //handleShowMessege();

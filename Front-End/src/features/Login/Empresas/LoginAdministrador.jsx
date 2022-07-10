@@ -9,7 +9,6 @@ import "./LoginAdminStyle.module.scss";
 // import PlayStoreLogo from "../../img/logos/get-it-on-google-play-logo.svg";
 // import AppStoreLogo from "../../img/logos/Download_on_the_App_Store_Badge.svg";
 
-import Cookies from "js-cookie";
 const URI = "http://localhost:8080/cuentas/login";
 const URITipoUsuario = "http://localhost:8080/tipoUsuario";
 const regexValidEmail =
@@ -21,6 +20,14 @@ function LoginAdmin(props) {
   const [role, setRole] = useState("administrador");
   const [isInvaliadEmailPass, setIsInvaliadEmailPass] = useState(false);
   const navigate = useNavigate();
+  //axios
+  axios.defaults.withCredentials = false;
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
   //setear el valor del email al escribir
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -37,15 +44,7 @@ function LoginAdmin(props) {
       return false;
     }
   }
-  //get cookies
-  const handleSession = () => {
-    Cookies.get("token");
-  };
-  //login
-  useEffect(() => {
-    handleSession();
-  }, []);
-  axios.defaults.withCredentials = true;
+  axios.defaults.withCredentials = false;
   // Consulta a la api para el login
   const store = async (e) => {
     e.preventDefault();
@@ -65,7 +64,12 @@ function LoginAdmin(props) {
               user: result.data.user,
               usuarioId: result.data.usuarioId,
               isLogged: result.data.isLogged,
+              token: result.data.token,
             };
+            console.log(
+              "salimos del login de foma correcta sin cookies" +
+                result.data.token
+            );
             axios
               .get(URITipoUsuario + "/usuario/" + userAth.usuarioId)
               .then((res) => {
@@ -75,9 +79,11 @@ function LoginAdmin(props) {
                   localStorage.setItem("id", result.data.usuarioId);
                   localStorage.setItem("isLogged", result.data.isLogged);
                   localStorage.setItem("tipoUsuario", res.data.tipoUsuario);
+                  localStorage.setItem("token", result.data.token);
                   props.changeId(result.data.usuarioId);
                   props.changeLogged(result.data.isLogged);
                   props.changeRole(res.data.tipoUsuario);
+                  props.changeToken(result.data.token);
                   Swal.fire({
                     text: "Inicio de sesion exitoso",
                     icon: "success",

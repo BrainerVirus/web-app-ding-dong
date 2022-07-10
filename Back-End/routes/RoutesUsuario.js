@@ -1,5 +1,4 @@
 import express from "express";
-import { createCuenta, uploadImg } from "../controllers/CuentaController.js";
 import {
   getUsuario,
   getAllUsuarios,
@@ -7,13 +6,14 @@ import {
   updateUsuario,
   deleteUsuario,
 } from "../controllers/UsuarioController.js";
+import authController from "../controllers/AuthController.js";
 
 const routerUsuario = express.Router();
 
-routerUsuario.get("/:id", getUsuario);
-routerUsuario.get("/", getAllUsuarios);
+routerUsuario.get("/:id", authController, getUsuario);
+routerUsuario.get("/", authController, getAllUsuarios);
 routerUsuario.post("/", createUsuario);
-routerUsuario.put("/:id", updateUsuario);
-routerUsuario.delete("/:id", deleteUsuario);
+routerUsuario.put("/:id", authController, updateUsuario);
+routerUsuario.delete("/:id", authController, deleteUsuario);
 
 export default routerUsuario;

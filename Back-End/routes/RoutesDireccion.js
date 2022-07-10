@@ -1,5 +1,4 @@
 import express from "express";
-import { isAuthenticated } from "../controllers/CuentaController.js";
 import {
   createDireccion,
   deleteDireccion,
@@ -10,20 +9,17 @@ import {
   updateDireccion,
   updateDireccionByUserId,
 } from "../controllers/DireccionController.js";
+import authController from "../controllers/AuthController.js";
 
 const routerDireccion = express.Router();
 
-routerDireccion.get("/:id", isAuthenticated, getDireccion);
-routerDireccion.get("/usuario/:id", isAuthenticated, getDireccionByUserId);
-routerDireccion.get("/", isAuthenticated, getAllDirecciones);
+routerDireccion.get("/:id", authController, getDireccion);
+routerDireccion.get("/usuario/:id", authController, getDireccionByUserId);
+routerDireccion.get("/", authController, getAllDirecciones);
 routerDireccion.post("/", createDireccion);
-routerDireccion.put("/:id", isAuthenticated, updateDireccion);
-routerDireccion.put("/usuario/:id", isAuthenticated, updateDireccionByUserId);
-routerDireccion.delete("/:id", isAuthenticated, deleteDireccion);
-routerDireccion.delete(
-  "/usuario/:id",
-  isAuthenticated,
-  deleteDireccionByUserId
-);
+routerDireccion.put("/:id", authController, updateDireccion);
+routerDireccion.put("/usuario/:id", authController, updateDireccionByUserId);
+routerDireccion.delete("/:id", authController, deleteDireccion);
+routerDireccion.delete("/usuario/:id", authController, deleteDireccionByUserId);
 
 export default routerDireccion;

@@ -2,8 +2,6 @@
 import jwt from "jsonwebtoken";
 //importamos bcrypt para encriptar las contraseñas
 import bcrypt from "bcryptjs";
-//importamos la libreria de cookies
-import cookieParser from "cookie-parser";
 // importamos el modelo
 import CuentaModel from "../models/CuentaModel.js";
 import multer from "multer";
@@ -87,7 +85,9 @@ export const getCuentaByUserId = async (req, res) => {
 export const getAllCuentas = async (req, res) => {
   try {
     const cuentas = await CuentaModel.findAll();
-    console.log("estas son cookies: " + req.cookies.token);
+    console.log(
+      "token del body desde getAllCuentas: " + req.headers.authorization
+    );
     res.json(cuentas);
   } catch (error) {
     res.json({ message: error.message });
@@ -234,15 +234,6 @@ export const login = async (req, res) => {
         user: req.body.email,
       },
     });
-    // await CuentaModel.update(
-    //   { isLogged: 1 },
-    //   {
-    //     where: {
-    //       user: req.body.email,
-    //       password: req.body.password,
-    //     },
-    //   }
-    // );
     if (await bcrypt.compare(req.body.password, cuenta[0].password)) {
       const id = cuenta[0].usuarioId;
       const isLogged = true;
@@ -250,15 +241,15 @@ export const login = async (req, res) => {
         expiresIn: process.env.JWT_EXPIRES,
       });
       //console.log("token: " + token + "usuario: " + cuenta[0].user);
-      const cookiesOptions = {
-        expires: new Date(
-          Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-        ),
-        httpOnly: false,
-        path: "/",
-      };
+      // const cookiesOptions = {
+      //   expires: new Date(
+      //     Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+      //   ),
+      //   httpOnly: false,
+      //   path: "/",
+      // };
 
-      console.log("cookies: " + cookiesOptions.expires);
+      // console.log("cookies: " + cookiesOptions.expires);
       // res.json({
       //   login: true,
       //   token: token,
@@ -275,15 +266,16 @@ export const login = async (req, res) => {
           },
         }
       );
-      console.log("sobre las cookies");
-      res.cookie("token", token, cookiesOptions);
-      console.log("entra a login: " + req.cookies.token);
+      // console.log("sobre las cookies");
+      // res.cookie("token", token, cookiesOptions);
+      // console.log("entra a login: " + req.cookies.token);
       res.json({
         user: cuenta[0].user,
         id: cuenta[0].id,
         password: cuenta[0].password,
         usuarioId: cuenta[0].usuarioId,
         isLogged: true,
+        token: token,
       });
 
       //res.cookie("token", token, { maxAge: 900000, httpOnly: true });
@@ -295,10 +287,13 @@ export const login = async (req, res) => {
 
 export const getLoginStatus = async (req, res) => {
   console.log("entra a getLoginStatus");
-  if (req.cookies.token) {
+  if (req.headers.authorization) {
     console.log("entra a getLoginStatus");
     try {
-      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      const decoded = jwt.verify(
+        req.headers.authorization,
+        process.env.JWT_SECRET
+      );
       const cuenta = await CuentaModel.findAll({
         where: {
           id: decoded.id,
@@ -357,9 +352,12 @@ export const uploadImg = multer({
 //autenticacion
 export const isAuthenticated = async (req, res, next) => {
   console.log("entra a isAuthenticated");
-  if (req.cookies.token) {
+  if (req.headers.authorization) {
     try {
-      const decoded = jwt.verify(req.cookies.token, process.env.JWT_SECRET);
+      const decoded = jwt.verify(
+        req.headers.authorization,
+        process.env.JWT_SECRET
+      );
       const cuenta = await CuentaModel.findAll({
         where: {
           id: decoded.id,
@@ -369,7 +367,10 @@ export const isAuthenticated = async (req, res, next) => {
         return next();
       }
       req.user = cuenta[0];
-      console.log("entra a isAuthenticated");
+      console.log(
+        "entra a isAuthenticated en cuentaController, token: " +
+          req.headers.authorization
+      );
       console.log("id: " + decoded.id);
       console.log("isLogged: " + decoded.isLogged);
       return next();
@@ -378,13 +379,14 @@ export const isAuthenticated = async (req, res, next) => {
       return next();
     }
   } else {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
-    res.setHeader(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS"
-    );
-    res.redirect("http://localhost:3000/");
+    // res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+    // res.setHeader("Access-Control-Allow-Headers", "Content-Type, Accept");
+    // res.setHeader(
+    //   "Access-Control-Allow-Methods",
+    //   "GET, POST, PUT, DELETE, OPTIONS"
+    // );
+    // res.redirect("http://localhost:3000/");
+    res.json({ message: error.message });
   }
 };
 
@@ -398,16 +400,6 @@ export const logout = async (req, res) => {
         },
       }
     );
-    const cookiesOptions = {
-      expires: new Date(
-        Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-      ),
-      httpOnly: false,
-      path: "/",
-    };
-    //console.log("entra a logout");
-    //console.log("id que llega al logout: " + req.body.usuarioId);
-    res.clearCookie("token");
     res.json({ message: "success" }).end();
     //console.log("logout correcto");
   } catch (error) {

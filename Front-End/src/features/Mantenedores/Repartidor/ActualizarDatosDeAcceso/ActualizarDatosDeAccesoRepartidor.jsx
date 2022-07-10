@@ -489,8 +489,15 @@ function AdministradorActualizarCuentaRepartidor() {
   const params = useParams();
   const tipoUsuario = "administrador";
   const [edit, setEdit] = useState(false);
-
   //----------------------------------------------------------
+  //axios config
+  axios.defaults.withCredentials = false;
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
   //first states to update
   useEffect(() => {
     getAccountData();
@@ -498,7 +505,10 @@ function AdministradorActualizarCuentaRepartidor() {
     getUserData();
   }, []);
   const getAccountData = async () => {
-    const response = await axios.get(URICuentas + "/usuario/" + params.id);
+    const response = await axios.get(
+      URICuentas + "/usuario/" + params.id,
+      config
+    );
     const oldImg = response.data.profileImg;
     setOldImg(oldImg);
     console.log("oldImg: " + oldImg);
@@ -510,7 +520,10 @@ function AdministradorActualizarCuentaRepartidor() {
     setRePassword(response.data.password);
   };
   const getDireccionData = async () => {
-    const response = await axios.get(URIDirecciones + "/usuario/" + params.id);
+    const response = await axios.get(
+      URIDirecciones + "/usuario/" + params.id,
+      config
+    );
     console.log("comuna: " + comuna);
     const numCalleTemp = response.data.numCalle;
     console.log("num calle parseado: " + parseInt(numCalleTemp));
@@ -521,7 +534,7 @@ function AdministradorActualizarCuentaRepartidor() {
   };
 
   const getUserData = async () => {
-    const response = await axios.get(URIUsuarios + params.id);
+    const response = await axios.get(URIUsuarios + params.id, config);
     console.log("nombre: " + response.data.nombre);
     console.log("apellidoPaterno: " + response.data.apellidoPaterno);
     setRun(response.data.run);
@@ -827,7 +840,6 @@ function AdministradorActualizarCuentaRepartidor() {
     e.preventDefault();
     setReShowPassword(!showRePassword);
   };
-  axios.defaults.withCredentials = true;
   const store = async (e) => {
     console.log("valid mail: " + validEmail);
     console.log("valid pass: " + validPassword);
@@ -877,7 +889,11 @@ function AdministradorActualizarCuentaRepartidor() {
       // }
 
       await axios
-        .put(URICuentas + "/usuario/access-data/" + params.id, cuentaData)
+        .put(
+          URICuentas + "/usuario/access-data/" + params.id,
+          cuentaData,
+          config
+        )
         .then((result) => {
           Swal.fire({
             text: "Actualización de datos exitosa",

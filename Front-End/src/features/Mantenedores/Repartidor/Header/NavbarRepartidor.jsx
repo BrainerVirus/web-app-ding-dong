@@ -17,18 +17,20 @@ function NavbarAdministrador() {
   const logoutId = {
     usuarioId: sessionId,
   };
-  axios.defaults.withCredentials = true;
+  //axios config
+  axios.defaults.withCredentials = false;
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
   //close session
   const handleLogout = async (e) => {
     e.preventDefault();
-    await axios
-      .put(URI, logoutId, {
-        withCredentials: true,
-        credentials: "include",
-      })
-      .then((res) => {
-        localStorage.clear();
-      });
+    await axios.put(URI, logoutId, config).then((res) => {
+      localStorage.clear();
+    });
     navigate("/");
   };
   //close navbar

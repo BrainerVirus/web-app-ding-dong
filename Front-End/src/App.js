@@ -1,10 +1,9 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AuthProvider } from "./features/context/AuthContext";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useLayoutEffect } from "react";
 import axios from "axios";
-import Cookies from "js-cookie";
 
 import "./App.scss";
 //Landing page
@@ -39,11 +38,18 @@ const URI = "http://localhost:8080/cuentas/login/status";
 const URITipoUsuario = "http://localhost:8080/tipoUsuario/usuario/";
 
 function App() {
+  const [token, setToken] = useState(null);
   const [isLogged, setIsLogged] = useState(false);
   const [id, setId] = useState(null);
   const [role, setRole] = useState("");
   const [rolSwitch, setRolSwitch] = useState("");
   const roles = ["administrador", "receptor", "repartidor"];
+  axios.defaults.withCredentials = false;
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
 
   const Wrapper = ({ children }) => {
     const location = useLocation();
@@ -53,28 +59,24 @@ function App() {
     return children;
   };
 
-  axios.defaults.withCredentials = true;
   const getSession = async () => {
     try {
-      const session = await axios
-        .get(URI, {
-          withCredentials: true,
-          credentials: "include",
-        })
-        .then((res) => {
-          axios.get(URITipoUsuario + res.data.id).then((response) => {
-            localStorage.getItem("id");
-            localStorage.getItem("tipoUsuario");
-            localStorage.getItem("isLogged");
-            console.log(
-              "Role localStorage: " + localStorage.getItem("tipoUsuario")
-            );
-            console.log(
-              "isLogged localStorage: " + localStorage.getItem("isLogged")
-            );
-            console.log("Id localStorage: " + localStorage.getItem("id"));
-          });
+      const session = await axios.get(URI, config).then((res) => {
+        axios.get(URITipoUsuario + res.data.id, config).then((response) => {
+          localStorage.getItem("id");
+          localStorage.getItem("tipoUsuario");
+          localStorage.getItem("isLogged");
+          localStorage.getItem("token");
+          console.log(
+            "Role localStorage: " + localStorage.getItem("tipoUsuario")
+          );
+          console.log(
+            "isLogged localStorage: " + localStorage.getItem("isLogged")
+          );
+          console.log("Id localStorage: " + localStorage.getItem("id"));
+          console.log("token localStorage: " + localStorage.getItem("token"));
         });
+      });
     } catch (error) {
       console.log("App js no trae los datos");
     }
@@ -89,13 +91,16 @@ function App() {
     console.log("user id por props: " + id);
     console.log("user rol por props: " + role);
     console.log("user status por props: " + isLogged);
+    console.log("user token por props: " + token);
     const idLocal = localStorage.getItem("id");
     const roleLocal = localStorage.getItem("tipoUsuario");
     const isLoggedLocal = localStorage.getItem("isLogged");
+    const tokenLocal = localStorage.getItem("token");
     setId(idLocal);
     setRole(roleLocal);
     setIsLogged(isLoggedLocal);
-  }, [id, role, isLogged]);
+    setToken(tokenLocal);
+  }, [id, role, isLogged, token]);
 
   return (
     <div className="App" id="App">
@@ -145,6 +150,9 @@ function App() {
                           changeRole={(role) => {
                             setRole(role);
                           }}
+                          changeToken={(token) => {
+                            setToken(token);
+                          }}
                         />
                       </main>
                       <Footer />
@@ -166,6 +174,9 @@ function App() {
                           }}
                           changeRole={(role) => {
                             setRole(role);
+                          }}
+                          changeToken={(token) => {
+                            setToken(token);
                           }}
                         />
                       </main>
@@ -194,7 +205,9 @@ function App() {
                         <>
                           <NavbarAdministrador />
                           <main>
-                            <AdministradorMostrarRepartidores />
+                            <AdministradorMostrarRepartidores
+                              timestamp={new Date().toString()}
+                            />
                           </main>
                           <Footer />
                         </>
@@ -236,7 +249,12 @@ function App() {
                         </>
                       }
                     />
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route
+                      path="*"
+                      element={
+                        <Navigate to="/cuenta/administrador/home" replace />
+                      }
+                    />
                   </>
                 )}
                 {/* Private routes Receptor*/}
@@ -278,14 +296,17 @@ function App() {
                         </>
                       }
                     />
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route
+                      path="*"
+                      element={<Navigate to="/cuenta/receptor/home" replace />}
+                    />
                   </>
                 )}
                 {/* Private routes Repartidor*/}
                 {isLogged && role === roles[2] && (
                   <>
                     <Route
-                      path="/cuenta/repartidor/home/"
+                      path="/cuenta/repartidor/home"
                       element={
                         <>
                           <NavbarRepartidor />
@@ -320,7 +341,12 @@ function App() {
                         </>
                       }
                     />
-                    <Route path="*" element={<Navigate to="/" replace />} />
+                    <Route
+                      path="*"
+                      element={
+                        <Navigate to="/cuenta/repartidor/home" replace />
+                      }
+                    />
                   </>
                 )}
               </Routes>

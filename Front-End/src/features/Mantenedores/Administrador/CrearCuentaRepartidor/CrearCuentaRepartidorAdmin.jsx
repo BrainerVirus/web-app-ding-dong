@@ -489,6 +489,14 @@ function AdministradorCrearCuentaRepartidor() {
   const tipoUsuario = "repartidor";
   //navitaion
   const navigate = useNavigate();
+  //axios config
+  axios.defaults.withCredentials = false;
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: token,
+    },
+  };
   // profile photo upload
   const fileInputRef = useRef();
   const handleFileInput = (e) => {
@@ -809,7 +817,7 @@ function AdministradorCrearCuentaRepartidor() {
   //----------------------------------------------------------
   //const params = new URLSearchParams();
   //axios post to database json way
-  axios.defaults.withCredentials = true;
+  // axios.defaults.withCredentials = true;
   const store = async (e) => {
     console.log("valid mail: " + validEmail);
     console.log("valid pass: " + validPassword);
@@ -875,10 +883,10 @@ function AdministradorCrearCuentaRepartidor() {
         url: URI,
       };
       axios(options);*/
-      await axios.get(URICheckEmail + email).then((res) => {
+      await axios.get(URICheckEmail + email, config).then((res) => {
         if (!res.data.user) {
           axios
-            .post(URIUsuarios, qs.stringify(usuarioData))
+            .post(URIUsuarios, qs.stringify(usuarioData), config)
             .then((result) => {
               console.log(result.data);
               console.log(result.data.usuarioId);
@@ -888,13 +896,13 @@ function AdministradorCrearCuentaRepartidor() {
               console.log("direcion user id: " + direccionData.usuarioId);
               if (img === "") {
                 cuentaData.usuarioId = result.data.usuarioId;
-                axios.post(URICuentasRegister, cuentaData);
+                axios.post(URICuentasRegister, cuentaData, config);
               } else {
                 cuentaData.append("usuarioId", result.data.usuarioId);
-                axios.post(URICuentas, cuentaData);
+                axios.post(URICuentas, cuentaData, config);
               }
-              axios.post(URIDirecciones, direccionData);
-              axios.post(URITipoUsuario, tipoUsuarioData);
+              axios.post(URIDirecciones, direccionData, config);
+              axios.post(URITipoUsuario, tipoUsuarioData, config);
               //messege success
               cleanStates(e);
               //handleShowMessege();
@@ -1027,7 +1035,7 @@ function AdministradorCrearCuentaRepartidor() {
                   alt="profile-img"
                 />
                 <button
-                  className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${booststrap["mt-2"]} ${crearCuentaRepatidorStyle["img-preview-btn"]}`}
+                  className={`${booststrap["btn"]} ${booststrap["btn-primary"]} ${crearCuentaRepatidorStyle["btn-primary-color"]} ${booststrap["mt-2"]} ${crearCuentaRepatidorStyle["img-preview-btn"]}`}
                   onClick={handleFileInput}
                 >
                   Actualizar
