@@ -51,4 +51,6 @@ routerCuentas.post("/login", login);
 routerCuentas.get("/login/status", getLoginStatus);
 routerCuentas.put("/logout/status", authController, logout);
 
+routerCuentas.post("/s3/posting/data/", uploadImg);
+
 export default routerCuentas;

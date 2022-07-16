@@ -15,6 +15,7 @@ function AdministradorMostrarRepartidores() {
   const [packagesAndQRs, setPackagesAndQRs] = useState([]);
   const [userLookup, setUserLookup] = useState("");
   const [isfilterByStatus, setIsFilterByStatus] = useState("todos");
+  const [img, setImg] = useState("");
   //axios config
   axios.defaults.withCredentials = false;
   const token = localStorage.getItem("token");
@@ -24,6 +25,8 @@ function AdministradorMostrarRepartidores() {
     },
   };
   const filterByStatus = useRef();
+  const qrCode = useRef();
+
   //data table columns
   const columns = [
     { name: "Código Paquete", selector: (row) => row.id },
@@ -73,41 +76,80 @@ function AdministradorMostrarRepartidores() {
     });
   };
 
+  const getQrFromS3 = async (qrId) => {
+    const response = await axios.get(
+      "http://localhost:8080/qr/" + qrId,
+      config
+    );
+
+    const cleanDataArr = response.data.replace(
+      "data:application/octet-stream",
+      "data:image/png"
+    );
+    //console.log("QR: ", response.data);
+    //const cleanData = cleanDataArr[1]; `data:image/png;base64,${cleanDataArr}`
+    console.log("QR: ", cleanDataArr);
+    setImg(cleanDataArr);
+  };
   const ExpandedComponent = ({ data }) => (
     <>
-      <div className={`${mostrarRepartidores["actions-column"]}`}>
-        <div className={`${mostrarRepartidores["flex-container"]}`}>
-          <p>Código para validación de identidad:</p>
-          {console.log("qr id en datas: " + data.qrId)}
-          <img
-            src={`http://localhost:8080/qr/identidad/${data.qrId}.png`}
-            alt="Imagen de perfil"
-            style={{ width: 150, height: 150 }}
-          />
-        </div>
-        <div
-          className={`${mostrarRepartidores["flex-container"]} ${mostrarRepartidores["btn-wrapper"]}`}
-        >
-          <p>Acciones:</p>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              axios
-                .get(
-                  `http://localhost:8080/qr/identidad/${data.qrId}.png`,
-                  {
-                    responseType: "blob",
-                  },
-                  config
-                )
-                .then((res) => fileDownload(res.data, "identificadorQR.png"));
-            }}
-            className={`${booststrap["btn"]} ${booststrap["btn-danger"]}`}
-          >
-            Descargar QR
-          </button>
-        </div>
-      </div>
+      {getQrFromS3(data.qrId) ? (
+        <>
+          <div className={`${mostrarRepartidores["actions-column"]}`}>
+            <div className={`${mostrarRepartidores["flex-container"]}`}>
+              <p>Código para validación de identidad:</p>
+              {console.log("qr id en datas: " + data.qrId)}
+              <img
+                src={img}
+                alt="QR code"
+                style={{ width: 150, height: 150 }}
+                ref={qrCode}
+                id="qrCode"
+              />
+            </div>
+            <div
+              className={`${mostrarRepartidores["flex-container"]} ${mostrarRepartidores["btn-wrapper"]}`}
+            >
+              <p>Acciones:</p>
+              <button
+                // onClick={(e) => {
+                //   e.preventDefault();
+                //   axios
+                //     .get(
+                //       "http://localhost:8080/qr/" + data.qrId,
+                //       config,
+                //       {
+                //         responseType: "blob",
+                //       },
+                //       config
+                //     )
+                //     .then((res) => {
+                //       console.log(
+                //         "img: ",
+                //         document.getElementById("qrCode").src
+                //       );
+                //       fileDownload(
+                //         document.getElementById("qrCode").src,
+                //         "identificadorQR.png"
+                //       );
+                //     });
+                // }}
+                className={`${booststrap["btn"]} ${booststrap["btn-danger"]}`}
+              >
+                <a
+                  className={mostrarRepartidores.anchorNoStyle}
+                  download="identificadorQR.png"
+                  href={img}
+                >
+                  Descargar QR
+                </a>
+              </button>
+            </div>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 

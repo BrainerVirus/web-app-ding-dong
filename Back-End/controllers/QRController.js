@@ -1,8 +1,24 @@
 import QRModel from "../models/QRModel.js";
-import DireccionModel from "../models/DireccionesModel.js";
+//import DireccionModel from "../models/DireccionesModel.js";
 import QRCode from "qrcode";
 import path from "path";
+import { fileURLToPath } from "url";
+import multer from "multer";
+import multerS3 from "multer-s3";
+import aws from "aws-sdk";
+import fs from "fs";
+
+//conexcion con el bucket de aws s3
+const s3 = new aws.S3({
+  region: process.env.S3_REGION_PROFILE_IMG,
+  accessKeyId: process.env.S3_KEY_PROFILE_IMG,
+  secretAccessKey: process.env.S3_SECRET_PROFILE_IMG,
+});
+//definiendo path
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 //crear un usurio
+
 export const createQR = async (req, res) => {
   try {
     const info = {
@@ -31,7 +47,8 @@ export const createQR = async (req, res) => {
 //Generar un QR para el receptor
 const generateQRReceptorIdentityValidation = async (response) => {
   try {
-    const qrPath = path.join("./QRCodes", "/ValidaciónReceptor/");
+    const qrPath = path.join(__dirname, "../QRCodes", "/ValidaciónReceptor/");
+    console.log("el path es: " + qrPath);
     const content = JSON.stringify({
       id: response.id,
       tipoQr: response.tipoQr,
@@ -39,7 +56,7 @@ const generateQRReceptorIdentityValidation = async (response) => {
       paqueteId: response.paqueteId,
     });
     console.log("el contenido es: " + content);
-    await QRCode.toFile(
+    QRCode.toFile(
       `${qrPath}${response.id}.png`,
       content,
       {
@@ -52,6 +69,28 @@ const generateQRReceptorIdentityValidation = async (response) => {
       function (err) {
         if (err) throw err;
         console.log("done");
+        const imgPath = path.join(
+          __dirname,
+          "../QRCodes",
+          `/ValidaciónReceptor/${response.id}.png`
+        );
+        const tempImg = fs.readFileSync(imgPath);
+        console.log("el temp es: ", tempImg);
+        if (tempImg) {
+          s3.putObject({
+            Bucket: "qr-codes-ding-dong-app",
+            Body: tempImg,
+            Key: `${response.id}.png`,
+          })
+            .promise()
+            .then((res) => {
+              console.log(`Upload succeeded - `, res);
+            })
+            .catch((err) => {
+              console.log("Upload failed:", err);
+            });
+          console.log("bajo s3 put object");
+        }
       }
     );
   } catch (err) {
@@ -62,19 +101,15 @@ const generateQRReceptorIdentityValidation = async (response) => {
 const generateQRPackageValidation = async (req, response) => {
   try {
     const qrPath = path.join("./QRCodes", "/CertificadoParaPaquetes/");
+    console.log("el path es: " + qrPath);
     const content = JSON.stringify({
       id: response.id,
-      status: req.body.status,
-      calle: req.body.calle,
-      numCalle: req.body.numCalle,
-      comuna: req.body.comuna,
-      region: req.body.region,
       tipoQr: response.tipoQr,
       usuarioId: response.usuarioId,
       paqueteId: response.paqueteId,
     });
     console.log("el contenido es: " + content);
-    await QRCode.toFile(
+    QRCode.toFile(
       `${qrPath}${response.id}.png`,
       content,
       {
@@ -87,6 +122,42 @@ const generateQRPackageValidation = async (req, response) => {
       function (err) {
         if (err) throw err;
         console.log("done");
+        const imgPath = path.join(
+          __dirname,
+          "../QRCodes",
+          `/CertificadoParaPaquetes/${response.id}.png`
+        );
+        const tempImg = fs.readFileSync(imgPath);
+        console.log("el temp es: ", tempImg);
+        if (tempImg) {
+          s3.putObject({
+            Bucket: "qr-codes-ding-dong-app",
+            Body: tempImg,
+            Key: `${response.id}.png`,
+          })
+            .promise()
+            .then((res) => {
+              console.log(`Upload succeeded - `, res);
+              // console.log(`Upload succeeded - `, req.file);
+              // try {
+              //   const info = {
+              //     qr: res.file
+              //   }
+              //   await QRModel.update(req.body, {
+              //     where: {
+              //       id: response.id,
+              //     },
+              //   });
+              //   res.json({ message: "QR actualizada correctamente" });
+              // } catch (error) {
+              //   res.json({ message: error.message });
+              // }
+            })
+            .catch((err) => {
+              console.log("Upload failed:", err);
+            });
+          console.log("bajo s3 put object");
+        }
       }
     );
   } catch (err) {
@@ -94,7 +165,7 @@ const generateQRPackageValidation = async (req, response) => {
   }
 };
 
-//mostrar un usuario
+//mostrar un qr
 export const getQR = async (req, res) => {
   try {
     const qr = await QRModel.findAll({
@@ -102,7 +173,39 @@ export const getQR = async (req, res) => {
         id: req.params.id,
       },
     });
-    res.json(qr[0]);
+    s3.getObject(
+      {
+        Bucket: "qr-codes-ding-dong-app",
+        Key: `${req.params.id}.png`,
+      },
+      (err, data) => {
+        console.log("data del get qr: ", data.Body);
+        if (err) {
+          //callback(err, null);
+        } else {
+          let image = new Buffer(data.Body).toString("base64");
+          console.log("qr en get : ", image);
+          image = "data:" + data.ContentType + ";base64," + image;
+          let response = {
+            statusCode: 200,
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": data.ContentType,
+            },
+            body: image,
+            isBase64Encoded: true,
+          };
+          res.writeHead(200, {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": data.ContentType,
+          });
+          res.write(image, "binary");
+          res.end(null, "binary");
+          //callback(null, response);
+        }
+      }
+    );
+    //res.json(qr[0]);
   } catch (error) {
     res.json({ message: error.message });
   }

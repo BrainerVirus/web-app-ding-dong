@@ -8,7 +8,8 @@ import cors from "cors";
 // import dotenv from "dotenv";
 //variables de entorno
 // dotenv.config({ path: "./.env" });
-
+import path from "path";
+import { fileURLToPath } from "url";
 //importamos las rutas
 import routerCuentas from "./routes/RoutesCuenta.js";
 import routerTipoUsuario from "./routes/RoutesTipoUsuario.js";
@@ -33,7 +34,8 @@ app.use(
     extended: true,
   })
 );
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 //routers
 console.log("test dotenv: " + process.env.DB_HOST);
 app.use("/cuentas", routerCuentas);
@@ -43,9 +45,15 @@ app.use("/direccion", routerDireccion);
 app.use("/paquete", routerPaquete);
 app.use("/qr", routerQR);
 //static files
-app.use("/images", express.static("./images"));
-app.use("/qr/certificado", express.static("./QRCodes/CertificadoParaPaquetes"));
-app.use("/qr/identidad", express.static("./QRCodes/ValidaciónReceptor"));
+app.use("/images", express.static(path.join(__dirname, "./images")));
+app.use(
+  "/qr-certificado",
+  express.static(path.join(__dirname, "./QRCodes/CertificadoParaPaquetes"))
+);
+app.use(
+  "/qr-identidad",
+  express.static(path.join(__dirname, "./QRCodes/ValidaciónReceptor"))
+);
 
 //test db
 try {
@@ -60,8 +68,8 @@ try {
   res.json({ message: "Servidor funcionando correctamente" });
 });*/
 //definos el puerto en el que va a correr el servidor
-const port = 8080;
+const PORT = 8080;
 //definos un listener para escuchar el puerto
-app.listen(port, () => {
-  console.log(`Server is running on port: ${port}`);
+app.listen(process.env.PORT || PORT, () => {
+  console.log(`Server is running on port: ${PORT}`);
 });

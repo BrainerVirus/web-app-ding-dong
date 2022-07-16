@@ -5,9 +5,17 @@ import bcrypt from "bcryptjs";
 // importamos el modelo
 import CuentaModel from "../models/CuentaModel.js";
 import multer from "multer";
+import multerS3 from "multer-s3";
+import aws from "aws-sdk";
 import path from "path";
-import { Console } from "console";
-import e from "express";
+
+//conexcion con el bucket de aws s3
+const s3 = new aws.S3({
+  region: process.env.S3_REGION_PROFILE_IMG,
+  accessKeyId: process.env.S3_KEY_PROFILE_IMG,
+  secretAccessKey: process.env.S3_SECRET_PROFILE_IMG,
+});
+
 //metodos del crud
 
 // crear un registro
@@ -17,7 +25,7 @@ export const createCuenta = async (req, res) => {
     const info = {
       user: req.body.user,
       password: hashedPassword,
-      profileImg: req.file.path,
+      profileImg: req.file.location,
       usuarioId: req.body.usuarioId,
     };
     const cuenta = await CuentaModel.create(info);
@@ -100,7 +108,7 @@ export const updateCuenta = async (req, res) => {
     const info = {
       user: req.body.user,
       password: req.body.password,
-      profileImg: req.file.path,
+      profileImg: req.file.location,
     };
     const cuenta = await CuentaModel.update(info, {
       where: {
@@ -118,13 +126,16 @@ export const updateCuentaByUserId = async (req, res) => {
     const info = {
       user: req.body.user,
       password: hashedPassword,
-      profileImg: req.file.path,
+      profileImg: req.file.location,
     };
     const infoKeepOldPassword = {
       user: req.body.user,
-      profileImg: req.file.path,
+      profileImg: req.file.location,
     };
     console.log("id por paramas en update: " + req.params.id);
+    console.log("img req: ", req.file);
+    console.log("info location: ", info.profileImg);
+
     const cuentaToFindForPassValidation = await CuentaModel.findAll({
       where: {
         usuarioId: req.params.id,
@@ -225,7 +236,6 @@ export const deleteCuentaByUserId = async (req, res) => {
 };
 
 //metodos adicionales
-
 //login
 export const login = async (req, res) => {
   try {
@@ -240,24 +250,6 @@ export const login = async (req, res) => {
       const token = jwt.sign({ id, isLogged }, process.env.JWT_SECRET, {
         expiresIn: process.env.JWT_EXPIRES,
       });
-      //console.log("token: " + token + "usuario: " + cuenta[0].user);
-      // const cookiesOptions = {
-      //   expires: new Date(
-      //     Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-      //   ),
-      //   httpOnly: false,
-      //   path: "/",
-      // };
-
-      // console.log("cookies: " + cookiesOptions.expires);
-      // res.json({
-      //   login: true,
-      //   token: token,
-      //   user: cuenta[0].user,
-      //   id: cuenta[0].id,
-      //   password: cuenta[0].password,
-      //   cookiesOptions: cookiesOptions,
-      // });
       await CuentaModel.update(
         { isLogged: true },
         {
@@ -266,9 +258,6 @@ export const login = async (req, res) => {
           },
         }
       );
-      // console.log("sobre las cookies");
-      // res.cookie("token", token, cookiesOptions);
-      // console.log("entra a login: " + req.cookies.token);
       res.json({
         user: cuenta[0].user,
         id: cuenta[0].id,
@@ -277,8 +266,6 @@ export const login = async (req, res) => {
         isLogged: true,
         token: token,
       });
-
-      //res.cookie("token", token, { maxAge: 900000, httpOnly: true });
     }
   } catch (error) {
     res.json({ message: error.message });
@@ -313,35 +300,31 @@ export const getLoginStatus = async (req, res) => {
   }
 };
 
-// export const getLoginStatus = async (req, res) => {
-//   try {
-//     const cuentas = await CuentaModel.findAll();
-//     console.log("estas son cookies: " + req.cookies.token);
-//     res.json(cuentas);
-//   } catch (error) {
-//     res.json({ message: error.message });
-//   }
-// };
-
-//img controller
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "images");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + path.extname(file.originalname));
+//   },
+// });
 
 export const uploadImg = multer({
-  storage: storage,
+  storage: multerS3({
+    s3,
+    bucket: "profile-pictures-ding-dong-app",
+    metadata: function (req, file, cb) {
+      cb(null, { filename: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now() + path.extname(file.originalname));
+    },
+  }),
   limits: { fileSize: "35000000" },
   fileFilter: (req, file, cb) => {
     const fileTypes = /jpeg|jpg|png/;
     const mimeType = fileTypes.test(file.mimetype);
     const extname = fileTypes.test(path.extname(file.originalname));
-
     if (mimeType && extname) {
       return cb(null, true);
     }

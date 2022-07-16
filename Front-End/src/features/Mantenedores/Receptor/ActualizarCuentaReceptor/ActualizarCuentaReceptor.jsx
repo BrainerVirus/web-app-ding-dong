@@ -514,7 +514,7 @@ function AdministradorActualizarCuentaRepartidor() {
     console.log("email: " + response.data.user);
     console.log("imagen: " + response.data.profileImg);
     setEmail(response.data.user);
-    setPreview(`http://localhost:8080/${oldImg}`);
+    setPreview(response.data.profileImg);
     setPassword(response.data.password);
     setRePassword(response.data.password);
   };

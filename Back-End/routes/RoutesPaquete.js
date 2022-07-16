@@ -15,14 +15,10 @@ import authController from "../controllers/AuthController.js";
 
 const routerPaquete = express.Router();
 
-routerPaquete.get("/:id", authController, getPaquete);
-routerPaquete.get("/usuario/:id", authController, getPaqueteByUserId);
-routerPaquete.get("/", authController, getAllPaquetes);
-routerPaquete.get(
-  "/usuario/all-packages/:id",
-  authController,
-  getAllPaquetesByUserId
-);
+routerPaquete.get("/:id", getPaquete);
+routerPaquete.get("/usuario/:id", getPaqueteByUserId);
+routerPaquete.get("/", getAllPaquetes);
+routerPaquete.get("/usuario/all-packages/:id", getAllPaquetesByUserId);
 routerPaquete.post("/", createPaquete);
 routerPaquete.put("/:id", authController, updatePaquete);
 routerPaquete.put("/usuario/:id", authController, updatePaqueteByUserId);
