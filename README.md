@@ -1,4 +1,4 @@
-Documentación front end app web ding dong
+I - Documentación front end app web ding dong
 1.	Instalación local
 Primero, descargas o clonas desde github el repositorio de la APP Web.
 Ejemplo: 
@@ -27,7 +27,7 @@ Ya realizados los pasos anteriores, podrás levantar el servidor de React ubicá
 •	qrcode: Librería que permite crear y trabajar con códigos qr.
 •	Nodemon: Librería para iniciar refrescar de forma automática el servidor en ambiente de desarrollo cada vez que se realicen cambios y se guarden.
 
-Documentación front end app web ding dong
+II - Documentación front end app web ding dong
 1.	Instalación local
 Primero, descargas o clonas desde github el repositorio de la APP Web.
 Ejemplo: 
